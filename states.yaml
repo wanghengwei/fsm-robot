@@ -1,0 +1,35 @@
+state:
+  name: ConnectGame
+  description: "连接game服"
+  timeout: 60000
+  signals:
+  - ok
+  - failed
+
+---
+state:
+  name: DisconnectGame
+  wait: false
+  description: "断开game连接"
+
+---
+state:
+  name: CEventLogin
+  description: "发送CEventLogin"
+  signals:
+  - CEventLoginRes_ok
+  - CEventLoginRes_failed
+
+---
+state:
+  name: CEventHeart
+  description: "发心跳"
+  wait: false
+
+---
+state:
+  name: InRoom
+  description: "在房间内"
+  wait: false
+  signals:
+  - leaveRoom

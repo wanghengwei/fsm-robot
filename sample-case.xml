@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testcase initial="ConnectGame">
+    <state id="ConnectGame">
+        <transition event="ok" target="CEventLogin" />
+        <transition event="failed" target="ConnectGame" delay="1000" />
+    </state>
+    <state id="CEventLogin">
+        <transition event="timeout" target="CEventLogin"/>
+        <transition event="CEventLoginRes_ok" target="InRoom"/>
+        <transition event="CEventLoginRes_failed" target="CEventLogin"/>
+    </state>
+    <parallel id="InRoom">
+        <!-- <transition event="beKicked" target="finish"/> -->
+        <transition event="leaveRoom" target="DisconnectGame"/>
+        <state id="InRoom1" initial="Idle1">
+            <state id="Idle1" type="Idle" timeout="1000">
+                <transition event="timeout" target="Idle1"/>
+            </state>
+        </state>
+        <state id="InRoom2" initial="CEventHeart">
+            <state id="CEventHeart">
+                <transition target="CEventHeart" delay="1000"/>
+            </state>
+        </state>
+    </parallel>
+    <state id="DisconnectGame">
+        <transition target="finish"/>
+    </state>
+</testcase>
