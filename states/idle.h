@@ -1,5 +1,5 @@
 #pragma once
-#include "base_state.h"
+#include "../base_state.h"
 #include <QtCore/QTimer>
 
 class Idle final : public BaseState {

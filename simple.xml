@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<testcase>
-    <state id="sleeping_1">
-        <transition event="timeout" target="sleeping_1"/>
-    </state>
-</testcase>

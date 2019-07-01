@@ -1,16 +1,16 @@
 
 #include "state_factory.h"
-#include "idle.h"
+#include "states/idle.h"
 
-#include "states/state_ConnectGame.h"
+#include "states/autogen/state_ConnectGame.h"
 
-#include "states/state_DisconnectGame.h"
+#include "states/autogen/state_DisconnectGame.h"
 
-#include "states/state_CEventLogin.h"
+#include "states/autogen/state_CEventLogin.h"
 
-#include "states/state_CEventHeart.h"
+#include "states/autogen/state_CEventHeart.h"
 
-#include "states/state_InRoom.h"
+#include "states/autogen/state_InRoom.h"
 
 
 QState* createStateByID(QString id, QState* parent) {

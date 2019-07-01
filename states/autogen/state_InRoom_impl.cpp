@@ -1,12 +1,12 @@
+
 #include "state_InRoom.h"
-#include <QtCore/QDebug>
+#include <stdexcept>
 
 namespace state {
 
     void StateInRoom::perform() {
         // todo
-        // throw "todo";
-        qDebug() << "in room";
+        throw std::runtime_error{"todo"};
     }
 
 }

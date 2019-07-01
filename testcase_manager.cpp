@@ -4,7 +4,7 @@
 #include "state_factory.h"
 #include <memory>
 #include "base_state.h"
-#include "idle.h"
+#include "states/idle.h"
 #include <QtCore/QMap>
 #include <QtCore/QDebug>
 #include <QtCore/QFinalState>

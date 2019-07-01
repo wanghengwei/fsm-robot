@@ -4,7 +4,7 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
 #include <QtCore/QDateTime>
-#include "idle.h"
+#include "states/idle.h"
 #include "robot.h"
 #include "testcase.h"
 #include <QtCore/QXmlStreamReader>

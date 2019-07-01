@@ -12,6 +12,10 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+var (
+	projectRoot = flag.String("R", ".", "project root dir")
+)
+
 type State struct {
 	Name        string
 	ClassName   string
@@ -23,6 +27,8 @@ type State struct {
 }
 
 func main() {
+	// flag.Parse()
+
 	statedef := flag.String("s", "", "yaml of states")
 	flag.Parse()
 
@@ -89,7 +95,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	f, err = os.Create(filepath.Join("../states", "CMakeLists.txt"))
+	f, err = os.Create(filepath.Join(*projectRoot, "states", "autogen", "CMakeLists.txt"))
 	if err != nil {
 		panic(err)
 	}
@@ -103,7 +109,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	f, err = os.Create(filepath.Join("../", "state_factory.cpp"))
+	f, err = os.Create(filepath.Join(*projectRoot, "state_factory.cpp"))
 	if err != nil {
 		panic(err)
 	}
@@ -114,7 +120,7 @@ func main() {
 }
 
 func writeStateFile(tpl *template.Template, state *State, overwrite bool) error {
-	p := filepath.Join("../states", fmt.Sprintf("%s%s", state.FileName, tpl.Name()))
+	p := filepath.Join(*projectRoot, "states", "autogen", fmt.Sprintf("%s%s", state.FileName, tpl.Name()))
 	_, err := os.Stat(p)
 	if !overwrite && !os.IsNotExist(err) {
 		return nil
@@ -194,15 +200,15 @@ set(SRCS
 {{ end }}
 )
     
-add_library(states ${SRCS})
-target_link_libraries(states Qt5::Core)
+add_library(states_gen ${SRCS})
+target_link_libraries(states_gen Qt5::Core)
 `
 
 const StateFactoryTPL = `
 #include "state_factory.h"
-#include "idle.h"
+#include "states/idle.h"
 {{ range . }}
-#include "states/{{ .FileName }}.h"
+#include "states/autogen/{{ .FileName }}.h"
 {{ end }}
 
 QState* createStateByID(QString id, QState* parent) {
