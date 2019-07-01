@@ -83,6 +83,34 @@ func main() {
 			panic(err)
 		}
 	}
+
+	// 生成一个CMakeLists.txt
+	tpl, err := template.New("CMakeLists.txt").Parse(CMakeTPL)
+	if err != nil {
+		panic(err)
+	}
+	f, err = os.Create(filepath.Join("../states", "CMakeLists.txt"))
+	if err != nil {
+		panic(err)
+	}
+	err = tpl.Execute(f, &states)
+	if err != nil {
+		panic(err)
+	}
+
+	// 生成一个 state_factory
+	tpl, err = template.New("state_factory.cpp").Parse(StateFactoryTPL)
+	if err != nil {
+		panic(err)
+	}
+	f, err = os.Create(filepath.Join("../", "state_factory.cpp"))
+	if err != nil {
+		panic(err)
+	}
+	err = tpl.Execute(f, &states)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func writeStateFile(tpl *template.Template, state *State, overwrite bool) error {
@@ -155,5 +183,39 @@ namespace state {
         throw std::runtime_error{"todo"};
     }
 
+}
+`
+
+const CMakeTPL = `
+set(SRCS
+{{ range . }}
+{{ .FileName }}.cpp
+{{ .FileName }}_impl.cpp
+{{ end }}
+)
+    
+add_library(states ${SRCS})
+target_link_libraries(states Qt5::Core)
+`
+
+const StateFactoryTPL = `
+#include "state_factory.h"
+#include "idle.h"
+{{ range . }}
+#include "states/{{ .FileName }}.h"
+{{ end }}
+
+QState* createStateByID(QString id, QState* parent) {
+    if (id == "Idle") {
+        return new Idle{parent};
+    }
+
+    {{ range . }}
+    if (id == "{{ .Name }}") {
+        return new state::State{{ .Name }}{parent};
+    }
+    {{ end }}
+
+    return nullptr;
 }
 `
