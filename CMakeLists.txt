@@ -7,7 +7,7 @@ find_package(Qt5 COMPONENTS Core Xml REQUIRED)
 
 add_subdirectory(states)
 
-add_executable(demo main.cpp robot.cpp testcase.cpp idle.cpp act_and_wait.cpp
+add_executable(demo main.cpp robot.cpp testcase.cpp idle.cpp
     base_state.cpp
     testcase_manager.cpp
     state_factory.cpp

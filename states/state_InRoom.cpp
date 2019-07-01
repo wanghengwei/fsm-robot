@@ -1,3 +1,4 @@
+
 #include "state_InRoom.h"
 
 namespace state {
