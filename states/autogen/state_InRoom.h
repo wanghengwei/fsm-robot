@@ -1,11 +1,11 @@
 
 #pragma once
-#include <base_state.h>
+#include <basic_state.h>
 
 namespace state {
 
 // 状态描述：在房间内
-class StateInRoom final : public BaseState {
+class StateInRoom final : public BasicState {
     Q_OBJECT
 public:
     explicit StateInRoom(QState* parent = nullptr);

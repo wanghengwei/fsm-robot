@@ -2,10 +2,10 @@
 #include "state_CEventLogin.h"
 
 namespace state {
-    StateCEventLogin::StateCEventLogin(QState* parent) : BaseState{parent} {
+    StateCEventLogin::StateCEventLogin(QState* parent) : BasicState{parent} {
         
         setTimeout(0);
-        QObject::connect(this->timer(), &QTimer::timeout, this, &BaseState::ev_timeout);
+        QObject::connect(this->timer(), &QTimer::timeout, this, &BasicState::ev_timeout);
         
     }
 }

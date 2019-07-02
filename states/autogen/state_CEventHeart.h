@@ -1,11 +1,11 @@
 
 #pragma once
-#include <base_state.h>
+#include <basic_state.h>
 
 namespace state {
 
 // 状态描述：发心跳
-class StateCEventHeart final : public BaseState {
+class StateCEventHeart final : public BasicState {
     Q_OBJECT
 public:
     explicit StateCEventHeart(QState* parent = nullptr);

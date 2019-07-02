@@ -1,11 +1,11 @@
 
 #pragma once
-#include <base_state.h>
+#include <basic_state.h>
 
 namespace state {
 
 // 状态描述：连接game服
-class StateConnectGame final : public BaseState {
+class StateConnectGame final : public BasicState {
     Q_OBJECT
 public:
     explicit StateConnectGame(QState* parent = nullptr);

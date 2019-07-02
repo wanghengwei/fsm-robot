@@ -4,10 +4,10 @@
 
 class Robot;
 
-class BaseState : public QState {
+class BasicState : public QState {
     Q_OBJECT
 public:
-    BaseState(QState* parent = nullptr);
+    BasicState(QState* parent = nullptr);
 
     void setTimeout(int ms) { m_timeout_ms = ms; }
 
@@ -16,6 +16,8 @@ signals:
 
 protected:
     virtual void perform() = 0;
+
+    virtual QString label() const { return this->objectName(); }
 
     QTimer* timer() { return &m_timer; }
 private:

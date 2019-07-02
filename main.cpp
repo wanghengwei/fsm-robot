@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
     // QStateMachine m;
     // // QState s1{&m};
     // Idle s1{&m};
-    // QObject::connect(&s1, &BaseState::ev_timeout, []() {
+    // QObject::connect(&s1, &BasicState::ev_timeout, []() {
     //     qDebug() << QDateTime::currentDateTime().toString() << "ev_timeout triggered";
     // });
     // s1.setObjectName("idle");

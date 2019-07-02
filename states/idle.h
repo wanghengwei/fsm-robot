@@ -1,8 +1,8 @@
 #pragma once
-#include "../base_state.h"
+#include "../basic_state.h"
 #include <QtCore/QTimer>
 
-class Idle final : public BaseState {
+class Idle final : public BasicState {
     Q_OBJECT
 public:
     explicit Idle(QState* parent = nullptr);

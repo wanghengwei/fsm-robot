@@ -1,11 +1,11 @@
 
 #pragma once
-#include <base_state.h>
+#include <basic_state.h>
 
 namespace state {
 
 // 状态描述：发送CEventLogin
-class StateCEventLogin final : public BaseState {
+class StateCEventLogin final : public BasicState {
     Q_OBJECT
 public:
     explicit StateCEventLogin(QState* parent = nullptr);

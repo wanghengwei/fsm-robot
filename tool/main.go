@@ -142,12 +142,12 @@ func writeStateFile(tpl *template.Template, state *State, overwrite bool) error 
 
 const FooH = `
 #pragma once
-#include <base_state.h>
+#include <basic_state.h>
 
 namespace state {
 
 // 状态描述：{{ .Description }}
-class {{ .ClassName }} final : public BaseState {
+class {{ .ClassName }} final : public BasicState {
     Q_OBJECT
 public:
     explicit {{ .ClassName }}(QState* parent = nullptr);
@@ -167,10 +167,10 @@ const FooCpp = `
 #include "{{ .FileName }}.h"
 
 namespace state {
-    {{ .ClassName }}::{{ .ClassName }}(QState* parent) : BaseState{parent} {
+    {{ .ClassName }}::{{ .ClassName }}(QState* parent) : BasicState{parent} {
         {{ if .Wait }}
         setTimeout({{ .Timeout }});
-        QObject::connect(this->timer(), &QTimer::timeout, this, &BaseState::ev_timeout);
+        QObject::connect(this->timer(), &QTimer::timeout, this, &BasicState::ev_timeout);
         {{ else }}
         setTimeout(-1);
         {{ end }}

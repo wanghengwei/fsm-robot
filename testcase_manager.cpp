@@ -3,7 +3,7 @@
 #include <pugixml.hpp>
 #include "state_factory.h"
 #include <memory>
-#include "base_state.h"
+#include "basic_state.h"
 #include "states/idle.h"
 #include <QtCore/QMap>
 #include <QtCore/QDebug>
@@ -79,7 +79,7 @@ namespace {
             // 设置timeout，如果设置了属性timeout且 >= 0
             auto to = st.attribute("timeout").as_int(-1);
             if (to >= 0) {
-                if (auto p = qobject_cast<BaseState*>(state)) {
+                if (auto p = qobject_cast<BasicState*>(state)) {
                     p->setTimeout(to);
                 }
             }
