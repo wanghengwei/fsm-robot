@@ -7,4 +7,6 @@ namespace state {
         setTimeout(-1);
         
     }
+
+	bool StateInRoom::printLog() const { return false; }
 }

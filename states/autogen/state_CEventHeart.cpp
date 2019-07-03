@@ -7,4 +7,6 @@ namespace state {
         setTimeout(-1);
         
     }
+
+	bool StateCEventHeart::printLog() const { return false; }
 }

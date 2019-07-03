@@ -11,7 +11,7 @@ public:
     explicit StateCEventHeart(QState* parent = nullptr);
 private:
     void perform() override;
-
+	bool printLog() const override;
 signals:
     
 };

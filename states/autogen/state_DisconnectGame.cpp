@@ -7,4 +7,6 @@ namespace state {
         setTimeout(-1);
         
     }
+
+	bool StateDisconnectGame::printLog() const { return true; }
 }

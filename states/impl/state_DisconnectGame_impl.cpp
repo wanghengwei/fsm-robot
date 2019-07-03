@@ -6,7 +6,7 @@ namespace state {
 
     void StateDisconnectGame::perform() {
         // todo
-        throw std::runtime_error{"todo"};
+        // throw std::runtime_error{"todo"};
     }
 
 }

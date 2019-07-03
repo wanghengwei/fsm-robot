@@ -11,7 +11,7 @@ public:
     explicit StateConnectGame(QState* parent = nullptr);
 private:
     void perform() override;
-
+	bool printLog() const override;
 signals:
     
     void ev_ok();

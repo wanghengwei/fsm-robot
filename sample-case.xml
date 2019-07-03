@@ -24,6 +24,6 @@
         </state>
     </parallel>
     <state id="DisconnectGame">
-        <transition target="finish"/>
+        <transition target="ConnectGame" delay="1000"/>
     </state>
 </testcase>

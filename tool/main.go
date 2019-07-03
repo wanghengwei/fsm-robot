@@ -23,6 +23,7 @@ type State struct {
 	Description string
 	Timeout     int
 	Wait        bool
+	PrintLog    bool `yaml:"printLog"`
 	Signals     []string
 }
 
@@ -54,10 +55,12 @@ func main() {
 		}
 		s.State.ClassName = fmt.Sprintf("State%s", s.State.Name)
 		s.State.FileName = fmt.Sprintf("state_%s", s.State.Name)
-		// log.Printf("%v\n", s.State)
+		// 默认超时10秒
+		s.State.Timeout = 10000
+		log.Printf("%#v\n", s.State)
 		states = append(states, s.State)
 	}
-	log.Printf("%v\n", states)
+	// log.Printf("%v\n", states)
 
 	fooH, err := template.New(".h").Parse(FooH)
 	if err != nil {
@@ -84,8 +87,19 @@ func main() {
 			panic(err)
 		}
 
-		err = writeStateFile(fooImplCpp, &state, false)
-		if err != nil {
+		p := filepath.Join(*projectRoot, "states", "impl", fmt.Sprintf("%s_impl.cpp", state.FileName))
+		_, err = os.Stat(p)
+		if os.IsNotExist(err) {
+			f, err := os.Create(p)
+			if err != nil {
+				panic(err)
+			}
+			err = fooImplCpp.Execute(f, state)
+			// err = writeStateFile(fooImplCpp, &state, false)
+			if err != nil {
+				panic(err)
+			}
+		} else if err != nil {
 			panic(err)
 		}
 	}
@@ -153,7 +167,7 @@ public:
     explicit {{ .ClassName }}(QState* parent = nullptr);
 private:
     void perform() override;
-
+	bool printLog() const override;
 signals:
     {{ range .Signals }}
     void ev_{{ . }}();
@@ -175,6 +189,8 @@ namespace state {
         setTimeout(-1);
         {{ end }}
     }
+
+	bool {{ .ClassName }}::printLog() const { return {{ .PrintLog }}; }
 }
 `
 
@@ -196,7 +212,7 @@ const CMakeTPL = `
 set(SRCS
 {{ range . }}
 {{ .FileName }}.cpp
-{{ .FileName }}_impl.cpp
+../impl/{{ .FileName }}_impl.cpp
 {{ end }}
 )
     

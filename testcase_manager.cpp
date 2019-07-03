@@ -78,10 +78,9 @@ namespace {
 
             // 设置timeout，如果设置了属性timeout且 >= 0
             auto to = st.attribute("timeout").as_int(-1);
-            if (to >= 0) {
-                if (auto p = qobject_cast<BasicState*>(state)) {
-                    p->setTimeout(to);
-                }
+            auto p = qobject_cast<BasicState*>(state);
+            if (to >= 0 && p != nullptr) {
+                p->setTimeout(to);
             }
             // qDebug() << "new state " << state->objectName();
 
@@ -89,7 +88,7 @@ namespace {
             parseChildStates(st, state, states);
 
             states[id] = state;
-            qDebug() << "add" << (isParallel ? "parallel" : "state") << id;
+            qDebug() << "add" << (isParallel ? "parallel" : "state") << id << "timeout:" << (p ? p->timeout() : 0);
         }
 
     }   
@@ -165,15 +164,21 @@ void TestCaseManager::create(QString account, QString caseName) {
     pugi::xml_document doc;
     doc.load_file(qPrintable(caseName));
 
+    // 创建一个用例对象
     std::unique_ptr<TestCase> testcase(new TestCase);
+    testcase->setObjectName("ROOT");
 
     QMap<QString, QAbstractState*> states;
 
     auto root = doc.child("testcase");
 
     parseChildStates(root, testcase.get(), states);
+    // 额外添加一个特殊状态叫finish
     QFinalState* finish = new QFinalState{testcase.get()};
     finish->setObjectName("finish");
+    QObject::connect(testcase.get(), &QStateMachine::finished, []() {
+        qDebug() << "finished";
+    });
     states["finish"] = finish;
 
     for (auto& node : root.children()) {

@@ -2,6 +2,7 @@ state:
   name: ConnectGame
   description: "连接game服"
   timeout: 60000
+  printLog: true
   signals:
   - ok
   - failed
@@ -10,12 +11,14 @@ state:
 state:
   name: DisconnectGame
   wait: false
+  printLog: true
   description: "断开game连接"
 
 ---
 state:
   name: CEventLogin
   description: "发送CEventLogin"
+  printLog: true
   signals:
   - CEventLoginRes_ok
   - CEventLoginRes_failed
