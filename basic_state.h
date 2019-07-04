@@ -1,6 +1,7 @@
 #pragma once
 #include <QtCore/QState>
 #include <QtCore/QTimer>
+#include "testcase.h"
 
 class Robot;
 
@@ -24,6 +25,16 @@ protected:
 
     // 是否输出特定操作的log
     virtual bool printLog() const { return false; }
+
+    template<typename T>
+    bool __attribute_warn_unused_result__ getData(const QString& key, T& value) {
+        auto tc = qobject_cast<TestCase*>(this->machine());
+        if (!tc) {
+            return false;
+        }
+
+        return tc->getData(key, value);
+    }
 private:
     void onEntry(QEvent* e) override;
     void onExit(QEvent* e) override;
