@@ -7,6 +7,9 @@ class TestCase : public QStateMachine {
     Q_OBJECT
 
 public:
+    QStringView id() const { return m_userId; }
+    void setId(QStringView id) { m_userId = id.toString(); }
+
     template<typename T>
     bool __attribute_warn_unused_result__ getData(const QString& key, T& value) {
         auto it = m_data.find(key);
@@ -22,6 +25,11 @@ public:
             return false;
         }
     }
+
+    void setData(QStringView key, const std::any& value) {
+        m_data[key.toString()] = value;
+    }
 private:
+    QString m_userId;
     std::map<QString, std::any> m_data;
 };

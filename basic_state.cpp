@@ -2,10 +2,15 @@
 #include <QtCore/QDebug>
 #include <QtCore/QDateTime>
 #include <QtCore/QTimeZone>
+#include <logger.h>
 
 BasicState::BasicState(QState* parent) : QState{parent} {
     m_timer.setSingleShot(true);
     m_timer.setTimerType(Qt::VeryCoarseTimer);
+}
+
+TestCase& BasicState::testcase() {
+    return *qobject_cast<TestCase*>(this->machine());
 }
 
 void BasicState::onEntry(QEvent* e) {
@@ -17,15 +22,17 @@ void BasicState::onEntry(QEvent* e) {
     QState::onEntry(e);
     
     // 在这里执行特定行为。子类重写perform来实现
-    auto now = QDateTime::currentDateTime();
-    now = now.toOffsetFromUtc(now.offsetFromUtc());
+    // auto now = QDateTime::currentDateTime();
+    // now = now.toOffsetFromUtc(now.offsetFromUtc());
     if (this->printLog()) {
-        qDebug().noquote() << now.toString(Qt::ISODateWithMs) << this->label() << "begin";
+        // qDebug().noquote() << now.toString(Qt::ISODateWithMs) << this->label() << "begin";
+        loggers::TESTCASE().info("[{}] {}", this->testcase().id(), this->label());
     }
     this->perform();
-    if (printLog()) {
-        qDebug().noquote() << now.toString(Qt::ISODateWithMs) << this->label() << "end";
-    }
+    // if (this->printLog()) {
+    //     // qDebug().noquote() << now.toString(Qt::ISODateWithMs) << this->label() << "end";
+    //     loggers::TESTCASE->info("{} end", this->label());
+    // }
 
     if (m_timeout_ms >= 0) {
         // qDebug().noquote() << now.toString(Qt::ISODateWithMs) << this->objectName() << "start timer" << m_timeout_ms;

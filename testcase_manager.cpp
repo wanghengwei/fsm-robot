@@ -8,7 +8,9 @@
 #include <QtCore/QMap>
 #include <QtCore/QDebug>
 #include <QtCore/QFinalState>
+#include <logger.h>
 
+// static std::shared_ptr<spdlog::logger> logger = spdlog::get("testcase_manager");
 
 namespace {
     // 根据parent来创建并加入state。如果parent是state machine，就调addstate，否则就作为子state
@@ -64,7 +66,8 @@ namespace {
 
             // id不能重复
             if (states.find(id) != states.end()) {
-                qDebug() << "duplicated id:", id;
+                // qDebug() << "duplicated id:", id;
+                loggers::TESTCASE_PARSER().warn("duplicated state id: {}", id);
             }
 
             bool isParallel = nname == "parallel";
@@ -88,7 +91,8 @@ namespace {
             parseChildStates(st, state, states);
 
             states[id] = state;
-            qDebug() << "add" << (isParallel ? "parallel" : "state") << id << "timeout:" << (p ? p->timeout() : 0);
+            // qDebug() << "add" << (isParallel ? "parallel" : "state") << id << "timeout:" << (p ? p->timeout() : 0);
+            loggers::TESTCASE_PARSER().debug("add {}: id={}, timeout={}", (isParallel ? "parallel" : "state"), id, (p ? p->timeout() : 0));
         }
 
     }   
@@ -99,7 +103,8 @@ namespace {
         // state 是要处理trans的节点
         auto state = qobject_cast<QState*>(states[id]);
         if (!state) {
-            qDebug() << "WARNING: no state" << id;
+            // qDebug() << "WARNING: no state" << id;
+            loggers::TESTCASE_PARSER().warn("no state {}", id);
             return;
         }
         for (auto &tr : root.children("transition")) {
@@ -107,7 +112,8 @@ namespace {
             QString target = tr.attribute("target").as_string();
             QAbstractState* targetState = states[target];
             if (!targetState) {
-                qDebug() << "WARNING: no target" << id;
+                // qDebug() << "WARNING: no target" << id;
+                loggers::TESTCASE_PARSER().warn("no target {}", id);
                 continue;
             }
 
@@ -118,14 +124,15 @@ namespace {
             if (ev.isEmpty()) {
                 // 没有设置触发的event，那么就直接跳转
                 if (delay == 0 && id == target) {
-                    qDebug() << "WARNING: cannot jump to self without delay:" << id;
+                    loggers::TESTCASE_PARSER().warn("cannot jump to self without delay: {}", id);
                     continue;
                 }
 
                 if (delay == 0) {
                     state->addTransition(targetState);
                 } else {
-                    qDebug() << "add a temp idle in parent" << parent->objectName() << ", connect" << id << "and" << target;
+                    // qDebug() << "add a temp idle in parent" << parent->objectName() << ", connect" << id << "and" << target;
+                    loggers::TESTCASE_PARSER().debug("add a temp idle in parent {}, connect {} to {}", parent->objectName(), id, target);
                     Idle* idle = new Idle{parent};
                     idle->setTimeout(delay);
                     state->addTransition(idle);
@@ -134,7 +141,8 @@ namespace {
             } else {
                 state->addTransition(state, qPrintable("2ev_" + ev + "()"), targetState);
             }
-            qDebug() << "add transition:" << state->objectName() << "--" << ev << "-->" << targetState->objectName() << "delay" << delay;
+            // qDebug() << "add transition:" << state->objectName() << "--" << ev << "-->" << targetState->objectName() << "delay" << delay;
+            loggers::TESTCASE_PARSER().debug("add transition: {} --{}--> {}, delay={}", state->objectName(), ev, targetState->objectName(), delay);
         }
 
         // 把子状态也递归处理了
@@ -154,19 +162,63 @@ namespace {
     }
 }
 
+TestCaseManager::TestCaseManager() {
+    QObject::connect(&m_startTimer, &QTimer::timeout, this, &TestCaseManager::startSome);
+}
+
 void TestCaseManager::start() {
     for (auto& kv : m_testcases) {
-        kv.second->start();
+        std::weak_ptr<TestCase> wp{kv.second};
+        m_startQueue.emplace(std::move(wp));
+    }
+
+    if (m_speed < 10) {
+        m_interval = 1000;
+    } else if (m_speed < 60) {
+        m_interval = 300;
+    } else {
+        m_interval = 100;
+    }
+
+    m_startTimer.start(m_interval);
+}
+
+void TestCaseManager::startSome() {
+    int n = m_speed * m_interval / 1000;
+    int k = 0;
+    while (k < n && !m_startQueue.empty()) {
+        ++k;
+        auto p = m_startQueue.front().lock();
+        m_startQueue.pop();
+        if (!p) {
+            continue;
+        }
+        p->start();
+        // qDebug() << "start a testcase" << p->id();
     }
 }
 
-void TestCaseManager::create(QString account, QString caseName) {
+bool TestCaseManager::create(const QString& id, const QString& caseName) {
     pugi::xml_document doc;
-    doc.load_file(qPrintable(caseName));
+    auto r = doc.load_file(qPrintable(caseName));
+
+    if (!r) {
+        // warn
+        spdlog::get("TestCaseManager")->warn("load xml failed: {}", r.description());
+        return false;
+    }
+
+    return create(id, doc);
+}
+
+bool TestCaseManager::create(const QString& id, const pugi::xml_document& doc) {
+    // pugi::xml_document doc;
+    // doc.load_file(qPrintable(caseName));
 
     // 创建一个用例对象
-    std::unique_ptr<TestCase> testcase(new TestCase);
+    std::shared_ptr<TestCase> testcase(new TestCase);
     testcase->setObjectName("ROOT");
+    testcase->setId(id);
 
     QMap<QString, QAbstractState*> states;
 
@@ -190,6 +242,25 @@ void TestCaseManager::create(QString account, QString caseName) {
         parseChildTransitions(node, testcase.get(), states);
     }
 
-    m_testcases[account] = std::move(testcase);
-    qDebug() << "create testcase: account=" << account << ", casename=" << caseName;
+    m_testcases[id] = std::move(testcase);
+    // qDebug() << "create testcase: account=" << id << ", casename=" << caseName;
+    return true;
+}
+
+void TestCaseManager::createMany(const QString& first, int count, const QString& caseName) {
+    loggers::TESTCASE_MANAGER().info("create testcases: type=sequence, name={}, first={}, count={}", caseName, first, count);
+
+    pugi::xml_document doc;
+    doc.load_file(qPrintable(caseName));
+    if (!doc) {
+        return;
+    }
+
+    auto lfirst = first.toLongLong();
+    for (int i = 0; i < count; i++) {
+        QString id = QString::number(lfirst + i);
+        this->create(id, doc);
+    }
+
+    loggers::TESTCASE_MANAGER().info("create testcases OK");
 }

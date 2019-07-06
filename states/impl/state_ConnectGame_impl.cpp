@@ -13,7 +13,10 @@ namespace state {
             emit this->ev_ok();
         });
         QList<QString> gameips;
-        getData("state.ConnectGame.iplist", gameips);
+        bool ok = this->testcase().getData("state.ConnectGame.iplist", gameips);
+        if (!ok) {
+            return;
+        }
         int idx = QRandomGenerator::global()->bounded(gameips.size() - 1);
         QString ip = gameips[idx];
         // robot()->connection("game").connect(ip);

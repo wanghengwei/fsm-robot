@@ -217,7 +217,7 @@ set(SRCS
 )
     
 add_library(states_gen ${SRCS})
-target_link_libraries(states_gen Qt5::Core)
+target_link_libraries(states_gen Qt5::Core env_logger)
 `
 
 const StateFactoryTPL = `

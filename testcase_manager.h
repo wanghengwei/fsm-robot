@@ -1,15 +1,32 @@
 #pragma once
 #include <map>
 #include <memory>
+#include <queue>
 #include <QtCore/QString>
+#include <QtCore/QTimer>
+#include <pugixml.hpp>
 
 class TestCase;
 
-class TestCaseManager {
+class TestCaseManager : public QObject {
+    Q_OBJECT
 public:
+    TestCaseManager();
+
+    void setSpeedRate(int countPerSecond) { m_speed = countPerSecond; }
+
     void start();
     
-    void create(QString account, QString caseName);
+    bool create(const QString& id, const QString& caseName);
+    bool create(const QString& id, const pugi::xml_document& doc);
+    void createMany(const QString& first, int count, const QString& caseName);
+
 private:
-    std::map<QString, std::unique_ptr<TestCase>> m_testcases;
+    void startSome();
+private:
+    std::map<QString, std::shared_ptr<TestCase>> m_testcases;
+    std::queue<std::weak_ptr<TestCase>> m_startQueue;
+    QTimer m_startTimer;
+    int m_speed = 1;
+    int m_interval = 1000;
 };
