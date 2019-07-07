@@ -22,7 +22,7 @@ namespace state {
                 delete ep;
                 emit this->ev_CEventLoginRes_ok();
             } else {
-                loggers::TESTCASE().info("received a null event");
+                loggers::TESTCASE().info("[{}] {} FAILED", this->testcase().id(), this->label());
                 emit this->ev_CEventLoginRes_failed();
             }
         });

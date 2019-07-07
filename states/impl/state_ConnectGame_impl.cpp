@@ -10,6 +10,12 @@
 #include <robot/basic_connection.h>
 #include <connection_types.h>
 
+// #define CONNECT(sig, slot) \
+//     QObject::connect(&conn, &BasicConnection::sig, this, [this] () { \
+//         loggers::TESTCASE().info("[{}] {}", this->testcase().id(), this->label()); \
+//         emit this->ev_##slot(); \
+//     })
+
 namespace state {
 
     void StateConnectGame::perform(std::map<std::string, std::string>& info) {
@@ -26,8 +32,8 @@ namespace state {
         BasicConnection& conn = robot().connection(CONN_GAME);
         QObject::connect(&conn, &BasicConnection::connectOK, this, [=]() {
             loggers::TESTCASE().info("[{}] {} OK", this->testcase().id(), this->label());
+            emit this->ev_ok();
         });
-        QObject::connect(&conn, &BasicConnection::connectOK, this, &StateConnectGame::ev_ok);
         QObject::connect(&conn, &BasicConnection::connectFailed, this, &StateConnectGame::ev_failed);
         conn.connect(id(), ip);
     }
@@ -36,6 +42,7 @@ namespace state {
         // 清理关注
         BasicConnection& conn = robot().connection(CONN_GAME);
         conn.disconnect(this);
+        // loggers::TESTCASE().info("clean connect");
     }
 
 }
