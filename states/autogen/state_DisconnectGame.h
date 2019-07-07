@@ -10,7 +10,7 @@ class StateDisconnectGame final : public BasicState {
 public:
     explicit StateDisconnectGame(QState* parent = nullptr);
 private:
-    void perform() override;
+    void perform(std::map<std::string, std::string>& info) override;
 	bool printLog() const override;
 signals:
     

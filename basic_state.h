@@ -1,6 +1,8 @@
 #pragma once
 #include <QtCore/QState>
 #include <QtCore/QTimer>
+#include <map>
+#include <string>
 #include "testcase.h"
 
 class Robot;
@@ -17,7 +19,7 @@ signals:
     void ev_timeout();
 
 protected:
-    virtual void perform() = 0;
+    virtual void perform(std::map<std::string, std::string>& info) = 0;
 
     virtual QString label() const { return this->objectName(); }
 

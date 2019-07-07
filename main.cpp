@@ -49,8 +49,9 @@ int main(int argc, char** argv) {
     }
 
     TestCaseManager testcaseManager;
-    testcaseManager.setBaseDir(parser.value("testcase-dir"));
+    testcaseManager.setTestCaseDir(parser.value("testcase-dir"));
     testcaseManager.setSpeedRate(100);
+    testcaseManager.loadUserData(parser.value("data-dir"));
     testcaseManager.createMany(firstId, count, testcasePath);
 
     testcaseManager.start();

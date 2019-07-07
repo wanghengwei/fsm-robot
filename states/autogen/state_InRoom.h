@@ -10,7 +10,7 @@ class StateInRoom final : public BasicState {
 public:
     explicit StateInRoom(QState* parent = nullptr);
 private:
-    void perform() override;
+    void perform(std::map<std::string, std::string>& info) override;
 	bool printLog() const override;
 signals:
     

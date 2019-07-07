@@ -13,7 +13,7 @@ public:
 
     // QState state;
 private:
-    void perform() override;
+    void perform(std::map<std::string, std::string>& info) override;
 //     void onEntry(QEvent* e) override;
 // private:
 //     QTimer timer;

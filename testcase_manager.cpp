@@ -9,6 +9,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QFinalState>
 #include <logger.h>
+#include <fstream>
 
 // static std::shared_ptr<spdlog::logger> logger = spdlog::get("testcase_manager");
 
@@ -215,8 +216,10 @@ bool TestCaseManager::create(const QString& id, const QString& caseName) {
 bool TestCaseManager::create(const QString& id, const pugi::xml_document& doc) {
     // 创建一个用例对象
     std::shared_ptr<TestCase> testcase(new TestCase);
+    // 初始化数据
     testcase->setObjectName("ROOT");
     testcase->setId(id);
+    testcase->setData(m_userData);
 
     QMap<QString, QAbstractState*> states;
 
@@ -267,4 +270,42 @@ void TestCaseManager::createMany(const QString& first, int count, const QString&
     }
 
     loggers::TESTCASE_MANAGER().info("create testcases OK");
+}
+
+void TestCaseManager::loadUserData(QString const& d) {
+    QDir dir;
+    bool ok = dir.cd(d);
+    if (!ok) {
+        loggers::TESTCASE_MANAGER().error("cannot find userdata dir: {}", d);
+        return;
+    }
+
+    // 目前感觉不需要有子目录
+
+    // 最终合并成一个josn
+    nlohmann::json merged = nlohmann::json::object();
+
+    auto dfiles = dir.entryList(QStringList{} << "*.json");
+    for (auto& df : dfiles) {
+        auto p = dir.filePath(df);
+        std::ifstream ins{p.toStdString()};
+        if (!ins) {
+            loggers::TESTCASE_MANAGER().error("cannot read userdata file: {}", df);
+            return;
+        }
+
+        nlohmann::json j;
+        try {
+            ins >> j;
+        } catch (std::exception& ex) {
+            loggers::TESTCASE_MANAGER().error("cannot parse json file {}: what={}", df, ex.what());
+            return;
+        }
+
+        merged.merge_patch(j);
+    }
+
+    loggers::TESTCASE_MANAGER().trace("merged userdata: {}", merged.dump());
+
+    this->m_userData = std::move(merged);
 }

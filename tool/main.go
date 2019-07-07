@@ -166,7 +166,7 @@ class {{ .ClassName }} final : public BasicState {
 public:
     explicit {{ .ClassName }}(QState* parent = nullptr);
 private:
-    void perform() override;
+    void perform(std::map<std::string, std::string>& info) override;
 	bool printLog() const override;
 signals:
     {{ range .Signals }}
@@ -197,10 +197,11 @@ namespace state {
 const FooImplCpp = `
 #include "{{ .FileName }}.h"
 #include <stdexcept>
+#include <logger.h>
 
 namespace state {
 
-    void {{ .ClassName }}::perform() {
+    void {{ .ClassName }}::perform(std::map<std::string, std::string>& info) {
         // todo
         throw std::runtime_error{"todo"};
     }
