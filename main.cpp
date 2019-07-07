@@ -1,8 +1,9 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QCommandLineParser>
 #include <QtCore/QDebug>
-#include "testcase_manager.h"
 #include <logger.h>
+#include "testcase_manager.h"
+#include <robot/connection_factory.h>
 
 int main(int argc, char** argv) {
 
@@ -48,11 +49,15 @@ int main(int argc, char** argv) {
         return 1;
     }
 
+    // =============================================================
+
+    std::shared_ptr<ConnectionFactory> connectionFactory{new FakeConnectionFactory};
     TestCaseManager testcaseManager;
+    testcaseManager.setConnectionFactory(connectionFactory);
     testcaseManager.setTestCaseDir(parser.value("testcase-dir"));
     testcaseManager.setSpeedRate(100);
     testcaseManager.loadUserData(parser.value("data-dir"));
-    testcaseManager.createMany(firstId, count, testcasePath);
+    testcaseManager.createMany(firstId.toStdString(), count, testcasePath);
 
     testcaseManager.start();
 

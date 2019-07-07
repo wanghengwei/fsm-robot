@@ -62,3 +62,17 @@ TEST(testcase_manager_test, test_merge) {
 
     qDebug().noquote() << j1.dump().c_str();
 }
+
+TEST(testcase_manager_test, test_toll) {
+    std::string s = "xxx";
+    char* end = nullptr;
+    long long a = std::strtoll(s.data(), &end, 10);
+    ASSERT_EQ(end, s.data());
+    ASSERT_NE(*end, '\0');
+
+    s = "91234567890";
+    end = nullptr;
+    a = std::strtoll(s.data(), &end, 10);
+    ASSERT_EQ(91234567890, a);
+    ASSERT_EQ('\0', *end);
+}

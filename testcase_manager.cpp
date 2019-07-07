@@ -10,6 +10,7 @@
 #include <QtCore/QFinalState>
 #include <logger.h>
 #include <fstream>
+#include <robot/basic_robot.h>
 
 // static std::shared_ptr<spdlog::logger> logger = spdlog::get("testcase_manager");
 
@@ -199,27 +200,29 @@ void TestCaseManager::startSome() {
     }
 }
 
-bool TestCaseManager::create(const QString& id, const QString& caseName) {
-    pugi::xml_document doc;
-    auto tcpath = m_testcaseBaseDir.filePath(caseName);
-    auto r = doc.load_file(qPrintable(tcpath));
+// bool TestCaseManager::create(const QString& id, const QString& caseName) {
+//     pugi::xml_document doc;
+//     auto tcpath = m_testcaseBaseDir.filePath(caseName);
+//     auto r = doc.load_file(qPrintable(tcpath));
 
-    if (!r) {
-        // warn
-        spdlog::get("TestCaseManager")->warn("load xml failed: {}", r.description());
-        return false;
-    }
+//     if (!r) {
+//         // warn
+//         spdlog::get("TestCaseManager")->warn("load xml failed: {}", r.description());
+//         return false;
+//     }
 
-    return create(id, doc);
-}
+//     return create(id, doc);
+// }
 
-bool TestCaseManager::create(const QString& id, const pugi::xml_document& doc) {
+bool TestCaseManager::create(const std::string& id, const pugi::xml_document& doc) {
     // 创建一个用例对象
     std::shared_ptr<TestCase> testcase(new TestCase);
     // 初始化数据
     testcase->setObjectName("ROOT");
     testcase->setId(id);
     testcase->setData(m_userData);
+    Q_ASSERT_X(m_connectionFactory, __PRETTY_FUNCTION__, "forgot set connectionFactory?");
+    testcase->setConnectionFactory(m_connectionFactory);
 
     QMap<QString, QAbstractState*> states;
 
@@ -248,7 +251,7 @@ bool TestCaseManager::create(const QString& id, const pugi::xml_document& doc) {
     return true;
 }
 
-void TestCaseManager::createMany(const QString& first, int count, const QString& caseName) {
+void TestCaseManager::createMany(const std::string& first, int count, const QString& caseName) {
     loggers::TESTCASE_MANAGER().info("create testcases: type=sequence, name={}, first={}, count={}", caseName, first, count);
 
     pugi::xml_document doc;
@@ -263,9 +266,16 @@ void TestCaseManager::createMany(const QString& first, int count, const QString&
         return;
     }
 
-    auto lfirst = first.toLongLong();
+    bool ok = true;
+    auto lfirst = QString::fromStdString(first).toLongLong(&ok);
+    if (!ok) {
+        // 转换失败
+        loggers::TESTCASE_MANAGER().error("first id is not number: {}", first);
+        return;
+    }
+
     for (int i = 0; i < count; i++) {
-        QString id = QString::number(lfirst + i);
+        std::string id = std::to_string(lfirst + i);
         this->create(id, doc);
     }
 

@@ -5,7 +5,7 @@
 #include <string>
 #include "testcase.h"
 
-class Robot;
+// class Robot;
 
 class BasicState : public QState {
     Q_OBJECT
@@ -26,6 +26,10 @@ protected:
     QTimer* timer() { return &m_timer; }
 
     TestCase& testcase();
+    TestCase const& testcase() const;
+
+    const std::string& id() const;
+    BasicRobot& robot();
 
     // 是否输出特定操作的log
     virtual bool printLog() const { return false; }

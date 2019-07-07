@@ -1,8 +1,8 @@
-- [ ] env_logger 支持`all=debug`的特殊模块
 - [x] 将基础部分提取为一个模块
-- [ ] 能从scxml生成plantuml的状态图
 - [x] 从某个目录中读取全部的json并合并它们
 - [x] 从某个目录下寻找用例
 - [ ] 可以指定额外的data文件来覆盖已有的值
 - [ ] 可以用 `--set`的形式来覆盖已有的值
+- [ ] env_logger 支持`all=debug`的特殊模块
 - [ ] 支持yaml格式的数据定义
+- [ ] 能从scxml生成plantuml的状态图

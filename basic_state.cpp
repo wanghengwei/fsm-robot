@@ -3,6 +3,7 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QTimeZone>
 #include <logger.h>
+#include "testcase.h"
 
 BasicState::BasicState(QState* parent) : QState{parent} {
     m_timer.setSingleShot(true);
@@ -11,6 +12,18 @@ BasicState::BasicState(QState* parent) : QState{parent} {
 
 TestCase& BasicState::testcase() {
     return *qobject_cast<TestCase*>(this->machine());
+}
+
+TestCase const& BasicState::testcase() const {
+    return *qobject_cast<TestCase*>(this->machine());
+}
+
+const std::string& BasicState::id() const {
+    return this->testcase().id();
+}
+
+BasicRobot& BasicState::robot() {
+    return this->testcase().robot();
 }
 
 void BasicState::onEntry(QEvent* e) {

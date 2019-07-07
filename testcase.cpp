@@ -1,5 +1,6 @@
 #include "testcase.h"
 #include <nlohmann/json.hpp>
+#include <robot/basic_robot.h>
 
 namespace impl {
     void setData(const nlohmann::json& data, std::map<QString, std::any>& store) {
@@ -42,6 +43,23 @@ namespace impl {
     }
 }
 
+TestCase::TestCase(QObject* parent) : QStateMachine{parent} {
+    m_robot = new BasicRobot{};
+}
+
+TestCase::~TestCase() {
+    delete m_robot;
+}
+
+void TestCase::setConnectionFactory(const std::shared_ptr<ConnectionFactory>& p) {
+    this->robot().setConnectionFactory(p);
+}
+
 void TestCase::setData(const nlohmann::json& data) {
     impl::setData(data, m_data);
+}
+
+BasicRobot& TestCase::robot() {
+    Q_ASSERT_X(m_robot != nullptr, "robot()", "forgot init robot?");
+    return *m_robot;
 }

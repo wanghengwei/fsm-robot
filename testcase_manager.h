@@ -9,6 +9,7 @@
 #include <nlohmann/json.hpp>
 
 class TestCase;
+class ConnectionFactory;
 
 /** 
  * @brief 管理TestCase
@@ -17,6 +18,10 @@ class TestCaseManager : public QObject {
     Q_OBJECT
 public:
     TestCaseManager();
+
+    void setConnectionFactory(const std::shared_ptr<ConnectionFactory>& p) {
+        m_connectionFactory = p;
+    }
 
     /** 
      * @brief 设置用例的执行速率，即每秒最多进入执行状态的用例数量
@@ -35,18 +40,19 @@ public:
 
     void start();
     
-    bool create(const QString& id, const QString& caseName);
-    bool create(const QString& id, const pugi::xml_document& doc);
-    void createMany(const QString& first, int count, const QString& caseName);
+    // bool create(const QString& id, const QString& caseName);
+    bool create(const std::string& id, const pugi::xml_document& doc);
+    void createMany(const std::string& first, int count, const QString& caseName);
 
 private:
     void startSome();
 private:
-    std::map<QString, std::shared_ptr<TestCase>> m_testcases;
+    std::map<std::string, std::shared_ptr<TestCase>> m_testcases;
     std::queue<std::weak_ptr<TestCase>> m_startQueue;
     QTimer m_startTimer;
     int m_speed = 1;
     int m_interval = 1000;
     QDir m_testcaseBaseDir;
     nlohmann::json m_userData;
+    std::shared_ptr<ConnectionFactory> m_connectionFactory;
 };

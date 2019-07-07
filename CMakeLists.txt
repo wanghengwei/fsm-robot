@@ -34,14 +34,18 @@ if(NOT nlohmann-json_POPULATED)
     message("${nlohmann-json_SOURCE_DIR}")
 endif()
 
+add_subdirectory(robot)
+
 add_subdirectory(states)
 
-add_library(base robot.cpp testcase.cpp
+add_library(base 
+    # basic_robot.cpp 
+    testcase.cpp
     basic_state.cpp
     testcase_manager.cpp
     state_factory.cpp
 )
-target_link_libraries(base Qt5::Core Qt5::Xml pugixml states env_logger)
+target_link_libraries(base Qt5::Core Qt5::Xml pugixml robot states env_logger)
 # target_include_directories(base PUBLIC ${nlohmann-json_SOURCE_DIR})
 
 add_executable(demo main.cpp)

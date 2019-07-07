@@ -5,16 +5,25 @@
 #include <type_traits>
 #include <nlohmann/json_fwd.hpp>
 
+class BasicRobot;
+class ConnectionFactory;
+
 class TestCase : public QStateMachine {
     Q_OBJECT
 
 public:
-    QStringView id() const { return m_userId; }
+    explicit TestCase(QObject* parent = nullptr);
+
+    ~TestCase();
+
+    void setConnectionFactory(const std::shared_ptr<ConnectionFactory>& p);
+
+    const std::string& id() const { return m_userId; }
     
     /** 
      * @brief 设置此用例对象使用的玩家账号id
     */
-    void setId(QStringView id) { m_userId = id.toString(); }
+    void setId(const std::string& id) { m_userId = id; }
 
     /** 
      * @brief 设置初始用户数据
@@ -32,14 +41,22 @@ public:
     template<typename T>
     bool __attribute_warn_unused_result__ getData(const QString& key, T& value);
 
+    /** 
+     * @brief 插入或更新用户数据
+    */
     void insertOrUpdateData(QStringView key, const std::any& value) {
         m_data[key.toString()] = value;
     }
+
+    BasicRobot& robot();
+
 private:
-    QString m_userId;
+    std::string m_userId;
 
     // 保存k-v结构的用户数据
     std::map<QString, std::any> m_data;
+
+    BasicRobot* m_robot = nullptr;
 };
 
 namespace impl {
