@@ -10,7 +10,7 @@ namespace state {
         // todo
         // throw std::runtime_error{"todo"};
         int zone = 0;
-        GET_DATA_OR_DIR("zone", zone);
+        GET_DATA_OR_DIE("zone", zone);
         info["zone"] = std::to_string(zone);
         QTimer::singleShot(1000, this, [=]() {
             emit this->ev_CEventLoginRes_ok();

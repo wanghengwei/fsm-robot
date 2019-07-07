@@ -47,7 +47,11 @@ private:
     int m_timeout_ms = 0;
 };
 
-// 用于在状态perform函数中获取data
-#define GET_DATA_OR_DIR(key, value) \
+/**
+ * @brief 用于在自定义状态的perform函数中获取data
+ * 
+ * 只能用在自定义的状态中。如果key不存在，那么会打印错误信息然后崩掉 
+ * */ 
+#define GET_DATA_OR_DIE(key, value) \
     if (!this->testcase().getData(key, value)) { \
         loggers::TESTCASE().critical(R"([{}] [{}:{}] cannot get data by key {})", testcase().id(), __FILE__, __LINE__, key); abort(); }

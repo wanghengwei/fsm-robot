@@ -11,7 +11,7 @@ namespace state {
 
     void StateConnectGame::perform(std::map<std::string, std::string>& info) {
         nlohmann::json gameips;
-        GET_DATA_OR_DIR("gameServerIPList", gameips);
+        GET_DATA_OR_DIE("gameServerIPList", gameips);
         int idx = QRandomGenerator::global()->bounded(int(gameips.size()) - 1);
         std::string ip = gameips[idx];
 
