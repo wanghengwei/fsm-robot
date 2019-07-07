@@ -44,3 +44,8 @@ private:
     QTimer m_timer;
     int m_timeout_ms = 0;
 };
+
+// 用于在状态perform函数中获取data
+#define GET_DATA_OR_DIR(key, value) \
+    if (!this->testcase().getData(key, value)) { \
+        loggers::TESTCASE().critical(R"([{}] [{}:{}] cannot get data by key {})", testcase().id(), __FILE__, __LINE__, key); abort(); }

@@ -4,6 +4,7 @@
 #include <queue>
 #include <QtCore/QString>
 #include <QtCore/QTimer>
+#include <QtCore/QDir>
 #include <pugixml.hpp>
 
 class TestCase;
@@ -14,6 +15,7 @@ public:
     TestCaseManager();
 
     void setSpeedRate(int countPerSecond) { m_speed = countPerSecond; }
+    void setBaseDir(QStringView dir) { m_testcaseBaseDir = dir.toString(); }
 
     void start();
     
@@ -29,4 +31,5 @@ private:
     QTimer m_startTimer;
     int m_speed = 1;
     int m_interval = 1000;
+    QDir m_testcaseBaseDir;
 };

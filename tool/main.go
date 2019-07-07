@@ -218,6 +218,8 @@ set(SRCS
     
 add_library(states_gen ${SRCS})
 target_link_libraries(states_gen Qt5::Core env_logger)
+target_include_directories(states_gen PUBLIC ${nlohmann-json_SOURCE_DIR})
+target_compile_definitions(states_gen PUBLIC JSON_MultipleHeaders=ON)
 `
 
 const StateFactoryTPL = `

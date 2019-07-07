@@ -200,7 +200,8 @@ void TestCaseManager::startSome() {
 
 bool TestCaseManager::create(const QString& id, const QString& caseName) {
     pugi::xml_document doc;
-    auto r = doc.load_file(qPrintable(caseName));
+    auto tcpath = m_testcaseBaseDir.filePath(caseName);
+    auto r = doc.load_file(qPrintable(tcpath));
 
     if (!r) {
         // warn
@@ -212,9 +213,6 @@ bool TestCaseManager::create(const QString& id, const QString& caseName) {
 }
 
 bool TestCaseManager::create(const QString& id, const pugi::xml_document& doc) {
-    // pugi::xml_document doc;
-    // doc.load_file(qPrintable(caseName));
-
     // 创建一个用例对象
     std::shared_ptr<TestCase> testcase(new TestCase);
     testcase->setObjectName("ROOT");
@@ -251,7 +249,13 @@ void TestCaseManager::createMany(const QString& first, int count, const QString&
     loggers::TESTCASE_MANAGER().info("create testcases: type=sequence, name={}, first={}, count={}", caseName, first, count);
 
     pugi::xml_document doc;
-    doc.load_file(qPrintable(caseName));
+
+    auto tcpath = m_testcaseBaseDir.filePath(caseName);
+    if (!tcpath.endsWith(".xml")) {
+        tcpath += ".xml";
+    }
+
+    doc.load_file(qPrintable(tcpath));
     if (!doc) {
         return;
     }

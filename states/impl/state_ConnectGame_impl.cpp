@@ -3,20 +3,14 @@
 #include <stdexcept>
 #include <QtCore/QTimer>
 #include <QtCore/QRandomGenerator>
+#include <logger.h>
+#include <QtCore/QDebug>
 
 namespace state {
 
     void StateConnectGame::perform() {
-        // todo
-        // throw std::runtime_error{"todo"};
-        QTimer::singleShot(1000, this, [=]() {
-            emit this->ev_ok();
-        });
         QList<QString> gameips;
-        bool ok = this->testcase().getData("state.ConnectGame.iplist", gameips);
-        if (!ok) {
-            return;
-        }
+        GET_DATA_OR_DIR("state.ConnectGame.iplist", gameips);
         int idx = QRandomGenerator::global()->bounded(gameips.size() - 1);
         QString ip = gameips[idx];
         // robot()->connection("game").connect(ip);
@@ -25,6 +19,10 @@ namespace state {
         //         emit this->ev_ok();
         //     }
         // });
+
+        QTimer::singleShot(1000, this, [=]() {
+            emit this->ev_ok();
+        });
     }
 
 }

@@ -1,30 +1,57 @@
-#include <QtCore/QStateMachine>
-#include <QtCore/QFinalState>
-#include <QtCore/QTimer>
 #include <QtCore/QCoreApplication>
+#include <QtCore/QCommandLineParser>
 #include <QtCore/QDebug>
-#include <QtCore/QDateTime>
-#include "states/idle.h"
-#include "robot.h"
-#include "testcase.h"
-#include <QtCore/QXmlStreamReader>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
-#include <QtCore/QFile>
-#include <QtCore/QMap>
-#include "state_factory.h"
-#include <pugixml.hpp>
 #include "testcase_manager.h"
+#include <logger.h>
 
 int main(int argc, char** argv) {
 
     QCoreApplication qapp(argc, argv);
 
+    QCommandLineParser parser;
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addOption({
+        "f", "first id", "FIRST_ID", "1000000"
+    });
+    parser.addOption({
+        "n", "count of robot", "COUNT", "1"
+    });
+    parser.addOption({
+        "t", "path of testcase", "TESTCASE_PATH", ""
+    });
+    parser.addOption({
+        "testcase-dir", "base dir of testcases", "DIR", "."
+    });
+    parser.addOption({
+        "data-dir", "base dir of data", "DIR", "./user_data"
+    });
+
+    parser.process(qapp);
+
+    // loggers::MAIN().info("first={}", parser.value("f"));
+    bool ok = true;
+    QString firstId = parser.value("f");
+    firstId.toULongLong(&ok);
+    if (!ok) {
+        loggers::MAIN().error("firstId must be long, but {}", firstId);
+        return 1;
+    }
+    int count = parser.value("n").toUInt(&ok);
+    if (!ok) {
+        loggers::MAIN().error("count must be uint, but {}", parser.value("n"));
+        return 1;
+    }
+    QString testcasePath = parser.value("t");
+    if (testcasePath.isEmpty()) {
+        loggers::MAIN().error("-t must not be empty");
+        return 1;
+    }
+
     TestCaseManager testcaseManager;
+    testcaseManager.setBaseDir(parser.value("testcase-dir"));
     testcaseManager.setSpeedRate(100);
-    testcaseManager.createMany("100000", 1, "../sample-case.xml");
-    // testcaseManager.create("1", "../sample-case.xml");
-    // testcaseManager.create("2", "../sample-case.xml");
+    testcaseManager.createMany(firstId, count, testcasePath);
 
     testcaseManager.start();
 
