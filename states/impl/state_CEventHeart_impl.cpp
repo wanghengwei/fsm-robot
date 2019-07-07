@@ -10,4 +10,6 @@ namespace state {
         
     }
 
+    void StateCEventHeart::clean() {}
+
 }

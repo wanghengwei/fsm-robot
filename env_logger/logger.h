@@ -41,4 +41,5 @@ namespace loggers {
     spdlog::logger& TESTCASE_MANAGER();
     spdlog::logger& TESTCASE_PARSER();
     spdlog::logger& TESTCASE();
+    spdlog::logger& NET();
 }

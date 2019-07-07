@@ -13,6 +13,9 @@ public:
 
 signals:
     void eventReceived(void *);
+    void connectOK();
+    void connectFailed();
+
 };
 
 class FakeConnection : public BasicConnection {

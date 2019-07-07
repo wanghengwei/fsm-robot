@@ -7,6 +7,17 @@
 
 // class Robot;
 
+/** 
+ * @brief 表示机器人所处状态
+ * 
+ * 与最一般的状态不同，这里赋予了更多的意义：
+ * 1. 有超时设置。如果设置超时不小于0，那么当指定时间到了后会触发其ev_timeout事件
+ * 2. 这里的状态一般是代表做了某个行为然后等待其响应的这一段时间，或者做了某个行为然后等待下一个行为的等待时间
+ * 
+ * 子类可以重写两个函数：
+ * 1. perform 这个函数会在进入状态时执行，一般在这里做点什么，比如发送个消息
+ * 2. clean 这个函数是退出状态时清理一些东西的，比如在perform里连接了signal和slot，就需要在clean里将它们断开
+*/
 class BasicState : public QState {
     Q_OBJECT
 public:
@@ -19,7 +30,8 @@ signals:
     void ev_timeout();
 
 protected:
-    virtual void perform(std::map<std::string, std::string>& info) = 0;
+    virtual void perform(std::map<std::string, std::string>& info) {}
+    virtual void clean() {}
 
     virtual QString label() const { return this->objectName(); }
 
@@ -34,21 +46,12 @@ protected:
     // 是否输出特定操作的log
     virtual bool printLog() const { return false; }
 
-    // template<typename T>
-    // bool __attribute_warn_unused_result__ getData(const QString& key, T& value) {
-    //     auto tc = qobject_cast<TestCase*>(this->machine());
-    //     if (!tc) {
-    //         return false;
-    //     }
-
-    //     return tc->getData(key, value);
-    // }
 private:
     void onEntry(QEvent* e) override;
     void onExit(QEvent* e) override;
 private:
     QTimer m_timer;
-    int m_timeout_ms = 0;
+    int m_timeout_ms = -1;
 };
 
 /**

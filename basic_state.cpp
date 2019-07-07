@@ -53,4 +53,6 @@ void BasicState::onExit(QEvent* e) {
     if (m_timeout_ms >= 0) {
         m_timer.stop();
     }
+
+    this->clean();
 }

@@ -15,9 +15,9 @@ public:
 
     BasicConnection& connection(int connType);
 
-signals:
-    void connectOK();
-    void connectFailed();
+// signals:
+//     void connectOK();
+//     void connectFailed();
 private:
     std::map<int, std::unique_ptr<BasicConnection>> m_conns;
     std::shared_ptr<ConnectionFactory> m_connectionFactory;

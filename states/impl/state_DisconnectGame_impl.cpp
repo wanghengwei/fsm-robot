@@ -9,4 +9,5 @@ namespace state {
         // throw std::runtime_error{"todo"};
     }
 
+    void StateDisconnectGame::clean() {}
 }

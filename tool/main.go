@@ -166,7 +166,8 @@ class {{ .ClassName }} final : public BasicState {
 public:
     explicit {{ .ClassName }}(QState* parent = nullptr);
 private:
-    void perform(std::map<std::string, std::string>& info) override;
+	void perform(std::map<std::string, std::string>& info) override;
+	void clean() override;
 	bool printLog() const override;
 signals:
     {{ range .Signals }}
@@ -204,7 +205,11 @@ namespace state {
     void {{ .ClassName }}::perform(std::map<std::string, std::string>& info) {
         // todo
         throw std::runtime_error{"todo"};
-    }
+	}
+	
+	void {{ .ClassName }}::clean() {
+		
+	}
 
 }
 `

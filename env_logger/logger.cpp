@@ -45,4 +45,9 @@ namespace loggers {
         static auto lg = initLogger("tc");
         return *lg;
     }
+
+    spdlog::logger& NET() {
+        static auto lg = initLogger("net");
+        return *lg;
+    }
 }

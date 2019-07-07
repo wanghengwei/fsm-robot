@@ -17,4 +17,5 @@ namespace state {
         });
     }
 
+    void StateInRoom::clean() {}
 }

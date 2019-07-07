@@ -13,26 +13,29 @@
 namespace state {
 
     void StateConnectGame::perform(std::map<std::string, std::string>& info) {
+        // 取出关心的数据
         nlohmann::json gameips;
         GET_DATA_OR_DIE("gameServerIPList", gameips);
         int idx = QRandomGenerator::global()->bounded(int(gameips.size()) - 1);
         std::string ip = gameips[idx];
 
+        // 准备log信息
         info["ip"] = ip;
 
-        QObject::connect(&robot(), &BasicRobot::connectOK, this, &StateConnectGame::ev_ok);
-        robot().connection(CONN_GAME).connect(id(), ip);
-        // loggers::TESTCASE().debug("connect game {}", ip);
-        // robot()->connection("game").connect(ip);
-        // QObject::connect(robot(), &Robot::connect_ok, this, [=](const QString& n) {
-        //     if (n == "game") {
-        //         emit this->ev_ok();
-        //     }
-        // });
+        // 发起连接，并关注连接事件
+        BasicConnection& conn = robot().connection(CONN_GAME);
+        QObject::connect(&conn, &BasicConnection::connectOK, this, [=]() {
+            loggers::TESTCASE().info("[{}] {} OK", this->testcase().id(), this->label());
+        });
+        QObject::connect(&conn, &BasicConnection::connectOK, this, &StateConnectGame::ev_ok);
+        QObject::connect(&conn, &BasicConnection::connectFailed, this, &StateConnectGame::ev_failed);
+        conn.connect(id(), ip);
+    }
 
-        // QTimer::singleShot(1000, this, [=]() {
-        //     emit this->ev_ok();
-        // });
+    void StateConnectGame::clean() {
+        // 清理关注
+        BasicConnection& conn = robot().connection(CONN_GAME);
+        conn.disconnect(this);
     }
 
 }

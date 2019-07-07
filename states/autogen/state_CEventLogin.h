@@ -10,7 +10,8 @@ class StateCEventLogin final : public BasicState {
 public:
     explicit StateCEventLogin(QState* parent = nullptr);
 private:
-    void perform(std::map<std::string, std::string>& info) override;
+	void perform(std::map<std::string, std::string>& info) override;
+	void clean() override;
 	bool printLog() const override;
 signals:
     

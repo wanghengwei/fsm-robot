@@ -14,14 +14,24 @@ namespace state {
         info["zone"] = std::to_string(zone);
 
         auto& conn = robot().connection(CONN_GAME);
-        QObject::connect(&conn, &BasicConnection::eventReceived, this, [=](void* e) {
+        QObject::connect(&conn, &BasicConnection::eventReceived, this, [=, &conn](void* e) {
+            // conn.disconnect(this);
             if (!e) {
+                int* ep = static_cast<int*>(e);
+                loggers::TESTCASE().info("received event: {}", *ep);
+                delete ep;
                 emit this->ev_CEventLoginRes_ok();
             } else {
+                loggers::TESTCASE().info("received a null event");
                 emit this->ev_CEventLoginRes_failed();
             }
         });
-        conn.sendEvent(nullptr);
+        conn.sendEvent(new int{1});
+    }
+
+    void StateCEventLogin::clean() {
+        auto& conn = robot().connection(CONN_GAME);
+        conn.disconnect(this);
     }
 
 }
