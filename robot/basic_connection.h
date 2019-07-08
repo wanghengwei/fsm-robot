@@ -13,9 +13,11 @@ public:
 
 signals:
     void eventReceived(void *);
+
     void connectOK();
     void connectFailed();
 
+    void kicked();
 };
 
 class FakeConnection : public BasicConnection {

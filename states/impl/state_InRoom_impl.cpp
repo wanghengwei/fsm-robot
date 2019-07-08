@@ -12,7 +12,7 @@ namespace state {
         // throw std::runtime_error{"todo"};
         // qDebug() << "in room!";
         loggers::TESTCASE().info("[{}] in room", testcase().id());
-        QTimer::singleShot(10000, this, [=]() {
+        QTimer::singleShot(10000, Qt::VeryCoarseTimer, this, [=]() {
             emit this->ev_leaveRoom();
         });
     }

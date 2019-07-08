@@ -16,7 +16,7 @@ namespace state {
         auto& conn = robot().connection(CONN_GAME);
         QObject::connect(&conn, &BasicConnection::eventReceived, this, [=, &conn](void* e) {
             // conn.disconnect(this);
-            if (!e) {
+            if (e != nullptr) {
                 int* ep = static_cast<int*>(e);
                 loggers::TESTCASE().info("received event: {}", *ep);
                 delete ep;
