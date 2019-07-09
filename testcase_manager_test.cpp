@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
 #include <QtCore/QDir>
 #include <QtCore/QDebug>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QStateMachine>
 #include "testcase_manager.h"
 
 TEST(testcase_manager_test, test_dir_join_file) {
@@ -75,4 +77,28 @@ TEST(testcase_manager_test, test_toll) {
     a = std::strtoll(s.data(), &end, 10);
     ASSERT_EQ(91234567890, a);
     ASSERT_EQ('\0', *end);
+}
+
+TEST(testcase_manager_test, test_machine) {
+    return;
+    
+    int argc = 1;
+    char* argv = "";
+    QCoreApplication qapp{argc, &argv};
+    QStateMachine m1;
+    QState s1{&m1};
+    QObject::connect(&s1, &QState::entered, []() {
+        qDebug() << "enter s1";
+    });
+    m1.setInitialState(&s1);
+    QStateMachine m2{&s1};
+    s1.setInitialState(&m2);
+    QState s3{&m2};
+    QObject::connect(&s3, &QState::entered, []() {
+        qDebug() << "enter s3";
+    });
+    m2.setInitialState(&s3);
+    m1.start();
+
+    qapp.exec();
 }

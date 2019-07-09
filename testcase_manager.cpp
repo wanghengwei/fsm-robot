@@ -224,11 +224,13 @@ bool TestCaseManager::create(const std::string& id, const pugi::xml_document& do
     Q_ASSERT_X(m_connectionFactory, __PRETTY_FUNCTION__, "forgot set connectionFactory?");
     testcase->setConnectionFactory(m_connectionFactory);
 
+    // 这个map用来创建trans时通过id找到state
     QMap<QString, QAbstractState*> states;
 
     auto root = doc.child("testcase");
 
     parseChildStates(root, testcase.get(), states);
+    
     // 额外添加一个特殊状态叫finish
     QFinalState* finish = new QFinalState{testcase.get()};
     finish->setObjectName("finish");
