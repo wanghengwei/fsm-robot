@@ -3,6 +3,8 @@
 #include <QtCore/QDebug>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QStateMachine>
+#include <QtCore/QFinalState>
+
 #include "testcase_manager.h"
 
 TEST(testcase_manager_test, test_dir_join_file) {
@@ -80,24 +82,45 @@ TEST(testcase_manager_test, test_toll) {
 }
 
 TEST(testcase_manager_test, test_machine) {
-    return;
-    
+    // return;
+
     int argc = 1;
     char* argv = "";
     QCoreApplication qapp{argc, &argv};
+
     QStateMachine m1;
+
+    QFinalState fs(&m1);
+    QObject::connect(&m1, &QStateMachine::finished, []() {
+        qDebug() << "m1 finished";
+    });
+
     QState s1{&m1};
     QObject::connect(&s1, &QState::entered, []() {
         qDebug() << "enter s1";
     });
+    QTimer t1;
+    s1.addTransition(&t1, &QTimer::timeout, &fs);
+    t1.start(2000);
+
     m1.setInitialState(&s1);
+
     QStateMachine m2{&s1};
     s1.setInitialState(&m2);
+    QObject::connect(&m2, &QStateMachine::entered, []() {
+        qDebug() << "enter m2";
+    });
+    QObject::connect(&m2, &QStateMachine::exited, []() {
+        qDebug() << "exit m2";
+    });
+
     QState s3{&m2};
     QObject::connect(&s3, &QState::entered, []() {
         qDebug() << "enter s3";
     });
+
     m2.setInitialState(&s3);
+
     m1.start();
 
     qapp.exec();
