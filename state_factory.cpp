@@ -12,6 +12,8 @@
 
 #include "states/autogen/state_InRoom.h"
 
+#include "states/autogen/state_SleepInRoom.h"
+
 
 QState* createStateByID(QString id, QState* parent) {
     if (id == "Idle") {
@@ -37,6 +39,10 @@ QState* createStateByID(QString id, QState* parent) {
     
     if (id == "InRoom") {
         return new state::StateInRoom{parent};
+    }
+    
+    if (id == "SleepInRoom") {
+        return new state::StateSleepInRoom{parent};
     }
     
 

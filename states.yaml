@@ -36,3 +36,8 @@ state:
   wait: false
   signals:
   - leaveRoom
+
+---
+state:
+  name: SleepInRoom
+  description: "在房间内发呆"

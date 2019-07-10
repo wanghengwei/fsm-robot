@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testcase initial="Idle" parent="login">
-    <state id="Idle" timeout="1000">
-        <transition event="timeout" target="Idle"/>
+<testcase initial="SleepInRoom" parent="login">
+    <state id="SleepInRoom" timeout="1000">
+        <transition event="timeout" target="SleepInRoom"/>
     </state>
 </testcase>

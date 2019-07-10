@@ -39,7 +39,7 @@ namespace {
     }
 
     // 将全部的state找出来
-    void parseChildStates(pugi::xml_node const& root, QState* parent, QMap<QString, QAbstractState*>& states) {
+    void parseChildStates(pugi::xml_node const& root, QState* parent, QMap<QString, QAbstractState*>& states, QState* inner = nullptr) {
         QString rootName = root.name();
         QString initName = root.attribute("initial").as_string();
         // 如果没有指定初始状态，那么就不要处理其内部状态了
@@ -75,7 +75,15 @@ namespace {
             bool isParallel = nname == "parallel";
 
             // qDebug() << id << " before create state";
-            auto state = createState(type, parent, isParallel);
+            QState* state = nullptr;
+            if (id == "$_") {
+                qDebug() << "3333" << inner;
+                Q_ASSERT_X(inner != nullptr, __PRETTY_FUNCTION__, "must pass inner argument!");
+                state = inner;
+                state->setParent(parent);
+            } else {
+                state = createState(type, parent, isParallel);
+            }
             state->setObjectName(id);
             if (id == initName) {
                 parent->setInitialState(state);
@@ -90,7 +98,7 @@ namespace {
             // qDebug() << "new state " << state->objectName();
 
             // 递归处理子状态
-            parseChildStates(st, state, states);
+            parseChildStates(st, state, states, inner);
 
             states[id] = state;
             // qDebug() << "add" << (isParallel ? "parallel" : "state") << id << "timeout:" << (p ? p->timeout() : 0);
@@ -160,7 +168,32 @@ namespace {
 
             parseChildTransitions(node, state, states);
         }
-        // }
+    }
+
+    // 通过解析docroot，将root的内部状态图创建好
+    void fillInner(QState* root, pugi::xml_node const& docroot, QState* inner = nullptr) {
+        qDebug() << "2222" << inner;
+        // 这个map用来创建trans时通过id找到state
+        QMap<QString, QAbstractState*> states;
+
+        parseChildStates(docroot, root, states, inner);
+
+        // 额外添加一个特殊状态叫finish
+        QFinalState* finish = new QFinalState{root};
+        finish->setObjectName("finish");
+        QObject::connect(root, &QStateMachine::finished, []() {
+            qDebug() << "finished";
+        });
+        states["finish"] = finish;
+
+        for (auto& node : docroot.children()) {
+            QString name = node.name();
+            if (name != "state" && name != "parallel") {
+                qDebug() << "WARNING: only state or parallel could at top level";
+                continue;
+            }
+            parseChildTransitions(node, root, states);
+        }
     }
 }
 
@@ -200,20 +233,6 @@ void TestCaseManager::startSome() {
     }
 }
 
-// bool TestCaseManager::create(const QString& id, const QString& caseName) {
-//     pugi::xml_document doc;
-//     auto tcpath = m_testcaseBaseDir.filePath(caseName);
-//     auto r = doc.load_file(qPrintable(tcpath));
-
-//     if (!r) {
-//         // warn
-//         spdlog::get("TestCaseManager")->warn("load xml failed: {}", r.description());
-//         return false;
-//     }
-
-//     return create(id, doc);
-// }
-
 bool TestCaseManager::create(const std::string& id, const pugi::xml_document& doc) {
     // 创建一个用例对象
     std::shared_ptr<TestCase> testcase(new TestCase);
@@ -224,29 +243,45 @@ bool TestCaseManager::create(const std::string& id, const pugi::xml_document& do
     Q_ASSERT_X(m_connectionFactory, __PRETTY_FUNCTION__, "forgot set connectionFactory?");
     testcase->setConnectionFactory(m_connectionFactory);
 
-    // 这个map用来创建trans时通过id找到state
-    QMap<QString, QAbstractState*> states;
-
     auto root = doc.child("testcase");
+    auto pa = root.attribute("parent");
+    if (pa.empty()) {
+        fillInner(testcase.get(), root);
+    } else {
+        QState* s = new QState;
+        fillInner(s, root);
 
-    parseChildStates(root, testcase.get(), states);
-    
-    // 额外添加一个特殊状态叫finish
-    QFinalState* finish = new QFinalState{testcase.get()};
-    finish->setObjectName("finish");
-    QObject::connect(testcase.get(), &QStateMachine::finished, []() {
-        qDebug() << "finished";
-    });
-    states["finish"] = finish;
-
-    for (auto& node : root.children()) {
-        QString name = node.name();
-        if (name != "state" && name != "parallel") {
-            qDebug() << "WARNING: only state or parallel could at top level";
-            continue;
-        }
-        parseChildTransitions(node, testcase.get(), states);
+        std::string ptp = pa.as_string();
+        ptp = "../testcase-templates/" + ptp + ".xml";
+        pugi::xml_document td;
+        td.load_file(ptp.c_str());
+        auto troot = td.child("testcase");
+        // 解析模板
+        // qDebug() << "1111111";
+        fillInner(testcase.get(), troot, s);
     }
+
+    // // 这个map用来创建trans时通过id找到state
+    // QMap<QString, QAbstractState*> states;
+
+    // parseChildStates(root, testcase.get(), states);
+
+    // // 额外添加一个特殊状态叫finish
+    // QFinalState* finish = new QFinalState{testcase.get()};
+    // finish->setObjectName("finish");
+    // QObject::connect(testcase.get(), &QStateMachine::finished, []() {
+    //     qDebug() << "finished";
+    // });
+    // states["finish"] = finish;
+
+    // for (auto& node : root.children()) {
+    //     QString name = node.name();
+    //     if (name != "state" && name != "parallel") {
+    //         qDebug() << "WARNING: only state or parallel could at top level";
+    //         continue;
+    //     }
+    //     parseChildTransitions(node, testcase.get(), states);
+    // }
 
     m_testcases[id] = std::move(testcase);
     // qDebug() << "create testcase: account=" << id << ", casename=" << caseName;

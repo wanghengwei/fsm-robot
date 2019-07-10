@@ -16,6 +16,9 @@ state_CEventHeart.cpp
 state_InRoom.cpp
 ../impl/state_InRoom_impl.cpp
 
+state_SleepInRoom.cpp
+../impl/state_SleepInRoom_impl.cpp
+
 )
     
 add_library(states_gen ${SRCS})
