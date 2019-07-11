@@ -1,6 +1,6 @@
 #pragma once
 #include <QtCore/QString>
-#include <QtCore/QStringView>
+// #include <QtCore/QStringView>
 #include <map>
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
@@ -10,10 +10,10 @@ OStream &operator<<(OStream &os, const QString& s) {
     return os << qPrintable(s);
 }
 
-template<typename OStream>
-OStream &operator<<(OStream &os, QStringView s) {
-    return os << s.toLocal8Bit().constData();
-}
+// template<typename OStream>
+// OStream &operator<<(OStream &os, QStringView s) {
+//     return os << s.toLocal8Bit().constData();
+// }
 
 template<typename OStream, typename K, typename V>
 OStream &operator<<(OStream &os, std::map<K, V> const& s) {

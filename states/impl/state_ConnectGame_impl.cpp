@@ -2,7 +2,7 @@
 #include "state_ConnectGame.h"
 #include <stdexcept>
 #include <QtCore/QTimer>
-#include <QtCore/QRandomGenerator>
+// #include <QtCore/QRandomGenerator>
 #include <logger.h>
 #include <QtCore/QDebug>
 #include <nlohmann/json.hpp>
@@ -22,7 +22,12 @@ namespace state {
         // 取出关心的数据
         nlohmann::json gameips;
         GET_DATA_OR_DIE("gameServerIPList", gameips);
-        int idx = QRandomGenerator::global()->bounded(int(gameips.size()) - 1);
+        if (gameips.empty()) {
+            // 触发错误怎么做？
+            return;
+        }
+        // int idx = QRandomGenerator::global()->bounded(int(gameips.size()) - 1);
+        int idx = std::rand() % gameips.size();
         std::string ip = gameips[idx];
 
         // 准备log信息

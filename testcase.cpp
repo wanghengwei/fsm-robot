@@ -3,10 +3,10 @@
 #include <robot/basic_robot.h>
 
 namespace impl {
-    void setData(const nlohmann::json& data, std::map<QString, std::any>& store) {
+    void setData(const nlohmann::json& data, std::map<std::string, std::any>& store) {
         store.clear();
         for (auto& p : data.items()) {
-            QString k = QString::fromStdString(p.key());
+            auto k = p.key();
             auto v = p.value();
             switch (v.type()) {
                 case nlohmann::json::value_t::number_integer: {

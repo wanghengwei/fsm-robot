@@ -24,11 +24,11 @@ TEST(testcase_test, test_json) {
 }
 
 namespace impl {
-    extern void setData(const nlohmann::json& data, std::map<QString, std::any>& store);
+    extern void setData(const nlohmann::json& data, std::map<std::string, std::any>& store);
 }
 
 TEST(testcase_test, test_set_data) {
-    std::map<QString, std::any> store;
+    std::map<std::string, std::any> store;
 
     impl::setData({}, store);
     ASSERT_TRUE(store.empty());

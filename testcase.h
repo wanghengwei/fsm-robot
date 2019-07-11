@@ -39,13 +39,13 @@ public:
      * 
     */
     template<typename T>
-    bool __attribute_warn_unused_result__ getData(const QString& key, T& value);
+    bool __attribute_warn_unused_result__ getData(const std::string& key, T& value);
 
     /** 
      * @brief 插入或更新用户数据
     */
-    void insertOrUpdateData(QStringView key, const std::any& value) {
-        m_data[key.toString()] = value;
+    void insertOrUpdateData(const std::string& key, const std::any& value) {
+        m_data[key] = value;
     }
 
     BasicRobot& robot();
@@ -54,7 +54,7 @@ private:
     std::string m_userId;
 
     // 保存k-v结构的用户数据
-    std::map<QString, std::any> m_data;
+    std::map<std::string, std::any> m_data;
 
     BasicRobot* m_robot = nullptr;
 };
@@ -113,7 +113,7 @@ namespace impl {
 
 
 template<typename T>
-bool __attribute_warn_unused_result__ TestCase::getData(const QString& key, T& value) {
+bool __attribute_warn_unused_result__ TestCase::getData(const std::string& key, T& value) {
     auto it = m_data.find(key);
     if (it == m_data.end()) {
         return false;
