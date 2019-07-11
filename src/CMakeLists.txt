@@ -31,7 +31,7 @@ FetchContent_Declare(nlohmann-json
 FetchContent_GetProperties(nlohmann-json)
 if(NOT nlohmann-json_POPULATED)
     FetchContent_Populate(nlohmann-json)
-    message("${nlohmann-json_SOURCE_DIR}")
+    # message("${nlohmann-json_SOURCE_DIR}")
 endif()
 
 add_subdirectory(robot)
@@ -46,7 +46,7 @@ add_library(base
     state_factory.cpp
 )
 target_link_libraries(base Qt5::Core Qt5::Xml pugixml robot states env_logger)
-# target_include_directories(base PUBLIC ${nlohmann-json_SOURCE_DIR})
+target_include_directories(base PUBLIC ${nlohmann-json_SOURCE_DIR})
 
 add_executable(demo main.cpp)
 target_link_libraries(demo base)

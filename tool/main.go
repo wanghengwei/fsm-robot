@@ -13,7 +13,8 @@ import (
 )
 
 var (
-	projectRoot = flag.String("R", ".", "project root dir")
+	projectRoot = flag.String("R", ".", "project root src dir")
+	statedef    = flag.String("s", "", "yaml of states")
 )
 
 type State struct {
@@ -30,7 +31,6 @@ type State struct {
 func main() {
 	// flag.Parse()
 
-	statedef := flag.String("s", "", "yaml of states")
 	flag.Parse()
 
 	fmt.Println(*statedef)
