@@ -31,7 +31,7 @@ public:
     /** 
      * @brief 设置用例搜索基础目录
     */
-    void setTestCaseDir(QStringView dir) { m_testcaseBaseDir = dir.toString(); }
+    void setTestCaseDir(const std::string& dir) { m_testcaseBaseDir = QString::fromStdString(dir); }
 
     /** 
      * @brief 加载用户数据
