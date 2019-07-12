@@ -1,0 +1,76 @@
+Index: share/netengine/BiboFrame/BiboPlatform.h
+===================================================================
+--- share/netengine/BiboFrame/BiboPlatform.h	(版本 139625)
++++ share/netengine/BiboFrame/BiboPlatform.h	(工作副本)
+@@ -89,7 +89,7 @@
+ 	#define BOOL		int
+ 	#define HWND		unsigned int
+ 	#define BYTE		unsigned char
+-	#define HANDLE		unsigned int
++	// #define HANDLE		unsigned int
+ 	typedef int SOCKET;
+ 
+ 	#define S_OK							((HRESULT)0x00000000)
+--- modules/quest/shared/QuestInstance.h	(revision 147668)
++++ modules/quest/shared/QuestInstance.h	(working copy)
+@@ -111,7 +111,7 @@
+ 	int GetQuestSystemTypeFromInitMap() const;
+ private:
+ 	int GetVersion()const;
+-	void ToClearResetQuestData();
++	void ToClearResetQuestData() {}
+ 	int DoTransferStrToInt(const char* str);
+ public:
+ 	///获得当时玩家的人气值
+=======
+
+Index: modules/quest/shared/QuestInstance.h
+===================================================================
+--- modules/quest/shared/QuestInstance.h	(revision 148020)
++++ modules/quest/shared/QuestInstance.h	(working copy)
+@@ -111,7 +111,7 @@
+ 	int GetQuestSystemTypeFromInitMap() const;
+ private:
+ 	int GetVersion()const;
+-	void ToClearResetQuestData();
++	void ToClearResetQuestData() {};
+ 	int DoTransferStrToInt(const char* str);
+ public:
+ 	///获得当时玩家的人气值
+
+Index: modules/item/inventorysys/BasicItem.cpp
+===================================================================
+--- modules/item/inventorysys/BasicItem.cpp	(revision 148734)
++++ modules/item/inventorysys/BasicItem.cpp	(working copy)
+@@ -157,17 +157,7 @@
+ {
+ 	//取消该功能，由保险柜替代
+ 	//return ILockableItem::Unlocked;
+-
+-    if( -1 == m_unlock_time )
+-        return ILockableItem::Locked;
+-    int temp = CItemDataTable::Instance()->GetItemUnlockingTime() - ( m_item_mng->GetServerTime() - m_unlock_time );
+-    if( temp < 0 )
+-        temp = 0;
+-    if( 0 == temp )
+-        return ILockableItem::Unlocked;
+-    if( remain_time )
+-        *remain_time = temp;
+-    return ILockableItem::Unlocking;
++	return ILockableItem::Locked;
+ }
+ 
+ int CBasicItem::Lock()
+@@ -282,10 +272,7 @@
+ 
+ bool CBasicItem::IsLuxuryItem() const
+ {
+-	if(!m_item_mng)
+-		return false;
+-
+-	return m_item_mng->IsLuxuryItem(m_type);
++	return false;
+ }
+ 
+ void CBasicItem::LuxuryCustomInfoToBuf( COStream& os )
+

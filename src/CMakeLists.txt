@@ -4,6 +4,20 @@ project(robot C CXX)
 
 enable_testing()
 
+# 如果ccache存在，就使用ccache
+# 如果要使用distcc，需要自己设置环境变量 CCACHE_PREFIX=distcc
+find_program(CCACHE ccache)
+if(CCACHE)
+    set(CMAKE_CXX_COMPILER_LAUNCHER ccache)
+    message("use ccache as c++ compuler launcher")
+endif()
+
+# find_program(CPPCHECK cppcheck)
+# if(CPPCHECK)
+#     set(CMAKE_CXX_CPPCHECK ${CPPCHECK})
+#     message("use cppcheck: ${CPPCHECK}")
+# endif()
+
 include(ExternalProject)
 ExternalProject_Add(ep-gtest
     URL https://github.com/google/googletest/archive/release-1.8.1.zip
@@ -34,12 +48,21 @@ if(NOT nlohmann-json_POPULATED)
     # message("${nlohmann-json_SOURCE_DIR}")
 endif()
 
+## 项目(x51/mgc)
+set(PROJ "x51" CACHE STRING "x51 or mgc")
+set(ALL_PROJS x51 mgc)
+if (NOT PROJ IN_LIST ALL_PROJS)
+    message(FATAL_ERROR "-DPROJ=x51 or mgc")
+endif()
+message("PROJ=${PROJ}")
+
+include(target_projs/x51/proj.cmake)
+
 add_subdirectory(robot)
 
 add_subdirectory(states)
 
 add_library(base 
-    # basic_robot.cpp 
     testcase.cpp
     basic_state.cpp
     testcase_manager.cpp
@@ -48,10 +71,15 @@ add_library(base
 target_link_libraries(base Qt5::Core Qt5::Xml pugixml robot states env_logger)
 target_include_directories(base PUBLIC ${nlohmann-json_SOURCE_DIR})
 
-add_executable(demo main.cpp)
-target_link_libraries(demo base)
-# target_include_directories(demo PUBLIC ${nlohmann-json_SOURCE_DIR}/nlohmann)
-# target_compile_definitions(demo PUBLIC JSON_MultipleHeaders=ON)
+add_executable(demo 
+    main.cpp 
+    ${PROJ_SOURCES}
+    target_projs/x51/dummy_src/QuestTemplate.cpp
+)
+target_link_libraries(demo base dl)
+target_include_directories(demo PRIVATE ${PROJ_INCLUDE_DIRS})
+target_compile_definitions(demo PRIVATE STAR_SERVER _SERVER_INVERTORY_SYS QT_NO_KEYWORDS)
+target_compile_options(demo PRIVATE -Wno-deprecated-declarations -Wno-format -Wno-narrowing -include limits.h)
 
 add_executable(base_test testcase_manager_test.cpp testcase_test.cpp)
 target_link_libraries(base_test gtest gtest_main base pthread)
