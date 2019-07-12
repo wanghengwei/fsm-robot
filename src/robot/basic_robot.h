@@ -4,12 +4,12 @@
 #include <memory>
 #include "basic_connection.h"
 
-class ConnectionFactory;
+class BasicConnectionFactory;
 
 class BasicRobot : public QObject {
     Q_OBJECT
 public:
-    void setConnectionFactory(std::shared_ptr<ConnectionFactory> cf) {
+    void setConnectionFactory(std::shared_ptr<BasicConnectionFactory> cf) {
         m_connectionFactory = cf;
     }
 
@@ -20,5 +20,5 @@ public:
 //     void connectFailed();
 private:
     std::map<int, std::unique_ptr<BasicConnection>> m_conns;
-    std::shared_ptr<ConnectionFactory> m_connectionFactory;
+    std::shared_ptr<BasicConnectionFactory> m_connectionFactory;
 };

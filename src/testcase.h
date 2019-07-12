@@ -6,7 +6,7 @@
 #include <nlohmann/json_fwd.hpp>
 
 class BasicRobot;
-class ConnectionFactory;
+class BasicConnectionFactory;
 
 class TestCase : public QStateMachine {
     Q_OBJECT
@@ -16,7 +16,7 @@ public:
 
     ~TestCase();
 
-    void setConnectionFactory(const std::shared_ptr<ConnectionFactory>& p);
+    void setConnectionFactory(const std::shared_ptr<BasicConnectionFactory>& p);
 
     const std::string& id() const { return m_userId; }
     
@@ -46,6 +46,19 @@ public:
     */
     void insertOrUpdateData(const std::string& key, const std::any& value) {
         m_data[key] = value;
+    }
+
+    /**
+     * @brief 插入数据
+     * 
+     * @return 成功插入返回true
+     * 
+     * 如果key已存在，则不插入
+     * 
+    */
+    bool insertData(const std::string& key, const std::any& value) {
+        auto r = m_data.insert(std::make_pair(key, value));
+        return r.second;
     }
 
     BasicRobot& robot();

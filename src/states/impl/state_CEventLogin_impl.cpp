@@ -4,7 +4,7 @@
 #include <QtCore/QTimer>
 #include <logger.h>
 #include <robot/basic_robot.h>
-#include <connection_types.h>
+#include <robot/connection_types.h>
 
 namespace state {
 
@@ -20,10 +20,10 @@ namespace state {
                 int* ep = static_cast<int*>(e);
                 loggers::TESTCASE().info("received event: {}", *ep);
                 delete ep;
-                emit this->ev_CEventLoginRes_ok();
+                Q_EMIT this->ev_CEventLoginRes_ok();
             } else {
                 loggers::TESTCASE().info("[{}] {} FAILED", this->testcase().id(), this->label());
-                emit this->ev_CEventLoginRes_failed();
+                Q_EMIT this->ev_CEventLoginRes_failed();
             }
         });
         conn.sendEvent(new int{1});

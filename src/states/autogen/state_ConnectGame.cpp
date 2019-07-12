@@ -4,8 +4,7 @@
 namespace state {
     StateConnectGame::StateConnectGame(QState* parent) : BasicState{parent} {
         
-        setTimeout(10000);
-        QObject::connect(this->timer(), &QTimer::timeout, this, &BasicState::ev_timeout);
+        setTimeout(-1);
         
     }
 

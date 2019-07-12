@@ -77,12 +77,12 @@ add_executable(demo
     target_projs/x51/dummy_src/QuestTemplate.cpp
 )
 target_link_libraries(demo base dl)
-target_include_directories(demo PRIVATE ${PROJ_INCLUDE_DIRS})
-target_compile_definitions(demo PRIVATE STAR_SERVER _SERVER_INVERTORY_SYS QT_NO_KEYWORDS)
-target_compile_options(demo PRIVATE -Wno-deprecated-declarations -Wno-format -Wno-narrowing -include limits.h)
+# target_include_directories(demo PRIVATE ${PROJ_INCLUDE_DIRS})
+# target_compile_definitions(demo PRIVATE STAR_SERVER _SERVER_INVERTORY_SYS QT_NO_KEYWORDS)
+# target_compile_options(demo PRIVATE -Wno-deprecated-declarations -Wno-format -Wno-narrowing -include limits.h)
 
 add_executable(base_test testcase_manager_test.cpp testcase_test.cpp)
-target_link_libraries(base_test gtest gtest_main base pthread)
+target_link_libraries(base_test base pthread gtest gtest_main)
 # target_include_directories(base_test PRIVATE ${nlohmann-json_SOURCE_DIR})
 # target_compile_definitions(base_test PRIVATE JSON_MultipleHeaders=ON)
 

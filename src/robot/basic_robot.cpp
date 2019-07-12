@@ -9,7 +9,9 @@ BasicConnection& BasicRobot::connection(int connType) {
     }
 
     Q_ASSERT_X(m_connectionFactory != nullptr, __PRETTY_FUNCTION__, "connection factory is null!");
+
     std::unique_ptr<BasicConnection> c = m_connectionFactory->create(connType);
+
     BasicConnection& r = *c;
     m_conns.emplace(connType, std::move(c));
     return r;

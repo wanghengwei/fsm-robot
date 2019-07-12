@@ -2,19 +2,13 @@
 #include "state_ConnectGame.h"
 #include <stdexcept>
 #include <QtCore/QTimer>
-// #include <QtCore/QRandomGenerator>
 #include <logger.h>
 #include <QtCore/QDebug>
 #include <nlohmann/json.hpp>
 #include <robot/basic_robot.h>
 #include <robot/basic_connection.h>
-#include <connection_types.h>
+#include <robot/connection_types.h>
 
-// #define CONNECT(sig, slot) \
-//     QObject::connect(&conn, &BasicConnection::sig, this, [this] () { \
-//         loggers::TESTCASE().info("[{}] {}", this->testcase().id(), this->label()); \
-//         emit this->ev_##slot(); \
-//     })
 
 namespace state {
 
@@ -26,21 +20,27 @@ namespace state {
             // 触发错误怎么做？
             return;
         }
-        // int idx = QRandomGenerator::global()->bounded(int(gameips.size()) - 1);
+
         int idx = std::rand() % gameips.size();
-        std::string ip = gameips[idx];
+        nlohmann::json ipport = gameips[idx];
 
         // 准备log信息
-        info["ip"] = ip;
+        info["host"] = ipport.dump();
+
+        std::string ip = ipport["ip"];
+        int port = ipport["port"];
 
         // 发起连接，并关注连接事件
         BasicConnection& conn = robot().connection(CONN_GAME);
         QObject::connect(&conn, &BasicConnection::connectOK, this, [=]() {
             loggers::TESTCASE().info("[{}] {} OK", this->testcase().id(), this->label());
-            emit this->ev_ok();
+            Q_EMIT this->ev_ok();
         });
-        QObject::connect(&conn, &BasicConnection::connectFailed, this, &StateConnectGame::ev_failed);
-        conn.connect(id(), ip);
+        QObject::connect(&conn, &BasicConnection::connectFailed, this, [=](const std::string& msg) {
+            loggers::TESTCASE().error("[{}] {} FAILED: {}", this->testcase().id(), this->label(), msg);
+            Q_EMIT this->ev_failed();
+        });
+        conn.connect(ip, port, id());
     }
 
     void StateConnectGame::clean() {

@@ -26,7 +26,7 @@ public:
     void setTimeout(int ms) { m_timeout_ms = ms; }
     int timeout() const { return m_timeout_ms; }
 
-signals:
+Q_SIGNALS:
     void ev_timeout();
 
 protected:

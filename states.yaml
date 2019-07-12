@@ -1,7 +1,7 @@
 state:
   name: ConnectGame
   description: "连接game服"
-  timeout: 60000
+  wait: false
   printLog: true
   signals:
   - ok
@@ -10,34 +10,50 @@ state:
 ---
 state:
   name: DisconnectGame
+  description: "disconnect from game"
   wait: false
   printLog: true
   description: "断开game连接"
 
 ---
 state:
-  name: CEventLogin
-  description: "发送CEventLogin"
+  name: CEventConnectRes
+  description: "wait CEventConnectRes"
   printLog: true
   signals:
-  - CEventLoginRes_ok
-  - CEventLoginRes_failed
+  - CEventConnectRes_ok
+  - CEventConnectRes_failed
 
 ---
 state:
-  name: CEventHeart
-  description: "发心跳"
-  wait: false
-
----
-state:
-  name: InRoom
-  description: "在房间内"
+  name: CEventRefreshPlayerInfo
+  description: "刷新玩家信息"
   wait: false
   signals:
-  - leaveRoom
+  - ok
 
 ---
 state:
-  name: SleepInRoom
-  description: "在房间内发呆"
+  name: CEventClientLoadAccountInfo
+  description: "send CEventClientLoadAccountInfo"
+  signals:
+  - CEventAccountInfo_noRole
+  - CEventAccountInfo_ok
+
+---
+state:
+  name: CEventEditRole
+  description: "send CEventEditRole"
+  signals:
+  - CEventAccountInfo
+  - CEventEditRoleRes_nick
+  - CEventEditRoleRes_failed
+
+---
+state:
+  name: CEventChooseRole
+  description: "send CEventChooseRole"
+  signals:
+  - CEventChooseRoleFail
+  - CEventJoinChannelResult_failed
+  - CEventJoinChannelResult_ok

@@ -2,7 +2,7 @@
 #include <logger.h>
 #include <QtCore/QTimer>
 
-void FakeConnection::connect(const std::string& id, const std::string& ip) {
+void FakeConnection::connect(const std::string& ip, int port, const std::string& id) {
     loggers::NET().info("[{}] connect to {}", id, ip);
     QTimer::singleShot(1000, Qt::VeryCoarseTimer, this, &FakeConnection::connectOK);
 }
@@ -14,6 +14,6 @@ void FakeConnection::sendEvent(void* e) {
     }
 
     QTimer::singleShot(1000, Qt::VeryCoarseTimer, this, [=]() {
-        emit this->eventReceived(e);
+        Q_EMIT this->eventReceived(e);
     });
 }

@@ -7,21 +7,24 @@ class BasicConnection : public QObject {
 public:
     virtual ~BasicConnection() {}
 
-    virtual void connect(const std::string& id, const std::string& ip) = 0;
+    virtual void connect(const std::string& ip, int port, const std::string& id) = 0;
+
+    virtual void close() = 0;
 
     virtual void sendEvent(void* e) = 0;
 
-signals:
+Q_SIGNALS:
     void eventReceived(void *);
 
     void connectOK();
-    void connectFailed();
+    void connectFailed(const std::string& msg);
 
     void kicked();
 };
 
 class FakeConnection : public BasicConnection {
 public:
-    void connect(const std::string& id, const std::string& ip) override;
+    void connect(const std::string& ip, int port, const std::string& id) override;
+    void close() override {}
     void sendEvent(void* e) override;
 };

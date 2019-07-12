@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testcase initial="ConnectGame">
+    <!-- 连接game服 -->
+    <state id="ConnectGame">
+        <transition event="ok" target="CEventConnectRes" />
+        <transition event="failed" target="ConnectGame" delay="1000" />
+    </state>
+    <!-- 等待消息CEventConnectRes -->
+    <state id="CEventConnectRes">
+        <transition event="timeout" target="DisconnectGame"/>
+        <transition event="CEventConnectRes_ok" target="GameConnected"/>
+        <transition event="CEventConnectRes_failed" target="DisconnectGame"/>
+    </state>
+    <!-- 表示处于game服连接建立的状态 -->
+    <parallel id="GameConnected">
+        <!-- <transition event="leaveRoom" target="DisconnectGame"/> -->
+        <!-- 并发分支：等待消息CEventRefreshPlayerInfo -->
+        <state id="CEventRefreshPlayerInfo">
+            <transition event="ok" target="CEventRefreshPlayerInfo"/>
+        </state>
+        <!-- 并发分支：走标准登录流程 -->
+        <state id="gc2" initial="CEventClientLoadAccountInfo">
+            <!-- 加载角色 -->
+            <state id="CEventClientLoadAccountInfo">
+                <transition event="timeout" target="DisconnectGame"/>
+                <!-- 没有角色？去创建 -->
+                <transition event="CEventAccountInfo_noRole" target="CEventEditRole"/>
+                <!-- 有角色？去选择 -->
+                <transition event="CEventAccountInfo_ok" target="CEventChooseRole"/>
+            </state>
+            <!-- 角色不存在 -->
+            <state id="CEventEditRole">
+                <transition event="timeout" target="DisconnectGame"/>
+                <!-- 收到这个消息表示ok了 -->
+                <transition event="CEventAccountInfo" target="CEventChooseRole"/>
+                <!-- nick不对，重新创建 -->
+                <transition event="CEventEditRoleRes_nick" target="CEventEditRole"/>
+                <transition event="CEventEditRoleRes_failed" target="DisconnectGame"/>
+            </state>
+            <!-- 角色存在，选择角色 -->
+            <state id="CEventChooseRole">
+                <transition event="timeout" target="DisconnectGame"/>
+                <transition event="CEventChooseRoleFail" target="DisconnectGame"/>
+                <transition event="CEventJoinChannelResult_failed" target="DisconnectGame"/>
+                <transition event="CEventJoinChannelResult_ok" target="Idle1"/>
+            </state>
+            <state id="Idle1" type="Idle" timeout="60000">
+                <transition event="timeout" target="Idle1"/>
+            </state>
+        </state>
+    </parallel>
+    <state id="DisconnectGame">
+        <transition target="ConnectGame" delay="1000"/>
+    </state>
+</testcase>

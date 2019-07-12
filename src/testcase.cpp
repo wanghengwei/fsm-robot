@@ -51,7 +51,7 @@ TestCase::~TestCase() {
     delete m_robot;
 }
 
-void TestCase::setConnectionFactory(const std::shared_ptr<ConnectionFactory>& p) {
+void TestCase::setConnectionFactory(const std::shared_ptr<BasicConnectionFactory>& p) {
     this->robot().setConnectionFactory(p);
 }
 

@@ -3,13 +3,13 @@
 
 class BasicConnection;
 
-class ConnectionFactory {
+class BasicConnectionFactory {
 public:
-    virtual ~ConnectionFactory() {}
+    virtual ~BasicConnectionFactory() {}
     virtual std::unique_ptr<BasicConnection> create(int connType) = 0;
 };
 
-class FakeConnectionFactory : public ConnectionFactory {
+class FakeConnectionFactory : public BasicConnectionFactory {
 public:
     std::unique_ptr<BasicConnection> create(int connType) override;
 };

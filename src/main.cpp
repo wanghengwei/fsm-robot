@@ -4,6 +4,9 @@
 #include <logger.h>
 #include "testcase_manager.h"
 #include <robot/connection_factory.h>
+#include <robot/x51_connection_factory.h>
+#include <robot/x51_netclient_manager.h>
+#include <share/netengine/net.h>
 
 int main(int argc, char** argv) {
 
@@ -51,13 +54,26 @@ int main(int argc, char** argv) {
 
     // =============================================================
 
-    std::shared_ptr<ConnectionFactory> connectionFactory{new FakeConnectionFactory};
+    GetLogInterface()->SetSystemPriority(800);
+    IEventSelector* es = GetBiboRegistry()->CreateEventSelector();
+
+    std::shared_ptr<x51::NetClientManager> netClientManager{new x51::NetClientManager{es}};
+
+    // std::shared_ptr<BasicConnectionFactory> connectionFactory{new FakeConnectionFactory};
+    std::shared_ptr<BasicConnectionFactory> connectionFactory{new x51::ConnectionFactory{netClientManager}};
+    
     TestCaseManager testcaseManager;
     testcaseManager.setConnectionFactory(connectionFactory);
     testcaseManager.setTestCaseDir(parser.value("testcase-dir").toStdString());
     testcaseManager.setSpeedRate(100);
     testcaseManager.loadUserData(parser.value("data-dir"));
     testcaseManager.createMany(firstId.toStdString(), count, testcasePath);
+
+    QTimer estimer;
+    QObject::connect(&estimer, &QTimer::timeout, [es]() {
+        es->ProcessEvents(0);
+    });
+    estimer.start(100);
 
     testcaseManager.start();
 

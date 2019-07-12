@@ -13,7 +13,7 @@ namespace state {
         // qDebug() << "in room!";
         loggers::TESTCASE().info("[{}] in room", testcase().id());
         QTimer::singleShot(10000, Qt::VeryCoarseTimer, this, [=]() {
-            emit this->ev_leaveRoom();
+            Q_EMIT this->ev_leaveRoom();
         });
     }
 

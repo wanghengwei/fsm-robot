@@ -9,7 +9,7 @@
 #include <nlohmann/json.hpp>
 
 class TestCase;
-class ConnectionFactory;
+class BasicConnectionFactory;
 
 /** 
  * @brief 管理TestCase
@@ -19,7 +19,7 @@ class TestCaseManager : public QObject {
 public:
     TestCaseManager();
 
-    void setConnectionFactory(const std::shared_ptr<ConnectionFactory>& p) {
+    void setConnectionFactory(const std::shared_ptr<BasicConnectionFactory>& p) {
         m_connectionFactory = p;
     }
 
@@ -54,5 +54,5 @@ private:
     int m_interval = 1000;
     QDir m_testcaseBaseDir;
     nlohmann::json m_userData;
-    std::shared_ptr<ConnectionFactory> m_connectionFactory;
+    std::shared_ptr<BasicConnectionFactory> m_connectionFactory;
 };

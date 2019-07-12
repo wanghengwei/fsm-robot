@@ -6,13 +6,15 @@
 
 #include "states/autogen/state_DisconnectGame.h"
 
-#include "states/autogen/state_CEventLogin.h"
+#include "states/autogen/state_CEventConnectRes.h"
 
-#include "states/autogen/state_CEventHeart.h"
+#include "states/autogen/state_CEventRefreshPlayerInfo.h"
 
-#include "states/autogen/state_InRoom.h"
+#include "states/autogen/state_CEventClientLoadAccountInfo.h"
 
-#include "states/autogen/state_SleepInRoom.h"
+#include "states/autogen/state_CEventEditRole.h"
+
+#include "states/autogen/state_CEventChooseRole.h"
 
 
 QState* createStateByID(QString id, QState* parent) {
@@ -29,20 +31,24 @@ QState* createStateByID(QString id, QState* parent) {
         return new state::StateDisconnectGame{parent};
     }
     
-    if (id == "CEventLogin") {
-        return new state::StateCEventLogin{parent};
+    if (id == "CEventConnectRes") {
+        return new state::StateCEventConnectRes{parent};
     }
     
-    if (id == "CEventHeart") {
-        return new state::StateCEventHeart{parent};
+    if (id == "CEventRefreshPlayerInfo") {
+        return new state::StateCEventRefreshPlayerInfo{parent};
     }
     
-    if (id == "InRoom") {
-        return new state::StateInRoom{parent};
+    if (id == "CEventClientLoadAccountInfo") {
+        return new state::StateCEventClientLoadAccountInfo{parent};
     }
     
-    if (id == "SleepInRoom") {
-        return new state::StateSleepInRoom{parent};
+    if (id == "CEventEditRole") {
+        return new state::StateCEventEditRole{parent};
+    }
+    
+    if (id == "CEventChooseRole") {
+        return new state::StateCEventChooseRole{parent};
     }
     
 

@@ -7,17 +7,20 @@ state_ConnectGame.cpp
 state_DisconnectGame.cpp
 ../impl/state_DisconnectGame_impl.cpp
 
-state_CEventLogin.cpp
-../impl/state_CEventLogin_impl.cpp
+state_CEventConnectRes.cpp
+../impl/state_CEventConnectRes_impl.cpp
 
-state_CEventHeart.cpp
-../impl/state_CEventHeart_impl.cpp
+state_CEventRefreshPlayerInfo.cpp
+../impl/state_CEventRefreshPlayerInfo_impl.cpp
 
-state_InRoom.cpp
-../impl/state_InRoom_impl.cpp
+state_CEventClientLoadAccountInfo.cpp
+../impl/state_CEventClientLoadAccountInfo_impl.cpp
 
-state_SleepInRoom.cpp
-../impl/state_SleepInRoom_impl.cpp
+state_CEventEditRole.cpp
+../impl/state_CEventEditRole_impl.cpp
+
+state_CEventChooseRole.cpp
+../impl/state_CEventChooseRole_impl.cpp
 
 )
     

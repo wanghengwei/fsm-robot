@@ -13,7 +13,7 @@ private:
 	void perform(std::map<std::string, std::string>& info) override;
 	void clean() override;
 	bool printLog() const override;
-signals:
+Q_SIGNALS:
     
     void ev_ok();
     
