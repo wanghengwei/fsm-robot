@@ -6,6 +6,8 @@
 
 #include "states/autogen/state_DisconnectGame.h"
 
+#include "states/autogen/state_GameConnected.h"
+
 #include "states/autogen/state_CEventConnectRes.h"
 
 #include "states/autogen/state_CEventRefreshPlayerInfo.h"
@@ -29,6 +31,10 @@ QState* createStateByID(QString id, QState* parent) {
     
     if (id == "DisconnectGame") {
         return new state::StateDisconnectGame{parent};
+    }
+    
+    if (id == "GameConnected") {
+        return new state::StateGameConnected{parent};
     }
     
     if (id == "CEventConnectRes") {

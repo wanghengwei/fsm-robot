@@ -13,7 +13,8 @@
     </state>
     <!-- 表示处于game服连接建立的状态 -->
     <parallel id="GameConnected">
-        <!-- <transition event="leaveRoom" target="DisconnectGame"/> -->
+        <!-- 可能被踢，这时直接跳回到开头重连 -->
+        <transition event="kicked" target="ConnectGame" delay="2000"/>
         <!-- 并发分支：等待消息CEventRefreshPlayerInfo -->
         <state id="gc1" initial="CEventRefreshPlayerInfo">
             <state id="CEventRefreshPlayerInfo">

@@ -21,7 +21,7 @@ namespace state {
                 auto ev = static_cast<CEventAccountInfo*>(e);
                 int rc = ev->m_info.GetRoleCount();
                 if (rc == 0) {
-                    loggers::TESTCASE().info("[{}] {} FAILED: no role", this->testcase().id(), this->label());
+                    loggers::TESTCASE().error("[{}] {} FAILED: no role", this->testcase().id(), this->label());
                     Q_EMIT this->ev_CEventAccountInfo_noRole();
                     return;
                 }

@@ -68,7 +68,7 @@ add_library(base
     testcase_manager.cpp
     state_factory.cpp
 )
-target_link_libraries(base Qt5::Core Qt5::Xml pugixml robot states env_logger)
+target_link_libraries(base Qt5::Core Qt5::Xml pugixml robot states env_logger dl)
 target_include_directories(base PUBLIC ${nlohmann-json_SOURCE_DIR})
 
 add_executable(demo 
@@ -82,9 +82,6 @@ target_link_libraries(demo base dl)
 # target_compile_options(demo PRIVATE -Wno-deprecated-declarations -Wno-format -Wno-narrowing -include limits.h)
 
 add_executable(base_test testcase_manager_test.cpp testcase_test.cpp)
-target_link_libraries(base_test base pthread gtest gtest_main)
-# target_include_directories(base_test PRIVATE ${nlohmann-json_SOURCE_DIR})
-# target_compile_definitions(base_test PRIVATE JSON_MultipleHeaders=ON)
-
+target_link_libraries(base_test gtest_main gtest base)
 
 add_test(NAME base_test COMMAND base_test)

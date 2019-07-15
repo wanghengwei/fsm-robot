@@ -18,7 +18,7 @@ namespace state {
                     loggers::TESTCASE().info("[{}] {} OK", this->testcase().id(), this->label());
                     Q_EMIT this->ev_CEventConnectRes_ok();
                 } else {
-                    loggers::TESTCASE().info("[{}] {} FAILED: ec={}", this->testcase().id(), this->label(), ev->GetLoginRes());
+                    loggers::TESTCASE().error("[{}] {} FAILED: ec={}", this->testcase().id(), this->label(), ev->GetLoginRes());
                     Q_EMIT this->ev_CEventConnectRes_failed();
                 }
             }

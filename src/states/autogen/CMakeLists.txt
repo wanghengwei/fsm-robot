@@ -7,6 +7,9 @@ state_ConnectGame.cpp
 state_DisconnectGame.cpp
 ../impl/state_DisconnectGame_impl.cpp
 
+state_GameConnected.cpp
+../impl/state_GameConnected_impl.cpp
+
 state_CEventConnectRes.cpp
 ../impl/state_CEventConnectRes_impl.cpp
 

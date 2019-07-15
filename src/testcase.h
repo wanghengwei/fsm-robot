@@ -26,11 +26,18 @@ public:
     void setId(const std::string& id) { m_userId = id; }
 
     /** 
-     * @brief 设置初始用户数据
+     * @brief 设置初始用户数据，用户一般不调用这个
      * 
      * 无法保存超过int64_t范围的整数
     */
     void setData(const nlohmann::json& data);
+
+    /** 
+     * @brief 是否已存在某个key的玩家数据
+    */
+    bool hasData(const std::string& key) const {
+        return m_data.find(key) != m_data.end();
+    }
 
     /** 
      * @brief 根据key获得一个用户数据

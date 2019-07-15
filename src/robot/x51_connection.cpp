@@ -45,6 +45,8 @@ namespace x51 {
     }
 
     void Connection::sendEvent(void* e) {
+        Q_ASSERT_X(m_link != nullptr, __PRETTY_FUNCTION__, "link is null!");
+        
         IEvent* ev = static_cast<IEvent*>(e);
 
         static CEventFragmentManager cfm;

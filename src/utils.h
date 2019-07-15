@@ -114,4 +114,6 @@ void sample(It begin, It end, T& t) {
 	t = *begin;
 }
 
+std::string generateRandomString(int size);
+
 }

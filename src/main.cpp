@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
     TestCaseManager testcaseManager;
     testcaseManager.setConnectionFactory(connectionFactory);
     testcaseManager.setTestCaseDir(parser.value("testcase-dir").toStdString());
-    testcaseManager.setSpeedRate(100);
+    testcaseManager.setSpeedRate(1);
     testcaseManager.loadUserData(parser.value("data-dir"));
     testcaseManager.createMany(firstId.toStdString(), count, testcasePath);
 

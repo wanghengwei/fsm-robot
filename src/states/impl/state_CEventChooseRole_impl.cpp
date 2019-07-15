@@ -31,7 +31,7 @@ namespace state {
                     loggers::TESTCASE().info("[{}] {} OK", this->testcase().id(), this->label());
                     Q_EMIT this->ev_CEventJoinChannelResult_ok();
                 } else {
-                    loggers::TESTCASE().info("[{}] {} FAILED: ec={}", this->testcase().id(), this->label(), ev->GetResult());
+                    loggers::TESTCASE().error("[{}] {} FAILED: ec={}", this->testcase().id(), this->label(), ev->GetResult());
                     Q_EMIT this->ev_CEventJoinChannelResult_failed();
                 }
             } else if (e->GetCLSID() == CLSID_CEventChooseRoleFail) {

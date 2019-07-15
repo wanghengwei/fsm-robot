@@ -10,10 +10,17 @@ state:
 ---
 state:
   name: DisconnectGame
-  description: "disconnect from game"
   wait: false
   printLog: true
   description: "断开game连接"
+
+---
+state:
+  name: GameConnected
+  description: "已连接Game"
+  wait: false
+  signals:
+  - kicked  
 
 ---
 state:

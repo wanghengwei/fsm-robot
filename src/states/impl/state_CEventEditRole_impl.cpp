@@ -19,7 +19,7 @@ namespace state {
         ccinfo.sex = QString::fromStdString(testcase().id()).toLongLong() % 2;
         ccinfo.birthday.set_time((time32::time(0) - time32(3600 * 24 * 365 * 20)).value());
         std::string nick;
-        bool ok = testcase().getData("nickname", nick);
+        bool ok = testcase().getData("m_nickname_recommend", nick);
         if (!ok) {
             nick = testcase().id();
         }
@@ -31,7 +31,7 @@ namespace state {
         if (!ok) {
             // todo
             // emit error!
-            loggers::TESTCASE().error("no playerdata avatar_info");
+            loggers::TESTCASE().info("[{}] {} FAILED: no playerdata avatar_info", this->testcase().id(), this->label());;
             return;
         }
 
@@ -71,11 +71,18 @@ namespace state {
                 auto ev = static_cast<CEventEditRoleRes*>(e);
                 if (ev->m_reason == 2) {
                     std::string rn = ev->m_nickname_recommend;
-                    testcase().insertOrUpdateData("m_nickname_recommend", rn);
-                    loggers::TESTCASE().info("[{}] {} FAILED: nick error", this->testcase().id(), this->label());
-                    Q_EMIT this->ev_CEventEditRoleRes_nick();
+                    // std::string rn = testcase().id() + "-" + utils::generateRandomString(6);
+                    bool ok = testcase().insertData("m_nickname_recommend", rn);
+                    if (ok) {
+                        loggers::TESTCASE().error("[{}] {} FAILED: nick error", this->testcase().id(), this->label());
+                        Q_EMIT this->ev_CEventEditRoleRes_nick();
+                    } else {
+                        // 已经使用推荐昵称但还是出错了！
+                        loggers::TESTCASE().error("[{}] {} FAILED: cannot use recommend nick", this->testcase().id(), this->label());
+                        Q_EMIT this->ev_CEventEditRoleRes_failed();
+                    }
                 } else {
-                    loggers::TESTCASE().info("[{}] {} FAILED: ec={}", this->testcase().id(), this->label(), ev->m_reason);
+                    loggers::TESTCASE().error("[{}] {} FAILED: ec={}", this->testcase().id(), this->label(), ev->m_reason);
                     Q_EMIT this->ev_CEventEditRoleRes_failed();
                 }
             }
