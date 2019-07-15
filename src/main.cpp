@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
 
     // =============================================================
 
-    GetLogInterface()->SetSystemPriority(800);
+    GetLogInterface()->SetSystemPriority(200);
     IEventSelector* es = GetBiboRegistry()->CreateEventSelector();
 
     std::shared_ptr<x51::NetClientManager> netClientManager{new x51::NetClientManager{es}};

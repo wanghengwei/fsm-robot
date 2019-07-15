@@ -36,6 +36,7 @@ state:
 state:
   name: CEventClientLoadAccountInfo
   description: "send CEventClientLoadAccountInfo"
+  printLog: true
   signals:
   - CEventAccountInfo_noRole
   - CEventAccountInfo_ok
@@ -44,6 +45,7 @@ state:
 state:
   name: CEventEditRole
   description: "send CEventEditRole"
+  printLog: true
   signals:
   - CEventAccountInfo
   - CEventEditRoleRes_nick
@@ -53,7 +55,9 @@ state:
 state:
   name: CEventChooseRole
   description: "send CEventChooseRole"
+  printLog: true
   signals:
   - CEventChooseRoleFail
   - CEventJoinChannelResult_failed
   - CEventJoinChannelResult_ok
+

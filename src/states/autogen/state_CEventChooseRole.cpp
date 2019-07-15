@@ -9,5 +9,5 @@ namespace state {
         
     }
 
-	bool StateCEventChooseRole::printLog() const { return false; }
+	bool StateCEventChooseRole::printLog() const { return true; }
 }

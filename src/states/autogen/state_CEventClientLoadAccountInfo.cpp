@@ -9,5 +9,5 @@ namespace state {
         
     }
 
-	bool StateCEventClientLoadAccountInfo::printLog() const { return false; }
+	bool StateCEventClientLoadAccountInfo::printLog() const { return true; }
 }

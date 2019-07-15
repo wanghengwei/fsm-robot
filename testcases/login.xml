@@ -15,8 +15,10 @@
     <parallel id="GameConnected">
         <!-- <transition event="leaveRoom" target="DisconnectGame"/> -->
         <!-- 并发分支：等待消息CEventRefreshPlayerInfo -->
-        <state id="CEventRefreshPlayerInfo">
-            <transition event="ok" target="CEventRefreshPlayerInfo"/>
+        <state id="gc1" initial="CEventRefreshPlayerInfo">
+            <state id="CEventRefreshPlayerInfo">
+                <transition event="ok" target="CEventRefreshPlayerInfo"/>
+            </state>
         </state>
         <!-- 并发分支：走标准登录流程 -->
         <state id="gc2" initial="CEventClientLoadAccountInfo">
@@ -44,8 +46,8 @@
                 <transition event="CEventJoinChannelResult_failed" target="DisconnectGame"/>
                 <transition event="CEventJoinChannelResult_ok" target="Idle1"/>
             </state>
-            <state id="Idle1" type="Idle" timeout="60000">
-                <transition event="timeout" target="Idle1"/>
+            <state id="Idle1" type="Idle" timeout="10000">
+                <transition event="timeout" target="DisconnectGame"/>
             </state>
         </state>
     </parallel>
