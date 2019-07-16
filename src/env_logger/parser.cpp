@@ -116,7 +116,6 @@ namespace env_logger {
                 ++index;
                 parseAll();
             }
-            // parseSegment(s, r);
         }
     };
 

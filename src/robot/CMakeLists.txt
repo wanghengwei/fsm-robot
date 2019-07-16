@@ -2,7 +2,7 @@ add_library(robot
     basic_robot.cpp
     basic_connection.cpp
     connection_factory.cpp
-    send_wait_event_state.cpp
+    # send_wait_event_state.cpp
 
     x51_connection.cpp
     x51_netclient.cpp

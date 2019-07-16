@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 #include <QtCore/QObject>
 #include <map>
 #include <memory>
