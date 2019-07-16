@@ -48,27 +48,35 @@ namespace state {
         }
     }
 
-    void StateCEventRefreshPlayerInfo::perform(std::map<std::string, std::string>& info) {
-        auto& conn = robot().connection(CONN_GAME);
-        QObject::connect(&conn, &BasicConnection::eventReceived, this, [this](void* ve) {
-            IEvent* e = static_cast<IEvent*>(ve);
-            if (e->GetCLSID() == CLSID_CEventRefreshPlayerInfo) {
-                auto ev = static_cast<CEventRefreshPlayerInfo*>(e);
-                refreshPlayerInfo(ev->GetPlayerInfo(), this->testcase());
-                Q_EMIT this->ev_ok();
-            } else if (e->GetCLSID() == CLSID_CEventInitializePlayerInfo) {
-                auto ev = static_cast<CEventInitializePlayerInfo*>(e);
-                testcase().insertOrUpdateData("zoneId", ev->GetZoneID());
-                testcase().insertOrUpdateData("pstid", ev->GetPlayerInfo().pstid.id);
-                refreshPlayerInfo(ev->GetPlayerInfo(), this->testcase());
-                Q_EMIT this->ev_ok();
-            }
-        });
-	}
-	
-	void StateCEventRefreshPlayerInfo::clean() {
-		auto& conn = robot().connection(CONN_GAME);
-        conn.disconnect(this);
-	}
+    class StateCEventRefreshPlayerInfoImpl final : public StateCEventRefreshPlayerInfo {
+    public:
+        using StateCEventRefreshPlayerInfo::StateCEventRefreshPlayerInfo;
 
+        void perform() override {
+            auto& conn = robot().connection(CONN_GAME);
+            QObject::connect(&conn, &BasicConnection::eventReceived, this, [this](void* ve) {
+                IEvent* e = static_cast<IEvent*>(ve);
+                if (e->GetCLSID() == CLSID_CEventRefreshPlayerInfo) {
+                    auto ev = static_cast<CEventRefreshPlayerInfo*>(e);
+                    refreshPlayerInfo(ev->GetPlayerInfo(), this->testcase());
+                    Q_EMIT this->ev_ok();
+                } else if (e->GetCLSID() == CLSID_CEventInitializePlayerInfo) {
+                    auto ev = static_cast<CEventInitializePlayerInfo*>(e);
+                    testcase().insertOrUpdateData("zoneId", ev->GetZoneID());
+                    testcase().insertOrUpdateData("pstid", ev->GetPlayerInfo().pstid.id);
+                    refreshPlayerInfo(ev->GetPlayerInfo(), this->testcase());
+                    Q_EMIT this->ev_ok();
+                }
+            });
+        }
+        
+        void clean() override {
+            auto& conn = robot().connection(CONN_GAME);
+            conn.disconnect(this);
+        }
+    };
+
+    StateCEventRefreshPlayerInfo* StateCEventRefreshPlayerInfo::create(QState* parent) {
+        return new StateCEventRefreshPlayerInfoImpl{parent};
+    }
 }

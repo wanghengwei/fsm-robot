@@ -8,44 +8,51 @@
 #include <modules/login/shared/events/EventChooseRoleFail.h>
 #include <robot/basic_robot.h>
 #include <robot/connection_types.h>
+#include <robot/utils.h>
 
 namespace state {
 
-    void StateCEventChooseRole::perform(std::map<std::string, std::string>& info) {
-        // // todo
-        // throw std::runtime_error{"todo"};
-        TPersistID roleId;
-        bool ok = testcase().getData("roleId", roleId);
-        if (!ok) {
-            loggers::TESTCASE().error("[{}] {} FAILED: no playerdata roleId", this->testcase().id(), this->label());
-            return;
+    class StateCEventChooseRoleImpl final : public StateCEventChooseRole {
+    public:
+        using StateCEventChooseRole::StateCEventChooseRole;
+
+        void perform() override {
+            TPersistID roleId;
+            bool ok = testcase().getData("roleId", roleId);
+            if (!ok) {
+                writeEndLogFailed("no playerdata roleId");
+                return;
+            }
+
+            CEventChooseRole ev{roleId, 0};
+            auto& conn = robot().connection(CONN_GAME);
+            QObject::connect(&conn, &BasicConnection::eventReceived, this, [this](void* ve) {
+                if (auto ev = eventCast<CEventJoinChannelResult>(ve)) {
+                    if (ev->GetResult() == 1) {
+                        writeEndLogOK();
+                        Q_EMIT this->ev_CEventJoinChannelResult_ok();
+                    } else {
+                        writeEndLogFailed(ev->GetResult());
+                        Q_EMIT this->ev_CEventJoinChannelResult_failed();
+                    }
+                } else if (auto ev = eventCast<CEventChooseRoleFail>(ve)) {
+                    writeEndLogFailed("");
+                    Q_EMIT this->ev_CEventChooseRoleFail();
+                } 
+            });
+            writeBeginLog({{"roleId", roleId.id}});
+            conn.sendEvent(&ev);
+        }
+        
+        void clean() override {
+            auto& conn = robot().connection(CONN_GAME);
+            conn.disconnect(this);
         }
 
-        CEventChooseRole ev{roleId, 0};
-        auto& conn = robot().connection(CONN_GAME);
-        QObject::connect(&conn, &BasicConnection::eventReceived, this, [this](void* ve) {
-            auto e = static_cast<IEvent*>(ve);
-            if (e->GetCLSID() == CLSID_CEventJoinChannelResult) {
-                auto ev = static_cast<CEventJoinChannelResult*>(e);
-                if (ev->GetResult() == 1) {
-                    loggers::TESTCASE().info("[{}] {} OK", this->testcase().id(), this->label());
-                    Q_EMIT this->ev_CEventJoinChannelResult_ok();
-                } else {
-                    loggers::TESTCASE().error("[{}] {} FAILED: ec={}", this->testcase().id(), this->label(), ev->GetResult());
-                    Q_EMIT this->ev_CEventJoinChannelResult_failed();
-                }
-            } else if (e->GetCLSID() == CLSID_CEventChooseRoleFail) {
-                loggers::TESTCASE().info("[{}] {} OK", this->testcase().id(), this->label());
-                Q_EMIT this->ev_CEventChooseRoleFail();
-            }
-        });
-        // loggers::TESTCASE().info("[{}] {} 11111", this->testcase().id(), this->label());
-        conn.sendEvent(&ev);
-	}
-	
-	void StateCEventChooseRole::clean() {
-		auto& conn = robot().connection(CONN_GAME);
-        conn.disconnect(this);
-	}
+    };
+
+    StateCEventChooseRole* StateCEventChooseRole::create(QState* parent) {
+        return new StateCEventChooseRoleImpl{parent};
+    }
 
 }

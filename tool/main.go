@@ -24,8 +24,8 @@ type State struct {
 	Description string
 	Timeout     int
 	Wait        bool
-	PrintLog    bool `yaml:"printLog"`
-	Signals     []string
+	// PrintLog    bool `yaml:"printLog"`
+	Signals []string
 }
 
 func main() {
@@ -161,14 +161,14 @@ const FooH = `
 namespace state {
 
 // 状态描述：{{ .Description }}
-class {{ .ClassName }} final : public BasicState {
+class {{ .ClassName }} : public BasicState {
     Q_OBJECT
 public:
+	static {{ .ClassName }}* create(QState* parent);
     explicit {{ .ClassName }}(QState* parent = nullptr);
-private:
-	void perform(std::map<std::string, std::string>& info) override;
-	void clean() override;
-	bool printLog() const override;
+protected:
+	void perform() override {}
+	void clean() override {}
 Q_SIGNALS:
     {{ range .Signals }}
     void ev_{{ . }}();
@@ -185,32 +185,37 @@ namespace state {
     {{ .ClassName }}::{{ .ClassName }}(QState* parent) : BasicState{parent} {
         {{ if .Wait }}
         setTimeout({{ .Timeout }});
-        QObject::connect(this->timer(), &QTimer::timeout, this, &BasicState::ev_timeout);
+        QObject::connect(this->timer(), &QTimer::timeout, this, [this]() {
+			writeEndLogFailed("timeout");
+			Q_EMIT this->ev_timeout();
+		});
         {{ else }}
         setTimeout(-1);
         {{ end }}
     }
 
-	bool {{ .ClassName }}::printLog() const { return {{ .PrintLog }}; }
 }
 `
 
 const FooImplCpp = `
 #include "{{ .FileName }}.h"
-#include <stdexcept>
 #include <logger.h>
 
 namespace state {
 
-    void {{ .ClassName }}::perform(std::map<std::string, std::string>& info) {
-        // todo
-        throw std::runtime_error{"todo"};
-	}
-	
-	void {{ .ClassName }}::clean() {
+	class {{ .ClassName }}Impl final : public {{ .ClassName }} {
+		void perform() override {
+			// todo
+		}
 		
-	}
+		void clean() override {
+			// todo
+		}
+	};
 
+	{{ .ClassName }}* {{ .ClassName }}::create(QState* parent) {
+		return new {{ .ClassName }}Impl{parent};
+	}
 }
 `
 
@@ -242,7 +247,7 @@ QState* createStateByID(QString id, QState* parent) {
 
     {{ range . }}
     if (id == "{{ .Name }}") {
-        return new state::State{{ .Name }}{parent};
+        return state::State{{ .Name }}::create(parent);
     }
     {{ end }}
 

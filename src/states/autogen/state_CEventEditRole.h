@@ -5,14 +5,14 @@
 namespace state {
 
 // 状态描述：send CEventEditRole
-class StateCEventEditRole final : public BasicState {
+class StateCEventEditRole : public BasicState {
     Q_OBJECT
 public:
+	static StateCEventEditRole* create(QState* parent);
     explicit StateCEventEditRole(QState* parent = nullptr);
-private:
-	void perform(std::map<std::string, std::string>& info) override;
-	void clean() override;
-	bool printLog() const override;
+protected:
+	void perform() override {}
+	void clean() override {}
 Q_SIGNALS:
     
     void ev_CEventAccountInfo();

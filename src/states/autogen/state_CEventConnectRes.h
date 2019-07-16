@@ -5,14 +5,14 @@
 namespace state {
 
 // 状态描述：wait CEventConnectRes
-class StateCEventConnectRes final : public BasicState {
+class StateCEventConnectRes : public BasicState {
     Q_OBJECT
 public:
+	static StateCEventConnectRes* create(QState* parent);
     explicit StateCEventConnectRes(QState* parent = nullptr);
-private:
-	void perform(std::map<std::string, std::string>& info) override;
-	void clean() override;
-	bool printLog() const override;
+protected:
+	void perform() override {}
+	void clean() override {}
 Q_SIGNALS:
     
     void ev_CEventConnectRes_ok();

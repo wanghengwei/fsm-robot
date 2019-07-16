@@ -5,14 +5,14 @@
 namespace state {
 
 // 状态描述：已连接Game
-class StateGameConnected final : public BasicState {
+class StateGameConnected : public BasicState {
     Q_OBJECT
 public:
+	static StateGameConnected* create(QState* parent);
     explicit StateGameConnected(QState* parent = nullptr);
-private:
-	void perform(std::map<std::string, std::string>& info) override;
-	void clean() override;
-	bool printLog() const override;
+protected:
+	void perform() override {}
+	void clean() override {}
 Q_SIGNALS:
     
     void ev_kicked();

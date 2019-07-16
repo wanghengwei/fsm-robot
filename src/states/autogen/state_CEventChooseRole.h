@@ -5,14 +5,14 @@
 namespace state {
 
 // 状态描述：send CEventChooseRole
-class StateCEventChooseRole final : public BasicState {
+class StateCEventChooseRole : public BasicState {
     Q_OBJECT
 public:
+	static StateCEventChooseRole* create(QState* parent);
     explicit StateCEventChooseRole(QState* parent = nullptr);
-private:
-	void perform(std::map<std::string, std::string>& info) override;
-	void clean() override;
-	bool printLog() const override;
+protected:
+	void perform() override {}
+	void clean() override {}
 Q_SIGNALS:
     
     void ev_CEventChooseRoleFail();

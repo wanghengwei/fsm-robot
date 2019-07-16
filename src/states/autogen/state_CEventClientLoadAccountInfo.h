@@ -5,14 +5,14 @@
 namespace state {
 
 // 状态描述：send CEventClientLoadAccountInfo
-class StateCEventClientLoadAccountInfo final : public BasicState {
+class StateCEventClientLoadAccountInfo : public BasicState {
     Q_OBJECT
 public:
+	static StateCEventClientLoadAccountInfo* create(QState* parent);
     explicit StateCEventClientLoadAccountInfo(QState* parent = nullptr);
-private:
-	void perform(std::map<std::string, std::string>& info) override;
-	void clean() override;
-	bool printLog() const override;
+protected:
+	void perform() override {}
+	void clean() override {}
 Q_SIGNALS:
     
     void ev_CEventAccountInfo_noRole();

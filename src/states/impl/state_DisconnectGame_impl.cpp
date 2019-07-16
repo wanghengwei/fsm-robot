@@ -5,12 +5,23 @@
 #include <robot/connection_types.h>
 namespace state {
 
-    void StateDisconnectGame::perform(std::map<std::string, std::string>& info) {
-        // todo
-        // throw std::runtime_error{"todo"};
-        auto& conn = robot().connection(CONN_GAME);
-        conn.close();
-    }
+    class StateDisconnectGameImpl final : public StateDisconnectGame {
+    public:
+        using StateDisconnectGame::StateDisconnectGame;
 
-    void StateDisconnectGame::clean() {}
+        void perform() override {
+            // todo
+            // throw std::runtime_error{"todo"};
+            auto& conn = robot().connection(CONN_GAME);
+            writeBeginLog();
+            conn.close();
+            writeEndLogOK();
+        }
+
+        void clean() override {}
+        };
+
+    StateDisconnectGame* StateDisconnectGame::create(QState* parent) {
+        return new StateDisconnectGameImpl{parent};
+    }
 }

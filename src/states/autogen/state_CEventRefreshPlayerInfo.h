@@ -5,14 +5,14 @@
 namespace state {
 
 // 状态描述：刷新玩家信息
-class StateCEventRefreshPlayerInfo final : public BasicState {
+class StateCEventRefreshPlayerInfo : public BasicState {
     Q_OBJECT
 public:
+	static StateCEventRefreshPlayerInfo* create(QState* parent);
     explicit StateCEventRefreshPlayerInfo(QState* parent = nullptr);
-private:
-	void perform(std::map<std::string, std::string>& info) override;
-	void clean() override;
-	bool printLog() const override;
+protected:
+	void perform() override {}
+	void clean() override {}
 Q_SIGNALS:
     
     void ev_ok();

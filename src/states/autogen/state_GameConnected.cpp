@@ -8,5 +8,4 @@ namespace state {
         
     }
 
-	bool StateGameConnected::printLog() const { return false; }
 }

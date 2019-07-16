@@ -5,14 +5,14 @@
 namespace state {
 
 // 状态描述：断开game连接
-class StateDisconnectGame final : public BasicState {
+class StateDisconnectGame : public BasicState {
     Q_OBJECT
 public:
+	static StateDisconnectGame* create(QState* parent);
     explicit StateDisconnectGame(QState* parent = nullptr);
-private:
-	void perform(std::map<std::string, std::string>& info) override;
-	void clean() override;
-	bool printLog() const override;
+protected:
+	void perform() override {}
+	void clean() override {}
 Q_SIGNALS:
     
 };

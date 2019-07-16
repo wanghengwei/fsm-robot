@@ -26,35 +26,35 @@ QState* createStateByID(QString id, QState* parent) {
 
     
     if (id == "ConnectGame") {
-        return new state::StateConnectGame{parent};
+        return state::StateConnectGame::create(parent);
     }
     
     if (id == "DisconnectGame") {
-        return new state::StateDisconnectGame{parent};
+        return state::StateDisconnectGame::create(parent);
     }
     
     if (id == "GameConnected") {
-        return new state::StateGameConnected{parent};
+        return state::StateGameConnected::create(parent);
     }
     
     if (id == "CEventConnectRes") {
-        return new state::StateCEventConnectRes{parent};
+        return state::StateCEventConnectRes::create(parent);
     }
     
     if (id == "CEventRefreshPlayerInfo") {
-        return new state::StateCEventRefreshPlayerInfo{parent};
+        return state::StateCEventRefreshPlayerInfo::create(parent);
     }
     
     if (id == "CEventClientLoadAccountInfo") {
-        return new state::StateCEventClientLoadAccountInfo{parent};
+        return state::StateCEventClientLoadAccountInfo::create(parent);
     }
     
     if (id == "CEventEditRole") {
-        return new state::StateCEventEditRole{parent};
+        return state::StateCEventEditRole::create(parent);
     }
     
     if (id == "CEventChooseRole") {
-        return new state::StateCEventChooseRole{parent};
+        return state::StateCEventChooseRole::create(parent);
     }
     
 

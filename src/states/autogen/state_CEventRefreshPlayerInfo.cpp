@@ -8,5 +8,4 @@ namespace state {
         
     }
 
-	bool StateCEventRefreshPlayerInfo::printLog() const { return false; }
 }

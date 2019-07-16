@@ -30,7 +30,7 @@ Q_SIGNALS:
     void ev_timeout();
 
 protected:
-    virtual void perform(std::map<std::string, std::string>& info) {}
+    virtual void perform() {}
     virtual void clean() {}
 
     virtual QString label() const { return this->objectName(); }
@@ -44,7 +44,14 @@ protected:
     BasicRobot& robot();
 
     // 是否输出特定操作的log
-    virtual bool printLog() const { return false; }
+    // virtual bool printLog() const { return false; }
+
+    void writeBeginLog(const std::map<std::string, std::any>& args = {});
+
+    void writeEndLogOK(const std::map<std::string, std::string>& results = {});
+
+    void writeEndLogFailed(const std::string& errmsg, const std::map<std::string, std::string>& info = {});
+    void writeEndLogFailed(int ec, const std::map<std::string, std::string>& info = {});
 
 private:
     void onEntry(QEvent* e) override;

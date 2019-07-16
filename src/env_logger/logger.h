@@ -2,6 +2,7 @@
 #include <QtCore/QString>
 // #include <QtCore/QStringView>
 #include <map>
+#include <any>
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
 
@@ -10,10 +11,19 @@ OStream &operator<<(OStream &os, const QString& s) {
     return os << qPrintable(s);
 }
 
-// template<typename OStream>
-// OStream &operator<<(OStream &os, QStringView s) {
-//     return os << s.toLocal8Bit().constData();
-// }
+template<typename OStream>
+OStream &operator<<(OStream &os, const std::any& s) {
+    auto& t =s.type();
+    if (t == typeid(int)) {
+        return os << std::any_cast<int>(s);
+    } else if (t == typeid(long long)) {
+        return os << std::any_cast<long long>(s);
+    } else if (t == typeid(std::string)) {
+        return os << std::any_cast<const std::string&>(s);
+    } else {
+        return os << "<ANY>";
+    }
+}
 
 template<typename OStream, typename K, typename V>
 OStream &operator<<(OStream &os, std::map<K, V> const& s) {
