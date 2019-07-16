@@ -3,7 +3,7 @@
     <!-- 连接game服 -->
     <state id="ConnectGame">
         <transition event="ok" target="CEventConnectRes" />
-        <transition event="failed" target="ConnectGame" delay="1000" />
+        <transition event="failed" target="finish"/>
     </state>
     <!-- 等待消息CEventConnectRes -->
     <state id="CEventConnectRes">
@@ -14,7 +14,7 @@
     <!-- 表示处于game服连接建立的状态 -->
     <parallel id="GameConnected">
         <!-- 可能被踢，这时直接跳回到开头重连 -->
-        <transition event="kicked" target="ConnectGame" delay="2000"/>
+        <transition event="kicked" target="finish" delay="2000"/>
         <!-- 并发分支：等待消息CEventRefreshPlayerInfo -->
         <state id="gc1" initial="CEventRefreshPlayerInfo">
             <state id="CEventRefreshPlayerInfo">
@@ -53,6 +53,6 @@
         </state>
     </parallel>
     <state id="DisconnectGame">
-        <transition target="ConnectGame" delay="1000"/>
+        <transition target="finish"/>
     </state>
 </testcase>
