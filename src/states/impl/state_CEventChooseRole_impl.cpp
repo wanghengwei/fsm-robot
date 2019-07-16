@@ -6,9 +6,9 @@
 #include <share/server_instance/server_address_info.h>
 #include <modules/channel/shared/events/EventJoinChannelResult.h>
 #include <modules/login/shared/events/EventChooseRoleFail.h>
-#include <robot/basic_robot.h>
-#include <robot/connection_types.h>
-#include <robot/utils.h>
+#include <net_base/basic_robot.h>
+#include <net_x51/connection_types.h>
+#include <net_x51/utils.h>
 
 namespace state {
 

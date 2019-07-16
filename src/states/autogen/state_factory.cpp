@@ -1,6 +1,5 @@
 
-#include "state_factory.h"
-#include "states/idle.h"
+#include <testcase/idle.h>
 
 #include "states/autogen/state_ConnectGame.h"
 

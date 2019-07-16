@@ -123,7 +123,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	f, err = os.Create(filepath.Join(*projectRoot, "state_factory.cpp"))
+	f, err = os.Create(filepath.Join(*projectRoot, "states", "autogen", "state_factory.cpp"))
 	if err != nil {
 		panic(err)
 	}
@@ -156,7 +156,7 @@ func writeStateFile(tpl *template.Template, state *State, overwrite bool) error 
 
 const FooH = `
 #pragma once
-#include <basic_state.h>
+#include <testcase/basic_state.h>
 
 namespace state {
 
@@ -225,17 +225,17 @@ set(SRCS
 {{ .FileName }}.cpp
 ../impl/{{ .FileName }}_impl.cpp
 {{ end }}
+state_factory.cpp
 )
     
-add_library(states_gen ${SRCS})
-target_link_libraries(states_gen Qt5::Core env_logger robot)
-target_include_directories(states_gen PUBLIC ${nlohmann-json_SOURCE_DIR})
-target_compile_definitions(states_gen PUBLIC JSON_MultipleHeaders=ON)
+add_library(states ${SRCS})
+target_link_libraries(states Qt5::Core env_logger net_x51)
+target_include_directories(states PUBLIC ${nlohmann-json_SOURCE_DIR})
+target_compile_definitions(states PUBLIC JSON_MultipleHeaders=ON)
 `
 
 const StateFactoryTPL = `
-#include "state_factory.h"
-#include "states/idle.h"
+#include <testcase/idle.h>
 {{ range . }}
 #include "states/autogen/{{ .FileName }}.h"
 {{ end }}

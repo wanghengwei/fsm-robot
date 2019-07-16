@@ -2,10 +2,10 @@
 #include <QtCore/QCommandLineParser>
 #include <QtCore/QDebug>
 #include <logger.h>
-#include "testcase_manager.h"
-#include <robot/connection_factory.h>
-#include <robot/x51_connection_factory.h>
-#include <robot/x51_netclient_manager.h>
+#include <testcase/testcase_manager.h>
+// #include <b/connection_factory.h>
+#include <net_x51/x51_connection_factory.h>
+#include <net_x51/x51_netclient_manager.h>
 #include <share/netengine/net.h>
 
 int main(int argc, char** argv) {

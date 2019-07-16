@@ -5,8 +5,8 @@
 #include <modules/login/shared/events/EventEditRole.h>
 #include <modules/login/shared/events/EventEditRoleFail.h>
 #include <modules/playermanager/shared/events/EventAccountInfo.h>
-#include <robot/connection_types.h>
-#include <robot/basic_robot.h>
+#include <net_x51/connection_types.h>
+#include <net_base/basic_robot.h>
 #include <utils.h>
 
 namespace state {

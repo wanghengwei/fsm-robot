@@ -1,5 +1,5 @@
 #pragma once
-#include "basic_connection.h"
+#include <net_base/basic_connection.h>
 #include <memory>
 
 struct IEvent;

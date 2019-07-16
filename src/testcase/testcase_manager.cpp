@@ -4,13 +4,13 @@
 #include "state_factory.h"
 #include <memory>
 #include "basic_state.h"
-#include "states/idle.h"
+#include "idle.h"
 #include <QtCore/QMap>
 #include <QtCore/QDebug>
 #include <QtCore/QFinalState>
 #include <logger.h>
 #include <fstream>
-#include <robot/basic_robot.h>
+#include <net_base/basic_robot.h>
 
 // static std::shared_ptr<spdlog::logger> logger = spdlog::get("testcase_manager");
 

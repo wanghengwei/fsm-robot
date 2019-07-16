@@ -1,6 +1,6 @@
 #include "testcase.h"
 #include <nlohmann/json.hpp>
-#include <robot/basic_robot.h>
+#include <net_base/basic_robot.h>
 
 namespace impl {
     void setData(const nlohmann::json& data, std::map<std::string, std::any>& store) {
@@ -62,4 +62,13 @@ void TestCase::setData(const nlohmann::json& data) {
 BasicRobot& TestCase::robot() {
     Q_ASSERT_X(m_robot != nullptr, "robot()", "forgot init robot?");
     return *m_robot;
+}
+
+void TestCase::insertOrUpdateData(const std::string& key, const std::any& value) {
+    m_data[key] = value;
+}
+
+bool TestCase::insertData(const std::string& key, const std::any& value) {
+    auto r = m_data.insert(std::make_pair(key, value));
+    return r.second;
 }

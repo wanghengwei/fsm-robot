@@ -1,5 +1,5 @@
 #pragma once
-#include "connection_factory.h"
+#include <net_base/connection_factory.h>
 
 namespace x51 {
 

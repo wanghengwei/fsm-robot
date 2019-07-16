@@ -2,8 +2,8 @@
 #include "state_GameConnected.h"
 #include <stdexcept>
 #include <logger.h>
-#include <robot/basic_robot.h>
-#include <robot/connection_types.h>
+#include <net_base/basic_robot.h>
+#include <net_x51/connection_types.h>
 
 namespace state {
 

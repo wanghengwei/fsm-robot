@@ -51,9 +51,7 @@ public:
     /** 
      * @brief 插入或更新用户数据
     */
-    void insertOrUpdateData(const std::string& key, const std::any& value) {
-        m_data[key] = value;
-    }
+    void insertOrUpdateData(const std::string& key, const std::any& value);
 
     /**
      * @brief 插入数据
@@ -63,10 +61,7 @@ public:
      * 如果key已存在，则不插入
      * 
     */
-    bool insertData(const std::string& key, const std::any& value) {
-        auto r = m_data.insert(std::make_pair(key, value));
-        return r.second;
-    }
+    bool insertData(const std::string& key, const std::any& value);
 
     BasicRobot& robot();
 
@@ -138,14 +133,6 @@ bool __attribute_warn_unused_result__ TestCase::getData(const std::string& key, 
     if (it == m_data.end()) {
         return false;
     }
-
-    // try {
-    //     value = std::any_cast<T>(it->second);
-    //     return true;
-    // } catch (std::bad_any_cast const& ex) {
-    //     qDebug() << "cannot get data with key" << key << ":" << ex.what();
-    //     return false;
-    // }
 
     return impl::GetValueFromAny<T>{}(it->second, value);
 }

@@ -25,9 +25,10 @@ state_CEventEditRole.cpp
 state_CEventChooseRole.cpp
 ../impl/state_CEventChooseRole_impl.cpp
 
+state_factory.cpp
 )
     
-add_library(states_gen ${SRCS})
-target_link_libraries(states_gen Qt5::Core env_logger robot)
-target_include_directories(states_gen PUBLIC ${nlohmann-json_SOURCE_DIR})
-target_compile_definitions(states_gen PUBLIC JSON_MultipleHeaders=ON)
+add_library(states ${SRCS})
+target_link_libraries(states Qt5::Core env_logger net_x51)
+target_include_directories(states PUBLIC ${nlohmann-json_SOURCE_DIR})
+target_compile_definitions(states PUBLIC JSON_MultipleHeaders=ON)

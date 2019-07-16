@@ -10,7 +10,7 @@
 #include <QtCore/QFinalState>
 #include <logger.h>
 #include <fstream>
-#include <robot/basic_robot.h>
+#include <net_base/basic_robot.h>
 
 // static std::shared_ptr<spdlog::logger> logger = spdlog::get("testcase_manager");
 

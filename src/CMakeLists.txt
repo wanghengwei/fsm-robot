@@ -58,30 +58,31 @@ message("PROJ=${PROJ}")
 
 include(target_projs/x51/proj.cmake)
 
-add_subdirectory(robot)
-
+add_subdirectory(net_base)
+add_subdirectory(net_x51)
+add_subdirectory(testcase)
 add_subdirectory(states)
 
-add_library(base 
-    testcase.cpp
-    basic_state.cpp
-    testcase_manager.cpp
-    state_factory.cpp
-)
-target_link_libraries(base Qt5::Core Qt5::Xml pugixml robot states env_logger dl)
-target_include_directories(base PUBLIC ${nlohmann-json_SOURCE_DIR})
+# add_library(base 
+#     testcase.cpp
+#     basic_state.cpp
+#     testcase_manager.cpp
+#     # state_factory.cpp
+# )
+# target_link_libraries(base Qt5::Core Qt5::Xml pugixml net_x51 states env_logger dl)
+# target_include_directories(base PUBLIC ${nlohmann-json_SOURCE_DIR})
 
 add_executable(demo 
     main.cpp 
     ${PROJ_SOURCES}
     target_projs/x51/dummy_src/QuestTemplate.cpp
 )
-target_link_libraries(demo base dl)
+target_link_libraries(demo testcase net_x51 states dl)
 # target_include_directories(demo PRIVATE ${PROJ_INCLUDE_DIRS})
 # target_compile_definitions(demo PRIVATE STAR_SERVER _SERVER_INVERTORY_SYS QT_NO_KEYWORDS)
 # target_compile_options(demo PRIVATE -Wno-deprecated-declarations -Wno-format -Wno-narrowing -include limits.h)
 
-add_executable(base_test testcase_manager_test.cpp testcase_test.cpp)
-target_link_libraries(base_test gtest_main gtest base)
+# add_executable(base_test testcase_manager_test.cpp testcase_test.cpp)
+# target_link_libraries(base_test gtest_main gtest base)
 
-add_test(NAME base_test COMMAND base_test)
+# add_test(NAME base_test COMMAND base_test)
