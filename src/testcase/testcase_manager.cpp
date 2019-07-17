@@ -11,6 +11,7 @@
 #include <logger.h>
 #include <fstream>
 #include <net_base/basic_robot.h>
+#include "chart_parser.h"
 
 // static std::shared_ptr<spdlog::logger> logger = spdlog::get("testcase_manager");
 
@@ -233,35 +234,36 @@ void TestCaseManager::startSome() {
     }
 }
 
-bool TestCaseManager::create(const std::string& id, const pugi::xml_document& doc) {
+bool TestCaseManager::create(const std::string& id, const QString& caseid) {
     // 创建一个用例对象
-    TestCase* testcase = new TestCase;
+    Q_ASSERT(m_xdocManager);
+    TestCase* testcase = parseChart(caseid, m_xdocManager);
     std::shared_ptr<TestCase> ptc(testcase);
 
     // 初始化数据
-    testcase->setObjectName("ROOT");
+    // testcase->setObjectName("ROOT");
     testcase->setId(id);
     testcase->setData(m_userData);
     Q_ASSERT_X(m_connectionFactory, __PRETTY_FUNCTION__, "forgot set connectionFactory?");
     testcase->setConnectionFactory(m_connectionFactory);
 
-    auto root = doc.child("testcase");
-    auto pa = root.attribute("parent");
-    if (pa.empty()) {
-        fillInner(testcase, root);
-    } else {
-        QState* s = new QState;
-        fillInner(s, root);
+    // auto root = doc.child("testcase");
+    // auto pa = root.attribute("parent");
+    // if (pa.empty()) {
+    //     fillInner(testcase, root);
+    // } else {
+    //     QState* s = new QState;
+    //     fillInner(s, root);
 
-        std::string ptp = pa.as_string();
-        ptp = "../testcase-templates/" + ptp + ".xml";
-        pugi::xml_document td;
-        td.load_file(ptp.c_str());
-        auto troot = td.child("testcase");
-        // 解析模板
-        // qDebug() << "1111111";
-        fillInner(testcase, troot, s);
-    }
+    //     std::string ptp = pa.as_string();
+    //     ptp = "../testcase-templates/" + ptp + ".xml";
+    //     pugi::xml_document td;
+    //     td.load_file(ptp.c_str());
+    //     auto troot = td.child("testcase");
+    //     // 解析模板
+    //     // qDebug() << "1111111";
+    //     fillInner(testcase, troot, s);
+    // }
 
     std::weak_ptr<TestCase> wp{ptc};
     QObject::connect(testcase, &QStateMachine::finished, this, [=]() {
@@ -275,17 +277,17 @@ bool TestCaseManager::create(const std::string& id, const pugi::xml_document& do
 void TestCaseManager::createMany(const std::string& first, int count, const QString& caseName) {
     loggers::TESTCASE_MANAGER().info("create testcases: type=sequence, name={}, first={}, count={}", caseName, first, count);
 
-    pugi::xml_document doc;
+    // pugi::xml_document doc;
 
-    auto tcpath = m_testcaseBaseDir.filePath(caseName);
-    if (!tcpath.endsWith(".xml")) {
-        tcpath += ".xml";
-    }
+    // auto tcpath = m_testcaseBaseDir.filePath(caseName);
+    // if (!tcpath.endsWith(".xml")) {
+    //     tcpath += ".xml";
+    // }
 
-    doc.load_file(qPrintable(tcpath));
-    if (!doc) {
-        return;
-    }
+    // doc.load_file(qPrintable(tcpath));
+    // if (!doc) {
+    //     return;
+    // }
 
     bool ok = true;
     auto lfirst = QString::fromStdString(first).toLongLong(&ok);
@@ -297,7 +299,7 @@ void TestCaseManager::createMany(const std::string& first, int count, const QStr
 
     for (int i = 0; i < count; i++) {
         std::string id = std::to_string(lfirst + i);
-        this->create(id, doc);
+        this->create(id, caseName);
     }
 
     loggers::TESTCASE_MANAGER().info("create testcases OK");

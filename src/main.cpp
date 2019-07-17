@@ -58,12 +58,14 @@ int main(int argc, char** argv) {
     IEventSelector* es = GetBiboRegistry()->CreateEventSelector();
 
     std::shared_ptr<x51::NetClientManager> netClientManager{new x51::NetClientManager{es}};
+    auto tcDocManager = std::make_shared<XDocManager>();
 
     // std::shared_ptr<BasicConnectionFactory> connectionFactory{new FakeConnectionFactory};
     std::shared_ptr<BasicConnectionFactory> connectionFactory{new x51::ConnectionFactory{netClientManager}};
     
     TestCaseManager testcaseManager;
     testcaseManager.setConnectionFactory(connectionFactory);
+    testcaseManager.setTestCaseDocumentManager(tcDocManager);
     testcaseManager.setTestCaseDir(parser.value("testcase-dir").toStdString());
     testcaseManager.setSpeedRate(10);
     testcaseManager.loadUserData(parser.value("data-dir"));

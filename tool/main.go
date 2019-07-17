@@ -204,6 +204,9 @@ const FooImplCpp = `
 namespace state {
 
 	class {{ .ClassName }}Impl final : public {{ .ClassName }} {
+	public:
+		using {{ .ClassName }}::{{ .ClassName }};
+		
 		void perform() override {
 			// todo
 		}

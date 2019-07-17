@@ -25,6 +25,9 @@ state_CEventEditRole.cpp
 state_CEventChooseRole.cpp
 ../impl/state_CEventChooseRole_impl.cpp
 
+state_Logined.cpp
+../impl/state_Logined_impl.cpp
+
 state_factory.cpp
 )
     

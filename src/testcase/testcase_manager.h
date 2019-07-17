@@ -7,6 +7,7 @@
 #include <QtCore/QDir>
 #include <pugixml.hpp>
 #include <nlohmann/json.hpp>
+#include "xdoc_manager.h"
 
 class TestCase;
 class BasicConnectionFactory;
@@ -21,6 +22,10 @@ public:
 
     void setConnectionFactory(const std::shared_ptr<BasicConnectionFactory>& p) {
         m_connectionFactory = p;
+    }
+
+    void setTestCaseDocumentManager(const std::shared_ptr<XDocManager>& p) {
+        m_xdocManager = p;
     }
 
     /** 
@@ -41,8 +46,8 @@ public:
     void start();
     
     // bool create(const QString& id, const QString& caseName);
-    bool create(const std::string& id, const pugi::xml_document& doc);
-    void createMany(const std::string& first, int count, const QString& caseName);
+    bool create(const std::string& id, const QString& caseid);
+    void createMany(const std::string& first, int count, const QString& caseid);
 
 private:
     void startSome();
@@ -55,4 +60,5 @@ private:
     QDir m_testcaseBaseDir;
     nlohmann::json m_userData;
     std::shared_ptr<BasicConnectionFactory> m_connectionFactory;
+    std::shared_ptr<XDocManager> m_xdocManager;
 };

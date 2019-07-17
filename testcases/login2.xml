@@ -45,14 +45,14 @@
                 <transition event="timeout" target="DisconnectGame"/>
                 <transition event="CEventChooseRoleFail" target="DisconnectGame"/>
                 <transition event="CEventJoinChannelResult_failed" target="DisconnectGame"/>
-                <transition event="CEventJoinChannelResult_ok" target="Logined"/>
+                <transition event="CEventJoinChannelResult_ok" target="Idle1"/>
             </state>
-            <state id="Logined" initial="$_">
-                <state id="$_"/>
+            <state id="Idle1" type="Idle" timeout="10000">
+                <transition event="timeout" target="DisconnectGame"/>
             </state>
         </state>
     </parallel>
     <state id="DisconnectGame">
-        <transition target="finish" delay="1000"/>
+        <transition target="finish"/>
     </state>
 </state>

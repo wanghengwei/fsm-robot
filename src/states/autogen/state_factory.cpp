@@ -17,6 +17,8 @@
 
 #include "states/autogen/state_CEventChooseRole.h"
 
+#include "states/autogen/state_Logined.h"
+
 
 QState* createStateByID(QString id, QState* parent) {
     if (id == "Idle") {
@@ -54,6 +56,10 @@ QState* createStateByID(QString id, QState* parent) {
     
     if (id == "CEventChooseRole") {
         return state::StateCEventChooseRole::create(parent);
+    }
+    
+    if (id == "Logined") {
+        return state::StateLogined::create(parent);
     }
     
 

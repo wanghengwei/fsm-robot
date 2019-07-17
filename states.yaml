@@ -68,3 +68,8 @@ state:
   - CEventJoinChannelResult_failed
   - CEventJoinChannelResult_ok
 
+---
+state:
+  name: Logined
+  description: "已登录"
+  wait: false
