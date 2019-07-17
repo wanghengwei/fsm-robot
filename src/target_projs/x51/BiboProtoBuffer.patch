@@ -1,0 +1,13 @@
+Index: share/netengine/BiboFrame/BiboProtoBuffer.h
+===================================================================
+--- share/netengine/BiboFrame/BiboProtoBuffer.h	(版本 152852)
++++ share/netengine/BiboFrame/BiboProtoBuffer.h	(工作副本)
+@@ -8,7 +8,7 @@
+ #if _PLATFORM_WIN32_
+ 	#define BiboAutoPtr std::auto_ptr
+ #else
+-	#define BiboAutoPtr std::auto_ptr
++	#define BiboAutoPtr std::unique_ptr
+ #endif
+ 
+ #if 1  //use var int

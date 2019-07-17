@@ -32,6 +32,6 @@ state_factory.cpp
 )
     
 add_library(states ${SRCS})
-target_link_libraries(states Qt5::Core env_logger net_x51)
+target_link_libraries(states Qt5::Core env_logger net_x51 testcase)
 target_include_directories(states PUBLIC ${nlohmann-json_SOURCE_DIR})
 target_compile_definitions(states PUBLIC JSON_MultipleHeaders=ON)

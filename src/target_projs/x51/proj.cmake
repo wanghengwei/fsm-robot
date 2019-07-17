@@ -118,5 +118,8 @@ execute_process(COMMAND svn info --show-item revision WORKING_DIRECTORY ${proj_S
 # 拼接出绝对路径
 list(TRANSFORM PROJ_SOURCES PREPEND "${proj_SOURCE_DIR}/")
 list(TRANSFORM PROJ_INCLUDE_DIRS PREPEND "${proj_SOURCE_DIR}")
+list(APPEND PROJ_SOURCES target_projs/x51/dummy_src/QuestTemplate.cpp)
+
+set_source_files_properties(${PROJ_SOURCES} PROPERTIES COMPILE_OPTIONS "-Wno-format;-Wno-narrowing")
 
 # file(GLOB PROJECT_DEPENDENT_SOURCES "${CMAKE_SOURCE_DIR}/src/${TARGET_PROJ}/*.cpp")
