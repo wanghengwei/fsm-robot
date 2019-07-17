@@ -5,17 +5,7 @@
 #include "idle.h"
 #include "testcase.h"
 #include <QtCore/QFinalState>
-
-// bool ChartParser::parse(const pugi::xml_document& doc) {
-//     bool ok = parseRootState(doc);
-//     if (!ok) {
-//         loggers::TESTCASE_PARSER().error("parse root state failed");
-//         return false;
-//     }
-
-//     return true;
-// }
-
+#include <QtCore/QScopedPointer>
 
 bool ChartParser::parse(const pugi::xml_document& doc) {
     if (!doc) {
@@ -34,18 +24,21 @@ bool ChartParser::parse(const pugi::xml_document& doc) {
     // 将所有state初始化
     bool ok = parseChildStates(rootNode, root);
     if (!ok) {
+        delete root;
         return false;
     }
 
     // 处理initial state
     ok = parseInitialStates(rootNode, root);
     if (!ok) {
+        delete root;
         return false;
     }
 
     // 处理trans
     ok = parseTransitions(rootNode, root);
     if (!ok) {
+        delete root;
         return false;
     }
 
@@ -57,6 +50,8 @@ bool ChartParser::parse(const pugi::xml_document& doc) {
         auto pdoc = xdocManager->getTemplate(pname);
         if (!pdoc) {
             loggers::TESTCASE_PARSER().error("no parent template: {}", pname);
+            delete root;
+            parsedRootState = nullptr;
             return false;
         }
 
@@ -69,6 +64,8 @@ bool ChartParser::parse(const pugi::xml_document& doc) {
         bool ok = pparser.parse(*pdoc);
         if (!ok) {
             loggers::TESTCASE_PARSER().error("parse parent failed: {}", pname);
+            delete root;
+            parsedRootState = nullptr;
             return false;
         }
 
@@ -193,6 +190,13 @@ bool ChartParser::parseChildStates(pugi::xml_node const& rootNode, QState* root)
             if (s == nullptr) {
                 loggers::TESTCASE_PARSER().debug("cannot find custom state {}, using QState", id);
                 s = new QState{root};
+            } else {
+                // 设置timeout，如果设置了属性timeout且 >= 0
+                auto to = n.attribute("timeout").as_int(-1);
+                auto p = qobject_cast<BasicState*>(s);
+                if (to >= 0 && p != nullptr) {
+                    p->setTimeout(to);
+                }
             }
         
             s->setObjectName(id);
@@ -205,7 +209,6 @@ bool ChartParser::parseChildStates(pugi::xml_node const& rootNode, QState* root)
 
             bool ok = parseChildStates(n, s);
             if (!ok) {
-                delete s;
                 return false;
             }
         }

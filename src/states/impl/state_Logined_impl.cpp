@@ -9,11 +9,11 @@ namespace state {
 		using StateLogined::StateLogined;
 		
 		void perform() override {
-			// todo
+			loggers::TESTCASE().info("[{}] Logined", this->testcase().id(), this->label());
 		}
 		
 		void clean() override {
-			// todo
+			loggers::TESTCASE().info("[{}] Logout", this->testcase().id(), this->label());
 		}
 	};
 
