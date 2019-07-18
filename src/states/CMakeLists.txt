@@ -28,6 +28,18 @@ impl/login/state_CEventChooseRole_impl.cpp
 autogen/login/state_Logined.cpp
 impl/login/state_Logined_impl.cpp
 
+autogen/autochess/state_CEventAutoChessStartCoor.cpp
+impl/autochess/state_CEventAutoChessStartCoor_impl.cpp
+
+autogen/autochess/state_CEventAutoChessCoorResult.cpp
+impl/autochess/state_CEventAutoChessCoorResult_impl.cpp
+
+autogen/autochess/state_CEventAutoChessNotifyClientCreateMatchRes.cpp
+impl/autochess/state_CEventAutoChessNotifyClientCreateMatchRes_impl.cpp
+
+autogen/autochess/state_CEventAutoChessStopCoor.cpp
+impl/autochess/state_CEventAutoChessStopCoor_impl.cpp
+
 autogen/state_factory.cpp
 )
     
@@ -39,5 +51,5 @@ target_compile_options(states PRIVATE
     -Wno-unknown-pragmas -Wno-unused-parameter -Wno-pedantic -Wno-missing-field-initializers 
     -Wno-unused-but-set-variable -Wno-sign-compare -Wno-misleading-indentation -Wno-unused-value
     -Wno-unused-variable -Wno-delete-non-virtual-dtor -Wno-reorder -Wno-ignored-qualifiers
-    -Wno-unused-function -Wno-parentheses
+    -Wno-unused-function -Wno-parentheses -Wno-shift-negative-value
 )

@@ -19,6 +19,14 @@
 
 #include "login/state_Logined.h"
 
+#include "autochess/state_CEventAutoChessStartCoor.h"
+
+#include "autochess/state_CEventAutoChessCoorResult.h"
+
+#include "autochess/state_CEventAutoChessNotifyClientCreateMatchRes.h"
+
+#include "autochess/state_CEventAutoChessStopCoor.h"
+
 
 QState* createStateByID(QString id, QState* parent) {
     if (id == "Idle") {
@@ -60,6 +68,22 @@ QState* createStateByID(QString id, QState* parent) {
     
     if (id == "Logined") {
         return state::StateLogined::create(parent);
+    }
+    
+    if (id == "CEventAutoChessStartCoor") {
+        return state::StateCEventAutoChessStartCoor::create(parent);
+    }
+    
+    if (id == "CEventAutoChessCoorResult") {
+        return state::StateCEventAutoChessCoorResult::create(parent);
+    }
+    
+    if (id == "CEventAutoChessNotifyClientCreateMatchRes") {
+        return state::StateCEventAutoChessNotifyClientCreateMatchRes::create(parent);
+    }
+    
+    if (id == "CEventAutoChessStopCoor") {
+        return state::StateCEventAutoChessStopCoor::create(parent);
     }
     
 

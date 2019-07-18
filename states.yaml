@@ -76,3 +76,36 @@ state:
   description: "已登录"
   wait: false
   path: login
+
+
+---
+# 自走棋
+state:
+  name: CEventAutoChessStartCoor
+  path: autochess
+  signals:
+  - ok
+  - failed
+
+---
+state:
+  name: CEventAutoChessCoorResult
+  path: autochess
+  signals:
+  - ok
+  - failed
+
+---
+state:
+  name: CEventAutoChessNotifyClientCreateMatchRes
+  path: autochess
+  signals:
+  - ok
+  - failed
+
+---
+state:
+  name: CEventAutoChessStopCoor
+  path: autochess
+  signals:
+  - ok

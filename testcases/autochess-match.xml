@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 自走棋匹配 -->
+<state initial="CEventAutoChessStartCoor" parent="login">
+    <state id="CEventAutoChessStartCoor">
+        <transition event="timeout" target="CEventAutoChessStartCoor"/>
+        <transition event="failed" target="CEventAutoChessStartCoor"/>
+        <transition event="ok" target="CEventAutoChessCoorResult"/>
+    </state>
+    <state id="CEventAutoChessCoorResult">
+        <transition event="timeout" target="CEventAutoChessStartCoor"/>
+        <transition event="failed" target="CEventAutoChessStartCoor"/>
+        <transition event="ok" target="CEventAutoChessNotifyClientCreateMatchRes"/>
+    </state>
+    <state id="CEventAutoChessNotifyClientCreateMatchRes">
+        <transition event="timeout" target="CEventAutoChessStartCoor"/>
+        <transition event="failed" target="CEventAutoChessStartCoor"/>
+        <transition event="ok" target="CEventAutoChessStopCoor"/>
+    </state>
+    <state id="CEventAutoChessStopCoor">
+        <transition event="timeout" target="CEventAutoChessStartCoor"/>
+        <transition event="ok" target="CEventAutoChessStartCoor"/>
+    </state>
+</state>

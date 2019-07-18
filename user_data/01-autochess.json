@@ -1,0 +1,11 @@
+{
+    "AutoChess": {
+        "start_coor": {
+            "type": 0
+        },
+        "chat_message": "Hello World",
+        "change_position": {
+            "type": 2
+        }
+    }
+}
