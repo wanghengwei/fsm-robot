@@ -85,7 +85,7 @@ TEST(testcase_manager_test, test_machine) {
     // return;
 
     int argc = 1;
-    char* argv = "";
+    char* argv = nullptr;
     QCoreApplication qapp{argc, &argv};
 
     QStateMachine m1;

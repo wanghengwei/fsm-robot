@@ -232,9 +232,15 @@ state_factory.cpp
 )
     
 add_library(states ${SRCS})
-target_link_libraries(states Qt5::Core env_logger net_x51)
+target_link_libraries(states Qt5::Core env_logger net_x51 testcase)
 target_include_directories(states PUBLIC ${nlohmann-json_SOURCE_DIR})
 target_compile_definitions(states PUBLIC JSON_MultipleHeaders=ON)
+target_compile_options(states PRIVATE 
+    -Wno-unknown-pragmas -Wno-unused-parameter -Wno-pedantic -Wno-missing-field-initializers 
+    -Wno-unused-but-set-variable -Wno-sign-compare -Wno-misleading-indentation -Wno-unused-value
+    -Wno-unused-variable -Wno-delete-non-virtual-dtor -Wno-reorder -Wno-ignored-qualifiers
+    -Wno-unused-function -Wno-parentheses
+)
 `
 
 const StateFactoryTPL = `

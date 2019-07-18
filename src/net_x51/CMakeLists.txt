@@ -1,9 +1,12 @@
-add_library(net_x51
-    # basic_robot.cpp
-    # basic_connection.cpp
-    # connection_factory.cpp
-    # send_wait_event_state.cpp
+set_source_files_properties(
+    x51_connection.cpp
+    x51_netclient.cpp
+    x51_netclient_manager.cpp
+    PROPERTIES
+    COMPILE_OPTIONS "-Wno-missing-field-initializers;-Wno-unused-parameter;-Wno-unused-value;-Wno-unknown-pragmas;-Wno-unused-but-set-variable;-Wno-misleading-indentation;-Wno-sign-compare;-Wno-unused-variable;-Wno-format;-Wno-delete-non-virtual-dtor"
+)
 
+add_library(net_x51
     x51_connection.cpp
     x51_netclient.cpp
     x51_connection_factory.cpp

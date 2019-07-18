@@ -19,7 +19,7 @@ namespace env_logger {
 
         bool isValidNameChar() {
             auto c = cur();
-            return (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c == '.');
+            return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '.');
         }
 
         spdlog::level::level_enum parseLevel() {
@@ -104,7 +104,7 @@ namespace env_logger {
             }
 
             auto c = cur();
-            if (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z') {
+            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
                 parseSegment();
                 if (!more()) {
                     return;

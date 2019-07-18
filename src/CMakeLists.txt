@@ -24,7 +24,6 @@ ExternalProject_Add(ep-gtest
     URL_MD5 ad6868782b5952b7476a7c1c72d5a714
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/ep
 )
-# find_package(GTest REQUIRED)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_AUTOMOC ON)
@@ -78,6 +77,12 @@ add_executable(demo
     target_projs/x51/dummy_src/QuestTemplate.cpp
 )
 target_link_libraries(demo testcase net_x51 states dl)
+target_compile_options(demo PRIVATE 
+    -Wno-unknown-pragmas -Wno-unused-parameter -Wno-pedantic -Wno-missing-field-initializers 
+    -Wno-unused-but-set-variable -Wno-sign-compare -Wno-misleading-indentation -Wno-unused-value
+    -Wno-unused-variable -Wno-delete-non-virtual-dtor -Wno-reorder -Wno-ignored-qualifiers
+    -Wno-unused-function -Wno-parentheses
+)
 # target_include_directories(demo PRIVATE ${PROJ_INCLUDE_DIRS})
 # target_compile_definitions(demo PRIVATE STAR_SERVER _SERVER_INVERTORY_SYS QT_NO_KEYWORDS)
 # target_compile_options(demo PRIVATE -Wno-deprecated-declarations -Wno-format -Wno-narrowing -include limits.h)

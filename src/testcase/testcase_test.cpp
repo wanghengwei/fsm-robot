@@ -92,7 +92,7 @@ TEST(testcase_test, test_get_any) {
         uint32_t v = 0;
         bool ok = impl::GetValueFromAny<uint32_t>{}(a, v);
         ASSERT_TRUE(ok);
-        ASSERT_EQ(1, v);
+        ASSERT_EQ(1u, v);
     }
 
     {
