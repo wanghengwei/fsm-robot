@@ -20,20 +20,19 @@ var (
 type State struct {
 	Name        string
 	ClassName   string
-	FileName    string
+	FileName    string // 文件名，不包括目录和后缀
 	Description string
 	Timeout     int
 	Wait        bool
-	// PrintLog    bool `yaml:"printLog"`
-	Signals []string
+	Path        string // 要生成的代码的相对目录
+	Signals     []string
 }
 
 func main() {
-	// flag.Parse()
 
 	flag.Parse()
 
-	fmt.Println(*statedef)
+	// fmt.Println(*statedef)
 
 	f, err := os.Open(*statedef)
 	if err != nil {
@@ -55,6 +54,9 @@ func main() {
 		}
 		s.State.ClassName = fmt.Sprintf("State%s", s.State.Name)
 		s.State.FileName = fmt.Sprintf("state_%s", s.State.Name)
+		if len(s.State.Path) == 0 {
+			s.State.Path = "."
+		}
 		// 默认超时10秒
 		s.State.Timeout = 10000
 		log.Printf("%#v\n", s.State)
@@ -87,7 +89,12 @@ func main() {
 			panic(err)
 		}
 
-		p := filepath.Join(*projectRoot, "states", "impl", fmt.Sprintf("%s_impl.cpp", state.FileName))
+		dir := filepath.Join(*projectRoot, "states", "impl", state.Path)
+		err = os.MkdirAll(dir, 0755)
+		if err != nil {
+			log.Fatal(err)
+		}
+		p := filepath.Join(dir, fmt.Sprintf("%s_impl.cpp", state.FileName))
 		_, err = os.Stat(p)
 		if os.IsNotExist(err) {
 			f, err := os.Create(p)
@@ -95,7 +102,6 @@ func main() {
 				panic(err)
 			}
 			err = fooImplCpp.Execute(f, state)
-			// err = writeStateFile(fooImplCpp, &state, false)
 			if err != nil {
 				panic(err)
 			}
@@ -109,7 +115,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	f, err = os.Create(filepath.Join(*projectRoot, "states", "autogen", "CMakeLists.txt"))
+	f, err = os.Create(filepath.Join(*projectRoot, "states", "CMakeLists.txt"))
 	if err != nil {
 		panic(err)
 	}
@@ -134,13 +140,20 @@ func main() {
 }
 
 func writeStateFile(tpl *template.Template, state *State, overwrite bool) error {
-	p := filepath.Join(*projectRoot, "states", "autogen", fmt.Sprintf("%s%s", state.FileName, tpl.Name()))
-	_, err := os.Stat(p)
+	// 确保dir存在
+	dir := filepath.Join(*projectRoot, "states", "autogen", state.Path)
+	err := os.MkdirAll(dir, 0775)
+	if err != nil {
+		return err
+	}
+
+	p := filepath.Join(dir, fmt.Sprintf("%s%s", state.FileName, tpl.Name()))
+	_, err = os.Stat(p)
 	if !overwrite && !os.IsNotExist(err) {
 		return nil
 	}
 
-	f, err := os.OpenFile(p, os.O_TRUNC|os.O_CREATE|os.O_WRONLY, 0644)
+	f, err := os.Create(p)
 	if err != nil {
 		return err
 	}
@@ -198,7 +211,7 @@ namespace state {
 `
 
 const FooImplCpp = `
-#include "{{ .FileName }}.h"
+#include <{{ .Path }}/{{ .FileName }}.h>
 #include <logger.h>
 
 namespace state {
@@ -225,15 +238,15 @@ namespace state {
 const CMakeTPL = `
 set(SRCS
 {{ range . }}
-{{ .FileName }}.cpp
-../impl/{{ .FileName }}_impl.cpp
+autogen/{{ .Path }}/{{ .FileName }}.cpp
+impl/{{ .Path }}/{{ .FileName }}_impl.cpp
 {{ end }}
-state_factory.cpp
+autogen/state_factory.cpp
 )
     
 add_library(states ${SRCS})
 target_link_libraries(states Qt5::Core env_logger net_x51 testcase)
-target_include_directories(states PUBLIC ${nlohmann-json_SOURCE_DIR})
+target_include_directories(states PUBLIC ${nlohmann-json_SOURCE_DIR} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/autogen)
 target_compile_definitions(states PUBLIC JSON_MultipleHeaders=ON)
 target_compile_options(states PRIVATE 
     -Wno-unknown-pragmas -Wno-unused-parameter -Wno-pedantic -Wno-missing-field-initializers 
@@ -246,7 +259,7 @@ target_compile_options(states PRIVATE
 const StateFactoryTPL = `
 #include <testcase/idle.h>
 {{ range . }}
-#include "states/autogen/{{ .FileName }}.h"
+#include "{{ .Path }}/{{ .FileName }}.h"
 {{ end }}
 
 QState* createStateByID(QString id, QState* parent) {

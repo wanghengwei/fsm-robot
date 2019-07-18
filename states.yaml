@@ -2,7 +2,7 @@ state:
   name: ConnectGame
   description: "连接game服"
   wait: false
-  printLog: true
+  path: login
   signals:
   - ok
   - failed
@@ -11,14 +11,15 @@ state:
 state:
   name: DisconnectGame
   wait: false
-  printLog: true
   description: "断开game连接"
+  path: login
 
 ---
 state:
   name: GameConnected
   description: "已连接Game"
   wait: false
+  path: login
   signals:
   - kicked  
 
@@ -26,7 +27,7 @@ state:
 state:
   name: CEventConnectRes
   description: "wait CEventConnectRes"
-  printLog: true
+  path: login
   signals:
   - CEventConnectRes_ok
   - CEventConnectRes_failed
@@ -36,6 +37,7 @@ state:
   name: CEventRefreshPlayerInfo
   description: "刷新玩家信息"
   wait: false
+  path: login
   signals:
   - ok
 
@@ -43,7 +45,7 @@ state:
 state:
   name: CEventClientLoadAccountInfo
   description: "send CEventClientLoadAccountInfo"
-  printLog: true
+  path: login
   signals:
   - CEventAccountInfo_noRole
   - CEventAccountInfo_ok
@@ -52,7 +54,7 @@ state:
 state:
   name: CEventEditRole
   description: "send CEventEditRole"
-  printLog: true
+  path: login
   signals:
   - CEventAccountInfo
   - CEventEditRoleRes_nick
@@ -62,7 +64,7 @@ state:
 state:
   name: CEventChooseRole
   description: "send CEventChooseRole"
-  printLog: true
+  path: login
   signals:
   - CEventChooseRoleFail
   - CEventJoinChannelResult_failed
@@ -73,3 +75,4 @@ state:
   name: Logined
   description: "已登录"
   wait: false
+  path: login

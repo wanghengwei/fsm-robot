@@ -1,23 +1,23 @@
 
 #include <testcase/idle.h>
 
-#include "states/autogen/state_ConnectGame.h"
+#include "login/state_ConnectGame.h"
 
-#include "states/autogen/state_DisconnectGame.h"
+#include "login/state_DisconnectGame.h"
 
-#include "states/autogen/state_GameConnected.h"
+#include "login/state_GameConnected.h"
 
-#include "states/autogen/state_CEventConnectRes.h"
+#include "login/state_CEventConnectRes.h"
 
-#include "states/autogen/state_CEventRefreshPlayerInfo.h"
+#include "login/state_CEventRefreshPlayerInfo.h"
 
-#include "states/autogen/state_CEventClientLoadAccountInfo.h"
+#include "login/state_CEventClientLoadAccountInfo.h"
 
-#include "states/autogen/state_CEventEditRole.h"
+#include "login/state_CEventEditRole.h"
 
-#include "states/autogen/state_CEventChooseRole.h"
+#include "login/state_CEventChooseRole.h"
 
-#include "states/autogen/state_Logined.h"
+#include "login/state_Logined.h"
 
 
 QState* createStateByID(QString id, QState* parent) {

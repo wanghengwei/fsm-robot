@@ -1,5 +1,5 @@
 
-#include "state_CEventConnectRes.h"
+#include <login/state_CEventConnectRes.h>
 #include <stdexcept>
 #include <logger.h>
 #include <modules/login/shared/events/EventClientConnectRes.h>

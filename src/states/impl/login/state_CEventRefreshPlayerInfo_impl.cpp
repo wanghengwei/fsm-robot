@@ -1,5 +1,5 @@
 
-#include "state_CEventRefreshPlayerInfo.h"
+#include <login/state_CEventRefreshPlayerInfo.h>
 #include <stdexcept>
 #include <logger.h>
 #include <net_base/basic_robot.h>

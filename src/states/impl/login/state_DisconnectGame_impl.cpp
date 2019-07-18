@@ -1,5 +1,5 @@
 
-#include "state_DisconnectGame.h"
+#include <login/state_DisconnectGame.h>
 #include <stdexcept>
 #include <net_base/basic_robot.h>
 #include <net_x51/connection_types.h>
