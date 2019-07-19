@@ -1,8 +1,10 @@
 
-#include "state_CEventChooseRole.h"
+#include "state_WaitConnectRes.h"
 
 namespace state {
-    StateCEventChooseRole::StateCEventChooseRole(QState* parent) : BasicState{parent} {
+namespace login {
+
+    StateWaitConnectRes::StateWaitConnectRes(QState* parent) : BasicState{parent} {
         
         setTimeout(10000);
         QObject::connect(this->timer(), &QTimer::timeout, this, [this]() {
@@ -12,4 +14,5 @@ namespace state {
         
     }
 
+}
 }

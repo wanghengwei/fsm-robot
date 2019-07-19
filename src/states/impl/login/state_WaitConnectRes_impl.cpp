@@ -1,5 +1,5 @@
 
-#include <login/state_CEventConnectRes.h>
+#include <login/state_WaitConnectRes.h>
 #include <stdexcept>
 #include <logger.h>
 #include <modules/login/shared/events/EventClientConnectRes.h>
@@ -7,9 +7,10 @@
 #include <net_base/basic_robot.h>
 
 namespace state {
-    class StateCEventConnectResImpl final : public StateCEventConnectRes {
+namespace login {
+    class StateWaitConnectResImpl final : public StateWaitConnectRes {
     public:
-        using StateCEventConnectRes::StateCEventConnectRes;
+        using StateWaitConnectRes::StateWaitConnectRes;
 
         void perform() override{
             auto& conn = robot().connection(CONN_GAME);
@@ -20,11 +21,11 @@ namespace state {
                     if (ev->GetLoginRes() == 0) {
                         // loggers::TESTCASE().info("[{}] {} OK", this->testcase().id(), this->label());
                         writeEndLogOK();
-                        Q_EMIT this->ev_CEventConnectRes_ok();
+                        Q_EMIT this->ev_ok();
                     } else {
                         writeEndLogFailed(ev->GetLoginRes());
                         // loggers::TESTCASE().error("[{}] {} FAILED: ec={}", this->testcase().id(), this->label(), ev->GetLoginRes());
-                        Q_EMIT this->ev_CEventConnectRes_failed();
+                        Q_EMIT this->ev_failed();
                     }
                 }
             });
@@ -36,7 +37,8 @@ namespace state {
         }
     };
 
-    StateCEventConnectRes* StateCEventConnectRes::create(QState* parent) {
-        return new StateCEventConnectResImpl{parent};
+    StateWaitConnectRes* StateWaitConnectRes::create(QState* parent) {
+        return new StateWaitConnectResImpl{parent};
     }
+}
 }

@@ -5,12 +5,12 @@
 namespace state {
 namespace login {
 
-// 状态描述：连接game服
-class StateConnectGame : public BasicState {
+// 状态描述：wait CEventConnectRes
+class StateWaitConnectRes : public BasicState {
     Q_OBJECT
 public:
-	static StateConnectGame* create(QState* parent);
-    explicit StateConnectGame(QState* parent = nullptr);
+	static StateWaitConnectRes* create(QState* parent);
+    explicit StateWaitConnectRes(QState* parent = nullptr);
 protected:
 	void perform() override {}
 	void clean() override {}

@@ -3,7 +3,7 @@
 #include <logger.h>
 
 namespace state {
-
+namespace login {
 	class StateLoginedImpl final : public StateLogined {
 	public:
 		using StateLogined::StateLogined;
@@ -20,4 +20,5 @@ namespace state {
 	StateLogined* StateLogined::create(QState* parent) {
 		return new StateLoginedImpl{parent};
 	}
+}
 }

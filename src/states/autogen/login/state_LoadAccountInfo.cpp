@@ -1,8 +1,10 @@
 
-#include "state_CEventAutoChessNotifyClientCreateMatchRes.h"
+#include "state_LoadAccountInfo.h"
 
 namespace state {
-    StateCEventAutoChessNotifyClientCreateMatchRes::StateCEventAutoChessNotifyClientCreateMatchRes(QState* parent) : BasicState{parent} {
+namespace login {
+
+    StateLoadAccountInfo::StateLoadAccountInfo(QState* parent) : BasicState{parent} {
         
         setTimeout(10000);
         QObject::connect(this->timer(), &QTimer::timeout, this, [this]() {
@@ -12,4 +14,5 @@ namespace state {
         
     }
 
+}
 }

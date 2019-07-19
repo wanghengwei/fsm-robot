@@ -1,8 +1,10 @@
+# 登录
+
 state:
   name: ConnectGame
   description: "连接game服"
   wait: false
-  path: login
+  namespace: login
   signals:
   - ok
   - failed
@@ -12,108 +14,107 @@ state:
   name: DisconnectGame
   wait: false
   description: "断开game连接"
-  path: login
+  namespace: login
 
 ---
 state:
   name: GameConnected
   description: "已连接Game"
   wait: false
-  path: login
+  namespace: login
   signals:
   - kicked  
 
 ---
 state:
-  name: CEventConnectRes
+  name: WaitConnectRes
   description: "wait CEventConnectRes"
-  path: login
+  namespace: login
   signals:
-  - CEventConnectRes_ok
-  - CEventConnectRes_failed
+  - ok
+  - failed
 
 ---
 state:
-  name: CEventRefreshPlayerInfo
+  name: RefreshPlayerInfo
   description: "刷新玩家信息"
   wait: false
-  path: login
+  namespace: login
   signals:
   - ok
 
 ---
 state:
-  name: CEventClientLoadAccountInfo
+  name: LoadAccountInfo
   description: "send CEventClientLoadAccountInfo"
-  path: login
+  namespace: login
   signals:
-  - CEventAccountInfo_noRole
-  - CEventAccountInfo_ok
+  - no_role
+  - ok
 
 ---
 state:
-  name: CEventEditRole
+  name: EditRole
   description: "send CEventEditRole"
-  path: login
+  namespace: login
   signals:
-  - CEventAccountInfo
-  - CEventEditRoleRes_nick
-  - CEventEditRoleRes_failed
+  - ok
+  - nick_error
+  - failed
 
 ---
 state:
-  name: CEventChooseRole
+  name: ChooseRole
   description: "send CEventChooseRole"
-  path: login
+  namespace: login
   signals:
-  - CEventChooseRoleFail
-  - CEventJoinChannelResult_failed
-  - CEventJoinChannelResult_ok
+  - failed
+  - ok
 
 ---
 state:
   name: Logined
   description: "已登录"
   wait: false
-  path: login
+  namespace: login
 
 
 ---
 # 自走棋
 state:
-  name: CEventAutoChessStartCoor
-  path: autochess
+  name: StartCoor
+  namespace: autochess
   signals:
   - ok
   - failed
 
 ---
 state:
-  name: CEventAutoChessCoorResult
-  path: autochess
+  name: WaitCoorResult
+  namespace: autochess
   signals:
   - ok
   - failed
 
 ---
 state:
-  name: CEventAutoChessNotifyClientCreateMatchRes
-  path: autochess
+  name: NotifyClientCreateMatchRes
+  namespace: autochess
   signals:
   - ok
   - failed
 
 ---
 state:
-  name: CEventAutoChessStopCoor
-  path: autochess
+  name: StopCoor
+  namespace: autochess
   signals:
   - ok
 
 ---
 state:
-  name: CEventAutoChessEnterMainUI
-  path: autochess
+  name: EnterMainUI
+  namespace: autochess
   signals:
   - reconnect_coordinated
   - reconnect_ingame

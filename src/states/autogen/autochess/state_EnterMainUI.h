@@ -3,13 +3,14 @@
 #include <testcase/basic_state.h>
 
 namespace state {
+namespace autochess {
 
 // 状态描述：
-class StateCEventAutoChessEnterMainUI : public BasicState {
+class StateEnterMainUI : public BasicState {
     Q_OBJECT
 public:
-	static StateCEventAutoChessEnterMainUI* create(QState* parent);
-    explicit StateCEventAutoChessEnterMainUI(QState* parent = nullptr);
+	static StateEnterMainUI* create(QState* parent);
+    explicit StateEnterMainUI(QState* parent = nullptr);
 protected:
 	void perform() override {}
 	void clean() override {}
@@ -25,4 +26,5 @@ Q_SIGNALS:
     
 };
 
+}
 }

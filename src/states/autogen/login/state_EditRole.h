@@ -5,18 +5,20 @@
 namespace state {
 namespace login {
 
-// 状态描述：连接game服
-class StateConnectGame : public BasicState {
+// 状态描述：send CEventEditRole
+class StateEditRole : public BasicState {
     Q_OBJECT
 public:
-	static StateConnectGame* create(QState* parent);
-    explicit StateConnectGame(QState* parent = nullptr);
+	static StateEditRole* create(QState* parent);
+    explicit StateEditRole(QState* parent = nullptr);
 protected:
 	void perform() override {}
 	void clean() override {}
 Q_SIGNALS:
     
     void ev_ok();
+    
+    void ev_nick_error();
     
     void ev_failed();
     

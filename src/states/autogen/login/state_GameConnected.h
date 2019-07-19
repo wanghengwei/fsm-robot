@@ -3,6 +3,7 @@
 #include <testcase/basic_state.h>
 
 namespace state {
+namespace login {
 
 // 状态描述：已连接Game
 class StateGameConnected : public BasicState {
@@ -19,4 +20,5 @@ Q_SIGNALS:
     
 };
 
+}
 }

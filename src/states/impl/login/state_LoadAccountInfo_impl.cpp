@@ -1,5 +1,5 @@
 
-#include <login/state_CEventClientLoadAccountInfo.h>
+#include <login/state_LoadAccountInfo.h>
 #include <stdexcept>
 #include <logger.h>
 #include <net_base/basic_robot.h>
@@ -8,10 +8,10 @@
 #include <modules/playermanager/shared/events/EventAccountInfo.h>
 
 namespace state {
-
-    class StateCEventClientLoadAccountInfoImpl final : public StateCEventClientLoadAccountInfo {
+namespace login {
+    class StateLoadAccountInfoImpl final : public StateLoadAccountInfo {
     public:
-        using StateCEventClientLoadAccountInfo::StateCEventClientLoadAccountInfo;
+        using StateLoadAccountInfo::StateLoadAccountInfo;
 
         void perform() override {
             // todo
@@ -26,7 +26,7 @@ namespace state {
                     if (rc == 0) {
                         // loggers::TESTCASE().error("[{}] {} FAILED: no role", this->testcase().id(), this->label());
                         writeEndLogFailed("no role");
-                        Q_EMIT this->ev_CEventAccountInfo_noRole();
+                        Q_EMIT this->ev_no_role();
                         return;
                     }
 
@@ -38,7 +38,7 @@ namespace state {
                     testcase().insertOrUpdateData("nickname", nick);
                     // loggers::TESTCASE().info("[{}] {} OK", this->testcase().id(), this->label());
                     writeEndLogOK();
-                    Q_EMIT this->ev_CEventAccountInfo_ok();
+                    Q_EMIT this->ev_ok();
                 }
             });
             writeBeginLog();
@@ -51,7 +51,8 @@ namespace state {
         }
     };
 
-    StateCEventClientLoadAccountInfo* StateCEventClientLoadAccountInfo::create(QState* parent) {
-        return new StateCEventClientLoadAccountInfoImpl{parent};
+    StateLoadAccountInfo* StateLoadAccountInfo::create(QState* parent) {
+        return new StateLoadAccountInfoImpl{parent};
     }
+}
 }

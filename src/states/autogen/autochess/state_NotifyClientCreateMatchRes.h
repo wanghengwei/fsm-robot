@@ -3,13 +3,14 @@
 #include <testcase/basic_state.h>
 
 namespace state {
+namespace autochess {
 
 // 状态描述：
-class StateCEventAutoChessStartCoor : public BasicState {
+class StateNotifyClientCreateMatchRes : public BasicState {
     Q_OBJECT
 public:
-	static StateCEventAutoChessStartCoor* create(QState* parent);
-    explicit StateCEventAutoChessStartCoor(QState* parent = nullptr);
+	static StateNotifyClientCreateMatchRes* create(QState* parent);
+    explicit StateNotifyClientCreateMatchRes(QState* parent = nullptr);
 protected:
 	void perform() override {}
 	void clean() override {}
@@ -21,4 +22,5 @@ Q_SIGNALS:
     
 };
 
+}
 }

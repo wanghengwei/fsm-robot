@@ -10,7 +10,7 @@
 
 
 namespace state {
-
+namespace login {
     class StateConnectGameImpl final : public StateConnectGame {
     public:
         using StateConnectGame::StateConnectGame;
@@ -60,4 +60,5 @@ namespace state {
     StateConnectGame* StateConnectGame::create(QState* parent) {
         return new StateConnectGameImpl{parent};
     }
+}
 }

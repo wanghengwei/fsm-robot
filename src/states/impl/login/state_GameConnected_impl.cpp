@@ -6,7 +6,7 @@
 #include <net_x51/connection_types.h>
 
 namespace state {
-
+namespace login {
     class StateGameConnectedImpl final : public StateGameConnected {
     public:
         using StateGameConnected::StateGameConnected;
@@ -30,4 +30,5 @@ namespace state {
     StateGameConnected* StateGameConnected::create(QState* parent) {
         return new StateGameConnectedImpl{parent};
     }
+}
 }

@@ -10,38 +10,38 @@ impl/login/state_DisconnectGame_impl.cpp
 autogen/login/state_GameConnected.cpp
 impl/login/state_GameConnected_impl.cpp
 
-autogen/login/state_CEventConnectRes.cpp
-impl/login/state_CEventConnectRes_impl.cpp
+autogen/login/state_WaitConnectRes.cpp
+impl/login/state_WaitConnectRes_impl.cpp
 
-autogen/login/state_CEventRefreshPlayerInfo.cpp
-impl/login/state_CEventRefreshPlayerInfo_impl.cpp
+autogen/login/state_RefreshPlayerInfo.cpp
+impl/login/state_RefreshPlayerInfo_impl.cpp
 
-autogen/login/state_CEventClientLoadAccountInfo.cpp
-impl/login/state_CEventClientLoadAccountInfo_impl.cpp
+autogen/login/state_LoadAccountInfo.cpp
+impl/login/state_LoadAccountInfo_impl.cpp
 
-autogen/login/state_CEventEditRole.cpp
-impl/login/state_CEventEditRole_impl.cpp
+autogen/login/state_EditRole.cpp
+impl/login/state_EditRole_impl.cpp
 
-autogen/login/state_CEventChooseRole.cpp
-impl/login/state_CEventChooseRole_impl.cpp
+autogen/login/state_ChooseRole.cpp
+impl/login/state_ChooseRole_impl.cpp
 
 autogen/login/state_Logined.cpp
 impl/login/state_Logined_impl.cpp
 
-autogen/autochess/state_CEventAutoChessStartCoor.cpp
-impl/autochess/state_CEventAutoChessStartCoor_impl.cpp
+autogen/autochess/state_StartCoor.cpp
+impl/autochess/state_StartCoor_impl.cpp
 
-autogen/autochess/state_CEventAutoChessCoorResult.cpp
-impl/autochess/state_CEventAutoChessCoorResult_impl.cpp
+autogen/autochess/state_WaitCoorResult.cpp
+impl/autochess/state_WaitCoorResult_impl.cpp
 
-autogen/autochess/state_CEventAutoChessNotifyClientCreateMatchRes.cpp
-impl/autochess/state_CEventAutoChessNotifyClientCreateMatchRes_impl.cpp
+autogen/autochess/state_NotifyClientCreateMatchRes.cpp
+impl/autochess/state_NotifyClientCreateMatchRes_impl.cpp
 
-autogen/autochess/state_CEventAutoChessStopCoor.cpp
-impl/autochess/state_CEventAutoChessStopCoor_impl.cpp
+autogen/autochess/state_StopCoor.cpp
+impl/autochess/state_StopCoor_impl.cpp
 
-autogen/autochess/state_CEventAutoChessEnterMainUI.cpp
-impl/autochess/state_CEventAutoChessEnterMainUI_impl.cpp
+autogen/autochess/state_EnterMainUI.cpp
+impl/autochess/state_EnterMainUI_impl.cpp
 
 autogen/state_factory.cpp
 )

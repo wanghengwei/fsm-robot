@@ -5,7 +5,7 @@
 #include <net_x51/connection_types.h>
 
 namespace state {
-
+namespace login {
     class StateDisconnectGameImpl final : public StateDisconnectGame {
     public:
         using StateDisconnectGame::StateDisconnectGame;
@@ -25,4 +25,5 @@ namespace state {
     StateDisconnectGame* StateDisconnectGame::create(QState* parent) {
         return new StateDisconnectGameImpl{parent};
     }
+}
 }

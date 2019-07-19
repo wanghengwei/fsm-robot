@@ -1,8 +1,10 @@
 
-#include "state_CEventAutoChessStopCoor.h"
+#include "state_EnterMainUI.h"
 
 namespace state {
-    StateCEventAutoChessStopCoor::StateCEventAutoChessStopCoor(QState* parent) : BasicState{parent} {
+namespace autochess {
+
+    StateEnterMainUI::StateEnterMainUI(QState* parent) : BasicState{parent} {
         
         setTimeout(10000);
         QObject::connect(this->timer(), &QTimer::timeout, this, [this]() {
@@ -12,4 +14,5 @@ namespace state {
         
     }
 
+}
 }

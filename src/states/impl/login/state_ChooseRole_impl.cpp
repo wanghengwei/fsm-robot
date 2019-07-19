@@ -1,5 +1,5 @@
 
-#include <login/state_CEventChooseRole.h>
+#include <login/state_ChooseRole.h>
 #include <stdexcept>
 #include <logger.h>
 #include <modules/login/shared/events/EventChooseRole.h>
@@ -11,10 +11,11 @@
 #include <net_x51/utils.h>
 
 namespace state {
+namespace login {
 
-    class StateCEventChooseRoleImpl final : public StateCEventChooseRole {
+    class StateChooseRoleImpl final : public StateChooseRole {
     public:
-        using StateCEventChooseRole::StateCEventChooseRole;
+        using StateChooseRole::StateChooseRole;
 
         void perform() override {
             TPersistID roleId;
@@ -30,14 +31,14 @@ namespace state {
                 if (auto ev = eventCast<CEventJoinChannelResult>(ve)) {
                     if (ev->GetResult() == 1) {
                         writeEndLogOK();
-                        Q_EMIT this->ev_CEventJoinChannelResult_ok();
+                        Q_EMIT this->ev_ok();
                     } else {
                         writeEndLogFailed(ev->GetResult());
-                        Q_EMIT this->ev_CEventJoinChannelResult_failed();
+                        Q_EMIT this->ev_failed();
                     }
                 } else if (auto ev = eventCast<CEventChooseRoleFail>(ve)) {
                     writeEndLogFailed("");
-                    Q_EMIT this->ev_CEventChooseRoleFail();
+                    Q_EMIT this->ev_failed();
                 } 
             });
             writeBeginLog({{"roleId", roleId.id}});
@@ -51,8 +52,9 @@ namespace state {
 
     };
 
-    StateCEventChooseRole* StateCEventChooseRole::create(QState* parent) {
-        return new StateCEventChooseRoleImpl{parent};
+    StateChooseRole* StateChooseRole::create(QState* parent) {
+        return new StateChooseRoleImpl{parent};
     }
 
+}
 }

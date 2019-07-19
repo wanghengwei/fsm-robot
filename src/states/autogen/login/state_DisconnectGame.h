@@ -3,6 +3,7 @@
 #include <testcase/basic_state.h>
 
 namespace state {
+namespace login {
 
 // 状态描述：断开game连接
 class StateDisconnectGame : public BasicState {
@@ -17,4 +18,5 @@ Q_SIGNALS:
     
 };
 
+}
 }

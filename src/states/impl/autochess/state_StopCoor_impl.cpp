@@ -1,15 +1,16 @@
 
-#include <autochess/state_CEventAutoChessCoorResult.h>
+#include <autochess/state_StopCoor.h>
 #include <logger.h>
 #include <net_base/basic_robot.h>
 #include <net_x51/connection_types.h>
 // #include <net_x51/utils.h>
 
 namespace state {
+namespace autochess {
 
-	class StateCEventAutoChessCoorResultImpl final : public StateCEventAutoChessCoorResult {
+	class StateStopCoorImpl final : public StateStopCoor {
 	public:
-		using StateCEventAutoChessCoorResult::StateCEventAutoChessCoorResult;
+		using StateStopCoor::StateStopCoor;
 		
 		void perform() override {
 			// todo
@@ -51,7 +52,8 @@ namespace state {
 		}
 	};
 
-	StateCEventAutoChessCoorResult* StateCEventAutoChessCoorResult::create(QState* parent) {
-		return new StateCEventAutoChessCoorResultImpl{parent};
+	StateStopCoor* StateStopCoor::create(QState* parent) {
+		return new StateStopCoorImpl{parent};
 	}
+}
 }

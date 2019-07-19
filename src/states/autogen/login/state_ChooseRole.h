@@ -5,20 +5,20 @@
 namespace state {
 namespace login {
 
-// 状态描述：连接game服
-class StateConnectGame : public BasicState {
+// 状态描述：send CEventChooseRole
+class StateChooseRole : public BasicState {
     Q_OBJECT
 public:
-	static StateConnectGame* create(QState* parent);
-    explicit StateConnectGame(QState* parent = nullptr);
+	static StateChooseRole* create(QState* parent);
+    explicit StateChooseRole(QState* parent = nullptr);
 protected:
 	void perform() override {}
 	void clean() override {}
 Q_SIGNALS:
     
-    void ev_ok();
-    
     void ev_failed();
+    
+    void ev_ok();
     
 };
 

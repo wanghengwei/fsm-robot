@@ -3,13 +3,14 @@
 #include <testcase/basic_state.h>
 
 namespace state {
+namespace login {
 
 // 状态描述：刷新玩家信息
-class StateCEventRefreshPlayerInfo : public BasicState {
+class StateRefreshPlayerInfo : public BasicState {
     Q_OBJECT
 public:
-	static StateCEventRefreshPlayerInfo* create(QState* parent);
-    explicit StateCEventRefreshPlayerInfo(QState* parent = nullptr);
+	static StateRefreshPlayerInfo* create(QState* parent);
+    explicit StateRefreshPlayerInfo(QState* parent = nullptr);
 protected:
 	void perform() override {}
 	void clean() override {}
@@ -19,4 +20,5 @@ Q_SIGNALS:
     
 };
 
+}
 }

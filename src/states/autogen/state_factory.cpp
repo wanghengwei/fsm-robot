@@ -7,27 +7,27 @@
 
 #include "login/state_GameConnected.h"
 
-#include "login/state_CEventConnectRes.h"
+#include "login/state_WaitConnectRes.h"
 
-#include "login/state_CEventRefreshPlayerInfo.h"
+#include "login/state_RefreshPlayerInfo.h"
 
-#include "login/state_CEventClientLoadAccountInfo.h"
+#include "login/state_LoadAccountInfo.h"
 
-#include "login/state_CEventEditRole.h"
+#include "login/state_EditRole.h"
 
-#include "login/state_CEventChooseRole.h"
+#include "login/state_ChooseRole.h"
 
 #include "login/state_Logined.h"
 
-#include "autochess/state_CEventAutoChessStartCoor.h"
+#include "autochess/state_StartCoor.h"
 
-#include "autochess/state_CEventAutoChessCoorResult.h"
+#include "autochess/state_WaitCoorResult.h"
 
-#include "autochess/state_CEventAutoChessNotifyClientCreateMatchRes.h"
+#include "autochess/state_NotifyClientCreateMatchRes.h"
 
-#include "autochess/state_CEventAutoChessStopCoor.h"
+#include "autochess/state_StopCoor.h"
 
-#include "autochess/state_CEventAutoChessEnterMainUI.h"
+#include "autochess/state_EnterMainUI.h"
 
 
 QState* createStateByID(QString id, QState* parent) {
@@ -37,59 +37,59 @@ QState* createStateByID(QString id, QState* parent) {
 
     
     if (id == "ConnectGame") {
-        return state::StateConnectGame::create(parent);
+        return state::login::StateConnectGame::create(parent);
     }
     
     if (id == "DisconnectGame") {
-        return state::StateDisconnectGame::create(parent);
+        return state::login::StateDisconnectGame::create(parent);
     }
     
     if (id == "GameConnected") {
-        return state::StateGameConnected::create(parent);
+        return state::login::StateGameConnected::create(parent);
     }
     
-    if (id == "CEventConnectRes") {
-        return state::StateCEventConnectRes::create(parent);
+    if (id == "WaitConnectRes") {
+        return state::login::StateWaitConnectRes::create(parent);
     }
     
-    if (id == "CEventRefreshPlayerInfo") {
-        return state::StateCEventRefreshPlayerInfo::create(parent);
+    if (id == "RefreshPlayerInfo") {
+        return state::login::StateRefreshPlayerInfo::create(parent);
     }
     
-    if (id == "CEventClientLoadAccountInfo") {
-        return state::StateCEventClientLoadAccountInfo::create(parent);
+    if (id == "LoadAccountInfo") {
+        return state::login::StateLoadAccountInfo::create(parent);
     }
     
-    if (id == "CEventEditRole") {
-        return state::StateCEventEditRole::create(parent);
+    if (id == "EditRole") {
+        return state::login::StateEditRole::create(parent);
     }
     
-    if (id == "CEventChooseRole") {
-        return state::StateCEventChooseRole::create(parent);
+    if (id == "ChooseRole") {
+        return state::login::StateChooseRole::create(parent);
     }
     
     if (id == "Logined") {
-        return state::StateLogined::create(parent);
+        return state::login::StateLogined::create(parent);
     }
     
-    if (id == "CEventAutoChessStartCoor") {
-        return state::StateCEventAutoChessStartCoor::create(parent);
+    if (id == "StartCoor") {
+        return state::autochess::StateStartCoor::create(parent);
     }
     
-    if (id == "CEventAutoChessCoorResult") {
-        return state::StateCEventAutoChessCoorResult::create(parent);
+    if (id == "WaitCoorResult") {
+        return state::autochess::StateWaitCoorResult::create(parent);
     }
     
-    if (id == "CEventAutoChessNotifyClientCreateMatchRes") {
-        return state::StateCEventAutoChessNotifyClientCreateMatchRes::create(parent);
+    if (id == "NotifyClientCreateMatchRes") {
+        return state::autochess::StateNotifyClientCreateMatchRes::create(parent);
     }
     
-    if (id == "CEventAutoChessStopCoor") {
-        return state::StateCEventAutoChessStopCoor::create(parent);
+    if (id == "StopCoor") {
+        return state::autochess::StateStopCoor::create(parent);
     }
     
-    if (id == "CEventAutoChessEnterMainUI") {
-        return state::StateCEventAutoChessEnterMainUI::create(parent);
+    if (id == "EnterMainUI") {
+        return state::autochess::StateEnterMainUI::create(parent);
     }
     
 

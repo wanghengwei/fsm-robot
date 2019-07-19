@@ -1,5 +1,5 @@
 
-#include <login/state_CEventEditRole.h>
+#include <login/state_EditRole.h>
 #include <stdexcept>
 #include <logger.h>
 #include <modules/login/shared/events/EventEditRole.h>
@@ -10,10 +10,10 @@
 #include <utils.h>
 
 namespace state {
-
-    class StateCEventEditRoleImpl final : public StateCEventEditRole {
+namespace login {
+    class StateEditRoleImpl final : public StateEditRole {
     public:
-        using StateCEventEditRole::StateCEventEditRole;
+        using StateEditRole::StateEditRole;
 
         void perform() override {
             // todo
@@ -72,7 +72,7 @@ namespace state {
                     testcase().insertOrUpdateData("nickname", nick);
                     // loggers::TESTCASE().info("[{}] {} OK", this->testcase().id(), this->label());
                     writeEndLogOK();
-                    Q_EMIT this->ev_CEventAccountInfo();
+                    Q_EMIT this->ev_ok();
                 } else if (e->GetCLSID() == CLSID_CEventEditRoleRes) {
                     auto ev = static_cast<CEventEditRoleRes*>(e);
                     if (ev->m_reason == 2) {
@@ -82,17 +82,17 @@ namespace state {
                         if (ok) {
                             // loggers::TESTCASE().error("[{}] {} FAILED: nick error", this->testcase().id(), this->label());
                             writeEndLogFailed("nick error");
-                            Q_EMIT this->ev_CEventEditRoleRes_nick();
+                            Q_EMIT this->ev_nick_error();
                         } else {
                             // 已经使用推荐昵称但还是出错了！
                             // loggers::TESTCASE().error("[{}] {} FAILED: cannot use recommend nick", this->testcase().id(), this->label());
                             writeEndLogFailed("cannot use recommend nick");
-                            Q_EMIT this->ev_CEventEditRoleRes_failed();
+                            Q_EMIT this->ev_failed();
                         }
                     } else {
                         // loggers::TESTCASE().error("[{}] {} FAILED: ec={}", this->testcase().id(), this->label(), ev->m_reason);
                         writeEndLogFailed(ev->m_reason);
-                        Q_EMIT this->ev_CEventEditRoleRes_failed();
+                        Q_EMIT this->ev_failed();
                     }
                 }
             });
@@ -106,7 +106,8 @@ namespace state {
         }
     };
 
-    StateCEventEditRole* StateCEventEditRole::create(QState* parent) {
-        return new StateCEventEditRoleImpl{parent};
+    StateEditRole* StateEditRole::create(QState* parent) {
+        return new StateEditRoleImpl{parent};
     }
+}
 }

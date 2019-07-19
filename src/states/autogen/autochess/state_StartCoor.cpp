@@ -1,8 +1,10 @@
 
-#include "state_CEventAutoChessStartCoor.h"
+#include "state_StartCoor.h"
 
 namespace state {
-    StateCEventAutoChessStartCoor::StateCEventAutoChessStartCoor(QState* parent) : BasicState{parent} {
+namespace autochess {
+
+    StateStartCoor::StateStartCoor(QState* parent) : BasicState{parent} {
         
         setTimeout(10000);
         QObject::connect(this->timer(), &QTimer::timeout, this, [this]() {
@@ -12,4 +14,5 @@ namespace state {
         
     }
 
+}
 }

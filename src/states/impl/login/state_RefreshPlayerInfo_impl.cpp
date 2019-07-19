@@ -1,5 +1,5 @@
 
-#include <login/state_CEventRefreshPlayerInfo.h>
+#include <login/state_RefreshPlayerInfo.h>
 #include <stdexcept>
 #include <logger.h>
 #include <net_base/basic_robot.h>
@@ -8,7 +8,7 @@
 #include <modules/playermanager/shared/events/EventInitializePlayerInfo.h>
 
 namespace state {
-
+namespace login {
     namespace {
         void refreshPlayerInfo(const character_info &info, TestCase& c) {
 
@@ -47,9 +47,9 @@ namespace state {
         }
     }
 
-    class StateCEventRefreshPlayerInfoImpl final : public StateCEventRefreshPlayerInfo {
+    class StateRefreshPlayerInfoImpl final : public StateRefreshPlayerInfo {
     public:
-        using StateCEventRefreshPlayerInfo::StateCEventRefreshPlayerInfo;
+        using StateRefreshPlayerInfo::StateRefreshPlayerInfo;
 
         void perform() override {
             auto& conn = robot().connection(CONN_GAME);
@@ -75,7 +75,8 @@ namespace state {
         }
     };
 
-    StateCEventRefreshPlayerInfo* StateCEventRefreshPlayerInfo::create(QState* parent) {
-        return new StateCEventRefreshPlayerInfoImpl{parent};
+    StateRefreshPlayerInfo* StateRefreshPlayerInfo::create(QState* parent) {
+        return new StateRefreshPlayerInfoImpl{parent};
     }
+}
 }

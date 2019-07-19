@@ -24,7 +24,8 @@ type State struct {
 	Description string
 	Timeout     int
 	Wait        bool
-	Path        string // 要生成的代码的相对目录
+	Namespace   string // 要生成的代码的相对目录
+	Path        string
 	Signals     []string
 }
 
@@ -54,9 +55,13 @@ func main() {
 		}
 		s.State.ClassName = fmt.Sprintf("State%s", s.State.Name)
 		s.State.FileName = fmt.Sprintf("state_%s", s.State.Name)
-		if len(s.State.Path) == 0 {
-			s.State.Path = "."
+		if len(s.State.Namespace) == 0 {
+			s.State.Namespace = "misc"
 		}
+		s.State.Path = s.State.Namespace
+		// if len(s.State.Path) == 0 {
+		// 	s.State.Path = "."
+		// }
 		// 默认超时10秒
 		s.State.Timeout = 10000
 		log.Printf("%#v\n", s.State)
@@ -172,6 +177,7 @@ const FooH = `
 #include <testcase/basic_state.h>
 
 namespace state {
+namespace {{ .Namespace }} {
 
 // 状态描述：{{ .Description }}
 class {{ .ClassName }} : public BasicState {
@@ -189,12 +195,15 @@ Q_SIGNALS:
 };
 
 }
+}
 `
 
 const FooCpp = `
 #include "{{ .FileName }}.h"
 
 namespace state {
+namespace {{ .Namespace }} {
+
     {{ .ClassName }}::{{ .ClassName }}(QState* parent) : BasicState{parent} {
         {{ if .Wait }}
         setTimeout({{ .Timeout }});
@@ -208,6 +217,7 @@ namespace state {
     }
 
 }
+}
 `
 
 const FooImplCpp = `
@@ -218,6 +228,7 @@ const FooImplCpp = `
 // #include <net_x51/utils.h>
 
 namespace state {
+namespace {{ .Namespace }} {
 
 	class {{ .ClassName }}Impl final : public {{ .ClassName }} {
 	public:
@@ -267,6 +278,7 @@ namespace state {
 		return new {{ .ClassName }}Impl{parent};
 	}
 }
+}
 `
 
 const CMakeTPL = `
@@ -303,7 +315,7 @@ QState* createStateByID(QString id, QState* parent) {
 
     {{ range . }}
     if (id == "{{ .Name }}") {
-        return state::State{{ .Name }}::create(parent);
+        return state::{{ .Namespace }}::State{{ .Name }}::create(parent);
     }
     {{ end }}
 

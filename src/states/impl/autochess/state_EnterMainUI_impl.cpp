@@ -1,5 +1,5 @@
 
-#include <autochess/state_CEventAutoChessEnterMainUI.h>
+#include <autochess/state_EnterMainUI.h>
 #include <logger.h>
 #include <net_base/basic_robot.h>
 #include <net_x51/connection_types.h>
@@ -7,17 +7,13 @@
 #include <net_x51/utils.h>
 
 namespace state {
+namespace autochess {
 
-	class StateCEventAutoChessEnterMainUIImpl final : public StateCEventAutoChessEnterMainUI {
+	class StateEnterMainUIImpl final : public StateEnterMainUI {
 	public:
-		using StateCEventAutoChessEnterMainUI::StateCEventAutoChessEnterMainUI;
+		using StateEnterMainUI::StateEnterMainUI;
 		
 		void perform() override {
-			// todo
-
-			// // 收发消息的范例
-			// 
-			// // 准备发送的消息
 			CEventAutoChessEnterMainUI ev;
 			auto& conn = robot().connection(CONN_GAME);
 			// 实现收到消息后的回调
@@ -67,7 +63,8 @@ namespace state {
 		}
 	};
 
-	StateCEventAutoChessEnterMainUI* StateCEventAutoChessEnterMainUI::create(QState* parent) {
-		return new StateCEventAutoChessEnterMainUIImpl{parent};
+	StateEnterMainUI* StateEnterMainUI::create(QState* parent) {
+		return new StateEnterMainUIImpl{parent};
 	}
+}
 }
