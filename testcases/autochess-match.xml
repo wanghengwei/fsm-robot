@@ -1,28 +1,53 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!-- 自走棋匹配 -->
-<state initial="CEventAutoChessStartCoor" parent="login">
-    <state id="EventAutoChessEnterMainUIAction">
-        <transition event="timeout" target="EventAutoChessEnterMainUIAction" />
-        <transition event="failed" target="EventAutoChessEnterMainUIAction" delay="5000" />
-        <transition event="ok" target="CEventAutoChessStartCoor" />
-        <transition event="reconnect_coordinated" target="CEventAutoChessNotifyClientCreateMatchRes" />
-        <transition event="reconnect_ingame" target="EventAutoChessEnterMainUIAction" />
-    </state>
-    <state id="CEventAutoChessStartCoor" timeout="30000">
-        <transition event="timeout" target="CEventAutoChessStartCoor" />
-        <transition event="failed" target="CEventAutoChessStartCoor" delay="5000" />
-        <transition event="ok" target="CEventAutoChessCoorResult" />
-    </state>
-    <state id="CEventAutoChessCoorResult">
-        <transition event="timeout" target="CEventAutoChessStartCoor" />
-        <transition event="failed" target="CEventAutoChessStartCoor" />
-        <transition event="ok" target="CEventAutoChessNotifyClientCreateMatchRes" />
-    </state>
-    <state id="CEventAutoChessNotifyClientCreateMatchRes">
-        <transition event="timeout" target="CEventAutoChessStartCoor" />
-        <transition event="failed" target="CEventAutoChessStartCoor" />
-        <transition event="ok" target="ConnectMatch" />
-    </state>
+<state initial="AutoChess" parent="login">
+    <parallel id="AutoChess">
+        <state id="ac1">
+            <state id="EnterMainUI">
+                <transition event="timeout" target="EnterMainUI" />
+                <transition event="failed" target="EnterMainUI" delay="5000" />
+                <transition event="ok" target="StartCoor" />
+                <transition event="reconnect_coordinated" target="NotifyClientCreateMatchRes" />
+                <transition event="reconnect_ingame" target="EnterMainUI" />
+            </state>
+            <state id="StartCoor" timeout="30000">
+                <transition event="timeout" target="StartCoor" />
+                <transition event="failed" target="StartCoor" delay="5000" />
+                <transition event="ok" target="WaitCoorResult" />
+            </state>
+            <state id="WaitCoorResult">
+                <transition event="timeout" target="StartCoor" />
+                <transition event="failed" target="StartCoor" />
+                <transition event="ok" target="NotifyClientCreateMatchRes" />
+            </state>
+            <state id="NotifyClientCreateMatchRes">
+                <transition event="timeout" target="StartCoor" />
+                <transition event="failed" target="StartCoor" />
+                <transition event="ok" target="ConnectMatch" />
+            </state>
+            <state id="ConnectMatch">
+                <transition event="ok" target="EnterRoom" />
+            </state>
+            <state id="EnterRoom">
+                <transition event="timeout" target="StartCoor" />
+                <transition event="failed" target="StartCoor" />
+                <transition event="ok" target="UploadProgress" />
+            </state>
+            <state id="UploadProgress">
+                <transition event="timeout" target="StartCoor" />
+                <transition event="failed" target="StartCoor" />
+                <transition event="ok" target="NotifyClientStartGame" />
+            </state>
+            <state id="NotifyClientStartGame">
+                <transition event="timeout" target="StartCoor" />
+                <transition event="failed" target="StartCoor" />
+                <transition event="ok" target="ConnectMatch" />
+            </state>
+        </state>
+        <state id="ac2"></state>
+        <state id="ac3"></state>
+    </parallel>
+    
     <state id="CEventAutoChessStopCoor">
         <transition event="timeout" target="CEventAutoChessStartCoor" />
         <transition event="ok" target="CEventAutoChessStartCoor" />

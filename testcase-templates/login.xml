@@ -2,50 +2,49 @@
 <state initial="ConnectGame">
     <!-- 连接game服 -->
     <state id="ConnectGame">
-        <transition event="ok" target="CEventConnectRes" />
+        <transition event="ok" target="WaitConnectRes" />
         <transition event="failed" target="finish"/>
     </state>
     <!-- 等待消息CEventConnectRes -->
-    <state id="CEventConnectRes">
+    <state id="WaitConnectRes">
         <transition event="timeout" target="DisconnectGame"/>
-        <transition event="CEventConnectRes_ok" target="GameConnected"/>
-        <transition event="CEventConnectRes_failed" target="DisconnectGame"/>
+        <transition event="ok" target="GameConnected"/>
+        <transition event="failed" target="DisconnectGame"/>
     </state>
     <!-- 表示处于game服连接建立的状态 -->
     <parallel id="GameConnected">
         <!-- 可能被踢，这时直接跳回到开头重连 -->
         <transition event="kicked" target="finish"/>
         <!-- 并发分支：等待消息CEventRefreshPlayerInfo -->
-        <state id="gc1" initial="CEventRefreshPlayerInfo">
-            <state id="CEventRefreshPlayerInfo">
-                <transition event="ok" target="CEventRefreshPlayerInfo"/>
+        <state id="gc1" initial="RefreshPlayerInfo">
+            <state id="RefreshPlayerInfo">
+                <transition event="ok" target="RefreshPlayerInfo"/>
             </state>
         </state>
         <!-- 并发分支：走标准登录流程 -->
-        <state id="gc2" initial="CEventClientLoadAccountInfo">
+        <state id="gc2" initial="LoadAccountInfo">
             <!-- 加载角色 -->
-            <state id="CEventClientLoadAccountInfo">
+            <state id="LoadAccountInfo">
                 <transition event="timeout" target="DisconnectGame"/>
                 <!-- 没有角色？去创建 -->
-                <transition event="CEventAccountInfo_noRole" target="CEventEditRole"/>
+                <transition event="no_role" target="EditRole"/>
                 <!-- 有角色？去选择 -->
-                <transition event="CEventAccountInfo_ok" target="CEventChooseRole"/>
+                <transition event="ok" target="ChooseRole"/>
             </state>
             <!-- 角色不存在 -->
-            <state id="CEventEditRole">
+            <state id="EditRole">
                 <transition event="timeout" target="DisconnectGame"/>
                 <!-- 收到这个消息表示ok了 -->
-                <transition event="CEventAccountInfo" target="CEventChooseRole"/>
+                <transition event="ok" target="ChooseRole"/>
                 <!-- nick不对，重新创建 -->
-                <transition event="CEventEditRoleRes_nick" target="CEventEditRole"/>
-                <transition event="CEventEditRoleRes_failed" target="DisconnectGame"/>
+                <transition event="nick_error" target="EditRole"/>
+                <transition event="failed" target="DisconnectGame"/>
             </state>
             <!-- 角色存在，选择角色 -->
-            <state id="CEventChooseRole">
+            <state id="ChooseRole">
                 <transition event="timeout" target="DisconnectGame"/>
-                <transition event="CEventChooseRoleFail" target="DisconnectGame"/>
-                <transition event="CEventJoinChannelResult_failed" target="DisconnectGame"/>
-                <transition event="CEventJoinChannelResult_ok" target="Logined"/>
+                <transition event="failed" target="DisconnectGame"/>
+                <transition event="ok" target="Logined"/>
             </state>
             <state id="Logined" initial="$_">
                 <state id="$_"/>
