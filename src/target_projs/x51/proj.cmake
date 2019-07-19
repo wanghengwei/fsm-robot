@@ -90,6 +90,7 @@ zone_server/GuildServer/Guild/super_guild/share/event/event_super_guild_reg.cpp
 zone_server/GuildServer/Guild/super_guild/share/event/event_super_guild_reg.cpp
 modules/contacts/shared/EventRegisterContacts.cpp
 modules/channel/shared/EventRegisterChannel.cpp
+modules/auto_chess/share/event/auto_chess_event_reg.cpp
 )
 
 # 必须包含的include path

@@ -18,7 +18,7 @@ namespace state {
         void perform() override {
             // 取出关心的数据
             nlohmann::json gameips;
-            GET_DATA_OR_DIE("gameServerIPList", gameips);
+            GET_CONFIG_OR_DIE("/gameServerIPList", gameips);
             if (gameips.empty()) {
                 // 触发错误怎么做？
                 return;

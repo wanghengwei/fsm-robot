@@ -55,8 +55,9 @@ void TestCase::setConnectionFactory(const std::shared_ptr<BasicConnectionFactory
     this->robot().setConnectionFactory(p);
 }
 
-void TestCase::setData(const nlohmann::json& data) {
-    impl::setData(data, m_data);
+void TestCase::setConfig(const nlohmann::json& cfg) {
+    // impl::setData(data, m_data);
+    m_config = cfg;
 }
 
 BasicRobot& TestCase::robot() {

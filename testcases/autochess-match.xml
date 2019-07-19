@@ -1,23 +1,30 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!-- 自走棋匹配 -->
 <state initial="CEventAutoChessStartCoor" parent="login">
-    <state id="CEventAutoChessStartCoor">
-        <transition event="timeout" target="CEventAutoChessStartCoor"/>
-        <transition event="failed" target="CEventAutoChessStartCoor"/>
-        <transition event="ok" target="CEventAutoChessCoorResult"/>
+    <state id="EventAutoChessEnterMainUIAction">
+        <transition event="timeout" target="EventAutoChessEnterMainUIAction" />
+        <transition event="failed" target="EventAutoChessEnterMainUIAction" delay="5000" />
+        <transition event="ok" target="CEventAutoChessStartCoor" />
+        <transition event="reconnect_coordinated" target="CEventAutoChessNotifyClientCreateMatchRes" />
+        <transition event="reconnect_ingame" target="EventAutoChessEnterMainUIAction" />
+    </state>
+    <state id="CEventAutoChessStartCoor" timeout="30000">
+        <transition event="timeout" target="CEventAutoChessStartCoor" />
+        <transition event="failed" target="CEventAutoChessStartCoor" delay="5000" />
+        <transition event="ok" target="CEventAutoChessCoorResult" />
     </state>
     <state id="CEventAutoChessCoorResult">
-        <transition event="timeout" target="CEventAutoChessStartCoor"/>
-        <transition event="failed" target="CEventAutoChessStartCoor"/>
-        <transition event="ok" target="CEventAutoChessNotifyClientCreateMatchRes"/>
+        <transition event="timeout" target="CEventAutoChessStartCoor" />
+        <transition event="failed" target="CEventAutoChessStartCoor" />
+        <transition event="ok" target="CEventAutoChessNotifyClientCreateMatchRes" />
     </state>
     <state id="CEventAutoChessNotifyClientCreateMatchRes">
-        <transition event="timeout" target="CEventAutoChessStartCoor"/>
-        <transition event="failed" target="CEventAutoChessStartCoor"/>
-        <transition event="ok" target="CEventAutoChessStopCoor"/>
+        <transition event="timeout" target="CEventAutoChessStartCoor" />
+        <transition event="failed" target="CEventAutoChessStartCoor" />
+        <transition event="ok" target="ConnectMatch" />
     </state>
     <state id="CEventAutoChessStopCoor">
-        <transition event="timeout" target="CEventAutoChessStartCoor"/>
-        <transition event="ok" target="CEventAutoChessStartCoor"/>
+        <transition event="timeout" target="CEventAutoChessStartCoor" />
+        <transition event="ok" target="CEventAutoChessStartCoor" />
     </state>
 </state>

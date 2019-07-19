@@ -69,3 +69,7 @@ private:
 #define GET_DATA_OR_DIE(key, value) \
     if (!this->testcase().getData(key, value)) { \
         loggers::TESTCASE().critical(R"([{}] [{}:{}] cannot get data by key {})", testcase().id(), __FILE__, __LINE__, key); abort(); }
+
+#define GET_CONFIG_OR_DIE(key, value) \
+    if (!this->testcase().getConfig(key, value)) { \
+        loggers::TESTCASE().critical(R"([{}] [{}:{}] cannot get config by key {})", testcase().id(), __FILE__, __LINE__, key); abort(); }

@@ -1,0 +1,47 @@
+@startuml
+left to right direction
+
+[*] --> Login
+Login --> AutoChess
+
+state AutoChess {
+[*] --> EnterMainUI
+EnterMainUI --> StartCoord : ok
+EnterMainUI --> WaitCreateMatchRes2 : reconnect_incoord
+EnterMainUI --> ConnectMatch3 : reconnect_ingame
+
+StartCoord --> WaitCreateMatchRes1
+WaitCreateMatchRes1 --> ConnectMatch1
+ConnectMatch1 --> EnterRoom1
+EnterRoom1 --> UploadProgress
+UploadProgress --> NotifyStartGame
+
+WaitCreateMatchRes2 --> ConnectMatch2
+ConnectMatch2 --> EnterRoom2
+
+ConnectMatch3 --> EnterRoom3
+EnterRoom3 --> ReconnectEnterGame
+
+NotifyStartGame --> GameSetting
+EnterRoom2 --> GameSetting
+ReconnectEnterGame --> GameSetting
+
+GameSetting --> RandomDoSomething
+RandomDoSomething --> RandomDoSomething
+--
+[*] --> WaitStageTransformOrShopFreshed
+WaitStageTransformOrShopFreshed --> FreshShop : on_prepare
+WaitStageTransformOrShopFreshed --> GameFinished : on_prepare
+
+FreshShop --> BuyChess
+BuyChess --> BuyChess : buy_more
+BuyChess --> WaitStageTransformOrShopFreshed : ok
+--
+[*] --> WaitEnd
+WaitEnd --> [*] : ok
+}
+
+AutoChess --> DisconnectMatch
+DisconnectMatch --> AutoChess
+
+@enduml

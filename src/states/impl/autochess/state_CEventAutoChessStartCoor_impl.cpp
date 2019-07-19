@@ -14,7 +14,7 @@ namespace state {
 		
 		void perform() override {
 			CEventAutoChessStartCoor ev;
-			GET_DATA_OR_DIE("/AutoChess/start_coor/type", ev.m_type);
+			GET_CONFIG_OR_DIE("/AutoChess/start_coor/type", ev.m_type);
 			ev.m_is_client = true;
 
 			auto& conn = robot().connection(CONN_GAME);

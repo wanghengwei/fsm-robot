@@ -57,7 +57,7 @@ bool TestCaseManager::create(const std::string& id, const QString& caseid) {
     // 初始化数据
     // testcase->setObjectName("ROOT");
     testcase->setId(id);
-    testcase->setData(m_userData);
+    testcase->setConfig(m_userData);
     Q_ASSERT_X(m_connectionFactory, __PRETTY_FUNCTION__, "forgot set connectionFactory?");
     testcase->setConnectionFactory(m_connectionFactory);
 

@@ -27,6 +27,8 @@
 
 #include "autochess/state_CEventAutoChessStopCoor.h"
 
+#include "autochess/state_CEventAutoChessEnterMainUI.h"
+
 
 QState* createStateByID(QString id, QState* parent) {
     if (id == "Idle") {
@@ -84,6 +86,10 @@ QState* createStateByID(QString id, QState* parent) {
     
     if (id == "CEventAutoChessStopCoor") {
         return state::StateCEventAutoChessStopCoor::create(parent);
+    }
+    
+    if (id == "CEventAutoChessEnterMainUI") {
+        return state::StateCEventAutoChessEnterMainUI::create(parent);
     }
     
 

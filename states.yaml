@@ -109,3 +109,13 @@ state:
   path: autochess
   signals:
   - ok
+
+---
+state:
+  name: CEventAutoChessEnterMainUI
+  path: autochess
+  signals:
+  - reconnect_coordinated
+  - reconnect_ingame
+  - ok
+  - failed

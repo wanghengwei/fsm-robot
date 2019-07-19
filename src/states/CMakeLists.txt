@@ -40,6 +40,9 @@ impl/autochess/state_CEventAutoChessNotifyClientCreateMatchRes_impl.cpp
 autogen/autochess/state_CEventAutoChessStopCoor.cpp
 impl/autochess/state_CEventAutoChessStopCoor_impl.cpp
 
+autogen/autochess/state_CEventAutoChessEnterMainUI.cpp
+impl/autochess/state_CEventAutoChessEnterMainUI_impl.cpp
+
 autogen/state_factory.cpp
 )
     

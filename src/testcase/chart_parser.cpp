@@ -300,31 +300,60 @@ bool ChartParser::parseTransitions(pugi::xml_node const& rootNode, QState* root)
             return false;
         }
 
-        if (ev.isEmpty()) {
-            // 没有设置触发的event，那么就直接跳转
-            if (delay <= 0 && rootid == target) {
-                loggers::TESTCASE_PARSER().error("cannot jump to self without delay: {}", rootid);
-                continue;
-            }
+        if (ev.isEmpty() && delay <= 0 && rootid == target) {
+            loggers::TESTCASE_PARSER().error("cannot jump to self without delay: {}", rootid);
+            continue;
+        }
 
-            if (delay <= 0) {
+        if (delay > 0) {
+            QState* parent = root->parentState();
+            if (parent == nullptr) {
+                loggers::TESTCASE_PARSER().error("cannot add trans at root node");
+                return false;
+            }
+            QString pn = parent ? parent->objectName() : "";
+            loggers::TESTCASE_PARSER().info("add a temp idle in parent {}, connect {} to {}", pn, rootid, target);
+            Idle* idle = new Idle{root->parentState()};
+            idle->setTimeout(delay);
+            if (ev.isEmpty()) {
+                root->addTransition(idle);
+            } else {
+                root->addTransition(root, qPrintable("2ev_" + ev + "()"), idle);
+            }
+            idle->addTransition(idle, &Idle::ev_timeout, targetState);
+        } else {
+            if (ev.isEmpty()) {
                 root->addTransition(targetState);
             } else {
-                QState* parent = root->parentState();
-                if (parent == nullptr) {
-                    loggers::TESTCASE_PARSER().error("cannot add trans at root node");
-                    return false;
-                }
-                QString pn = parent ? parent->objectName() : "";
-                loggers::TESTCASE_PARSER().info("add a temp idle in parent {}, connect {} to {}", pn, rootid, target);
-                Idle* idle = new Idle{root->parentState()};
-                idle->setTimeout(delay);
-                root->addTransition(idle);
-                idle->addTransition(idle, &Idle::ev_timeout, targetState);
+                root->addTransition(root, qPrintable("2ev_" + ev + "()"), targetState);
             }
-        } else {
-            root->addTransition(root, qPrintable("2ev_" + ev + "()"), targetState);
         }
+
+        // if (ev.isEmpty()) {
+        //     // 没有设置触发的event，那么就直接跳转
+        //     if (delay <= 0 && rootid == target) {
+        //         loggers::TESTCASE_PARSER().error("cannot jump to self without delay: {}", rootid);
+        //         continue;
+        //     }
+
+        //     if (delay <= 0) {
+        //         root->addTransition(targetState);
+        //     } else {
+        //         QState* parent = root->parentState();
+        //         if (parent == nullptr) {
+        //             loggers::TESTCASE_PARSER().error("cannot add trans at root node");
+        //             return false;
+        //         }
+        //         QString pn = parent ? parent->objectName() : "";
+        //         loggers::TESTCASE_PARSER().info("add a temp idle in parent {}, connect {} to {}", pn, rootid, target);
+        //         Idle* idle = new Idle{root->parentState()};
+        //         idle->setTimeout(delay);
+        //         root->addTransition(idle);
+        //         idle->addTransition(idle, &Idle::ev_timeout, targetState);
+        //     }
+        // } else {
+        //     root->addTransition(root, qPrintable("2ev_" + ev + "()"), targetState);
+        // }
         // qDebug() << "add transition:" << state->objectName() << "--" << ev << "-->" << targetState->objectName() << "delay" << delay;
         loggers::TESTCASE_PARSER().info("add transition: {} --{}--> {}, delay={}", root->objectName(), ev, targetState->objectName(), delay);
     }
