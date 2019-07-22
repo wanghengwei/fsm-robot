@@ -3,13 +3,17 @@
 #include <logger.h>
 #include <QtCore/QDebug>
 
+XDocManager::XDocManager(QDir tcdir, QDir ttdir) : m_tcbase(tcdir), m_ttbase(ttdir) {
+
+}
+
 std::shared_ptr<pugi::xml_document> XDocManager::getDoc(const QString& cid) {
     auto it = m_doccache.find(cid);
     if (it != m_doccache.end()) {
         return it.value();
     }
 
-    QDir base{"../testcases"};
+    QDir base = m_tcbase;
     auto xp = base.filePath(cid + ".xml");
     std::shared_ptr<pugi::xml_document> doc{new pugi::xml_document};
     auto r = doc->load_file(qPrintable(xp), pugi::parse_default, pugi::encoding_utf8);
@@ -29,7 +33,7 @@ std::shared_ptr<pugi::xml_document> XDocManager::getTemplate(const QString& cid)
         return it.value();
     }
 
-    QDir base{"../testcase-templates"};
+    QDir base = m_ttbase;
     auto xp = base.filePath(cid + ".xml");
     std::shared_ptr<pugi::xml_document> doc{new pugi::xml_document};
     auto r = doc->load_file(qPrintable(xp), pugi::parse_default, pugi::encoding_utf8);

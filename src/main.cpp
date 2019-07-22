@@ -25,7 +25,10 @@ int main(int argc, char** argv) {
         "t", "path of testcase", "TESTCASE_PATH", ""
     });
     parser.addOption({
-        "testcase-dir", "base dir of testcases", "DIR", "."
+        "testcase-dir", "base dir of testcases", "DIR", "./testcases"
+    });
+    parser.addOption({
+        "template-dir", "base dir of templates", "DIR", "./testcase-templates"
     });
     parser.addOption({
         "data-dir", "base dir of data", "DIR", "./user_data"
@@ -58,7 +61,7 @@ int main(int argc, char** argv) {
     IEventSelector* es = GetBiboRegistry()->CreateEventSelector();
 
     std::shared_ptr<x51::NetClientManager> netClientManager{new x51::NetClientManager{es}};
-    auto tcDocManager = std::make_shared<XDocManager>();
+    auto tcDocManager = std::make_shared<XDocManager>(parser.value("testcase-dir"), parser.value("template-dir"));
 
     // std::shared_ptr<BasicConnectionFactory> connectionFactory{new FakeConnectionFactory};
     std::shared_ptr<BasicConnectionFactory> connectionFactory{new x51::ConnectionFactory{netClientManager}};
@@ -66,7 +69,7 @@ int main(int argc, char** argv) {
     TestCaseManager testcaseManager;
     testcaseManager.setConnectionFactory(connectionFactory);
     testcaseManager.setTestCaseDocumentManager(tcDocManager);
-    testcaseManager.setTestCaseDir(parser.value("testcase-dir").toStdString());
+    // testcaseManager.setTestCaseDir(parser.value("testcase-dir").toStdString());
     testcaseManager.setSpeedRate(10);
     testcaseManager.loadUserData(parser.value("data-dir"));
     testcaseManager.createMany(firstId.toStdString(), count, testcasePath);

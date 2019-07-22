@@ -91,3 +91,10 @@ target_compile_options(demo PRIVATE
 # target_link_libraries(base_test gtest_main gtest base)
 
 # add_test(NAME base_test COMMAND base_test)
+
+# ===================== INSTALL =========================== #
+install(TARGETS demo
+    RUNTIME DESTINATION bin
+)
+install(DIRECTORY ../testcases ../testcase-templates ../user_data DESTINATION bin)
+install(FILES ../Dockerfile DESTINATION .)

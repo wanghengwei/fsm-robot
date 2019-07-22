@@ -34,7 +34,7 @@ public:
     void setConfig(const nlohmann::json& cfg);
 
     template<typename T>
-    bool __attribute_warn_unused_result__ getConfig(const std::string& jpath, T& value);
+    bool __attribute__ ((warn_unused_result)) getConfig(const std::string& jpath, T& value);
 
     /** 
      * @brief 是否已存在某个key的玩家数据
@@ -50,7 +50,7 @@ public:
      * 
     */
     template<typename T>
-    bool __attribute_warn_unused_result__ getData(const std::string& key, T& value);
+    bool __attribute__ ((warn_unused_result)) getData(const std::string& key, T& value);
 
     /** 
      * @brief 插入或更新用户数据
@@ -134,7 +134,7 @@ private:
 
 
 template<typename T>
-bool __attribute_warn_unused_result__ TestCase::getData(const std::string& key, T& value) {
+bool __attribute__ ((warn_unused_result)) TestCase::getData(const std::string& key, T& value) {
     auto it = m_data.find(key);
     if (it == m_data.end()) {
         return false;
@@ -150,7 +150,7 @@ bool __attribute_warn_unused_result__ TestCase::getData(const std::string& key, 
 }
 
 template<typename T>
-bool __attribute_warn_unused_result__ TestCase::getConfig(const std::string& jpath, T& value) {
+bool __attribute__ ((warn_unused_result)) TestCase::getConfig(const std::string& jpath, T& value) {
 	// nlohmann::json data;
 	try {
         nlohmann::json::json_pointer jp{jpath};
